@@ -178,6 +178,3 @@ Edit `src/components/sections/Header.astro` — the `navItems` array at the top.
 4. Add to `llms.txt.ts` index
 5. Add JSON-LD structured data appropriate to the page type
 6. Link from an existing page (no orphans)
-
-### Replace the booking CTA
-The mailto fallback is at two locations in `index.astro` (hero and final CTA sections). Search for `mailto:hello@techshift.ai` and replace with a Calendly embed URL or booking widget when ready.
