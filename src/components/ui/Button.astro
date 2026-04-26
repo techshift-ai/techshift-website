@@ -1,0 +1,41 @@
+---
+interface Props {
+  variant?: 'primary' | 'secondary' | 'ghost' | 'inverse';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  href?: string;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  class: className = '',
+  ...rest
+} = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+
+const baseStyles = 'inline-flex items-center justify-center font-medium transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600';
+
+const sizeStyles: Record<string, string> = {
+  sm: 'h-9 px-4 py-2 text-body-sm rounded-md',
+  md: 'h-11 px-5 py-2.5 text-body-md rounded-md',
+  lg: 'h-13 px-7 py-3.5 text-body-lg font-semibold rounded-md',
+  xl: 'h-14 px-8 py-4 text-body-lg font-semibold rounded-xl',
+};
+
+const variantStyles: Record<string, string> = {
+  primary: 'bg-action-primary text-white shadow-sm hover:bg-action-primary-hover hover:shadow-md hover:-translate-y-px active:bg-action-primary-active active:translate-y-0 active:shadow-sm',
+  secondary: 'bg-white text-text-primary border border-border-default hover:bg-surface-subtle hover:border-border-strong hover:shadow-sm active:bg-surface-muted',
+  ghost: 'bg-transparent text-primary-600 hover:bg-primary-50 hover:text-primary-700 active:bg-primary-100',
+  inverse: 'bg-white text-navy-900 hover:bg-neutral-50 active:bg-neutral-100',
+};
+
+const styles = `${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`;
+---
+
+<Tag href={href} class={styles} {...rest}>
+  <slot />
+</Tag>

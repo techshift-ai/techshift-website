@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://techshift-website.pages.dev/sitemap-index.xml

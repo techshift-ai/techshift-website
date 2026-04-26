@@ -1,0 +1,575 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import FAQAccordion from '../components/ui/FAQAccordion.tsx';
+import AnimatedSection, { AnimatedItem } from '../components/ui/AnimatedSection.tsx';
+import { HeroContainer, HeroOverline, HeroHeadline, HeroSubhead, HeroCta } from '../components/ui/HeroAnimated.tsx';
+import { Phone, Mail, Globe, Cpu, Settings, TrendingUp, Wrench, Target, Clock, DollarSign, ArrowRight, CheckCircle, BarChart2, Users, ShieldCheck, Zap } from 'lucide-react';
+import type { Organization, FAQPage, WithContext } from 'schema-dts';
+
+// ---- Structured Data ----
+const orgSchema: WithContext<Organization> = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Techshift AI Consulting',
+  url: 'https://techshift-website.pages.dev',
+  logo: 'https://techshift-website.pages.dev/assets/logo-horizontal-primary.png',
+  description: 'AI consulting and implementation for small and medium businesses. We build AI systems that handle your business tasks — answering calls, booking appointments, following up with leads — so you can focus on the work that actually needs you.',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Barrie',
+    addressRegion: 'Ontario',
+    addressCountry: 'CA',
+  },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'sales',
+    email: 'hello@techshift.ai',
+  },
+  sameAs: [],
+};
+
+const faqItems = [
+  {
+    question: 'How long does it take to build?',
+    answer: 'Default is four weeks from kickoff to go-live. Some projects are faster if the scope is tight. We show you a working demo every week so you’re never guessing at progress.',
+  },
+  {
+    question: 'What does the monthly subscription cover?',
+    answer: 'Everything that keeps your AI system running and improving: monitoring for errors, tuning performance, upgrading to better AI models when they’re available, and adding small new features as your business evolves. Think of it as having an AI specialist on your team without hiring one.',
+  },
+  {
+    question: 'Do I own what you build?',
+    answer: 'Yes. If the engagement ends, you own everything we built. We document it, hand it over cleanly, and don’t hold anything hostage.',
+  },
+  {
+    question: 'Do I need technical staff to use this?',
+    answer: 'No. We build systems that business owners and their existing teams can use. If something breaks or needs changing, that’s what the monthly subscription is for — we handle it.',
+  },
+  {
+    question: 'Will it work with my existing tools?',
+    answer: 'In most cases, yes. We integrate with the tools you already use — your CRM, calendar, email, phone system, website, whatever fits. During the first call, we’ll map out exactly what connects to what.',
+  },
+  {
+    question: 'What if it doesn’t work?',
+    answer: 'We monitor it closely after launch and tune it based on real results. If something isn’t performing, we fix it — that’s included in the monthly. And there are no long-term contracts: if you’re not seeing value, you can stop anytime.',
+  },
+];
+
+const faqSchema: WithContext<FAQPage> = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question' as const,
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer' as const,
+      text: item.answer,
+    },
+  })),
+};
+
+const services = [
+  {
+    icon: 'Globe',
+    title: 'Websites that work for you',
+    description: 'Not brochures. Sites that qualify visitors, answer questions, and feed leads into your pipeline automatically.',
+  },
+  {
+    icon: 'Cpu',
+    title: 'AI employees',
+    description: 'Agents that handle customer calls, booking, order tracking, and lead follow-up around the clock.',
+  },
+  {
+    icon: 'Settings',
+    title: 'Business automations',
+    description: 'The repetitive tasks you or your staff do every day, week, or month — handled automatically.',
+  },
+  {
+    icon: 'TrendingUp',
+    title: 'Marketing and lead generation',
+    description: 'AI-driven SEO, content, and outbound that keeps your pipeline full without adding headcount.',
+  },
+  {
+    icon: 'Target',
+    title: 'Sales tools',
+    description: 'Smarter follow-up, better targeting, faster outreach. AI that helps you close.',
+  },
+  {
+    icon: 'Wrench',
+    title: 'Custom builds',
+    description: 'When the problem doesn’t fit a category, we start with your business case and build what fits.',
+  },
+];
+
+const processSteps = [
+  {
+    number: '01',
+    title: 'We listen',
+    description: 'A free 30-minute call where we diagnose your biggest time and money drains. No pitch, no pressure.',
+  },
+  {
+    number: '02',
+    title: 'We plan',
+    description: 'We map the work and propose the AI system with the best payoff. You see exactly what you’re getting before you pay.',
+  },
+  {
+    number: '03',
+    title: 'We build',
+    description: 'Four weeks, start to finish. You see a working demo every week. You’re in the room for every decision.',
+  },
+  {
+    number: '04',
+    title: 'We run it',
+    description: 'Your system goes live. We monitor it, tune it, and improve it every month. You focus on running your business.',
+  },
+];
+
+const stats = [
+  {
+    number: '20+',
+    label: 'hours saved per month',
+    sublabel: 'by SMBs after AI implementation',
+    source: 'Thryv Survey, 2026',
+  },
+  {
+    number: '71%',
+    label: 'of Canadian SMBs',
+    sublabel: 'are actively using AI tools',
+    source: 'Microsoft / CNBC Canada, 2025',
+  },
+  {
+    number: '$500–2K',
+    label: 'saved monthly',
+    sublabel: 'by SMBs after AI implementation',
+    source: 'Thryv Survey, 2026',
+  },
+  {
+    number: '60%',
+    label: 'of SMBs say',
+    sublabel: 'lack of in-house resources is the #1 barrier to AI',
+    source: 'Industry Survey, 2025',
+  },
+];
+
+const differentiators = [
+  {
+    icon: 'Wrench',
+    title: 'We build it, not just advise on it.',
+    description: 'Strategy decks are free at this point. We ship working systems that run in your business — not recommendations that collect dust.',
+  },
+  {
+    icon: 'Users',
+    title: 'We speak business, not tech.',
+    description: 'You’ll never hear us say “LLM” or “neural network.” We talk hours saved, costs cut, leads generated. If we can’t put a number on it, we don’t pitch it.',
+  },
+  {
+    icon: 'DollarSign',
+    title: 'You know the price before we start.',
+    description: 'One setup fee. One monthly fee. No hourly billing, no surprise invoices, no scope creep.',
+  },
+  {
+    icon: 'TrendingUp',
+    title: 'Your AI gets better every month.',
+    description: 'The monthly subscription isn’t just hosting. We monitor, tune, and improve your system as your business evolves and AI models get better.',
+  },
+];
+
+// Icon component map for dynamic rendering
+const iconMap: Record<string, typeof Globe> = {
+  Globe, Cpu, Settings, TrendingUp, Target, Wrench, Users, DollarSign,
+};
+---
+
+<BaseLayout
+  title="Techshift AI Consulting | AI That Does the Work"
+  description="AI consulting for small and medium businesses. We build AI systems that handle your calls, appointments, follow-ups, and more — so you focus on the work that needs you."
+>
+  <!-- JSON-LD Structured Data -->
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
+  <!-- ============================================================
+       HERO — surface.brand (#0066FF)
+       ============================================================ -->
+  <section class="relative bg-surface-brand overflow-hidden" aria-labelledby="hero-heading">
+    <!-- Subtle geometric pattern overlay -->
+    <div class="absolute inset-0 opacity-[0.06]" aria-hidden="true">
+      <div class="absolute top-1/4 -left-20 w-80 h-80 rounded-full border-2 border-white"></div>
+      <div class="absolute bottom-1/4 -right-10 w-60 h-60 rounded-full border-2 border-white"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-white"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12 pt-24 sm:pt-32 lg:pt-40 pb-16 sm:pb-20 lg:pb-24">
+      <HeroContainer client:load className="max-w-3xl">
+        <HeroOverline client:load className="inline-block text-overline font-semibold text-primary-100 uppercase tracking-[0.08em] mb-3">
+          AI consulting for small businesses
+        </HeroOverline>
+        <HeroHeadline client:load>
+          <h1 id="hero-heading" class="text-display-2xl font-bold text-white leading-[1.05] tracking-[-0.03em]">
+            AI that does the work.<br class="hidden sm:inline" /> Not just a plan for it.
+          </h1>
+        </HeroHeadline>
+        <HeroSubhead client:load className="mt-6">
+          <p class="text-body-lg sm:text-[1.25rem] text-primary-100 leading-relaxed max-w-[55ch]">
+            Most AI consultants hand you a deck. We hand you a working system &mdash; answering calls, booking appointments, following up with leads &mdash; while you focus on the work that actually needs you.
+          </p>
+        </HeroSubhead>
+        <HeroCta client:load className="mt-10 flex flex-col sm:flex-row gap-4">
+          <Button variant="inverse" size="lg" href="#book">
+            Book your free diagnostic
+            <svg class="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </Button>
+          <Button variant="ghost" size="lg" href="#examples" class="!text-white/90 hover:!text-white hover:!bg-white/10">
+            See how it works
+          </Button>
+        </HeroCta>
+      </HeroContainer>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       WHAT THIS LOOKS LIKE — surface.default
+       ============================================================ -->
+  <section id="examples" class="bg-surface-default py-16 sm:py-20 lg:py-24" aria-labelledby="examples-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">Real examples</p>
+        <h2 id="examples-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+          What this looks like for you
+        </h2>
+        <p class="mt-4 text-body-lg text-text-secondary max-w-[60ch] leading-relaxed">
+          AI handles real business tasks, right now. Here are three things we build for businesses like yours.
+        </p>
+      </AnimatedSection>
+
+      <div class="mt-12 lg:mt-16 grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+        <!-- Example 1: Phone agent -->
+        <AnimatedSection client:visible className="group relative bg-surface-subtle border border-border-default rounded-lg p-6 lg:p-8 hover:shadow-md hover:-translate-y-0.5 transition-all">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-primary-50 text-primary-600">
+              <Phone size={22} />
+            </div>
+            <span class="text-caption font-semibold text-primary-600 uppercase tracking-widest">After-hours calls</span>
+          </div>
+          <h3 class="text-heading-md font-semibold text-text-primary">
+            An AI agent answers your phone after hours
+          </h3>
+          <p class="mt-3 text-body-md text-text-secondary leading-relaxed">
+            It qualifies the lead, checks your service area and pricing, and books them into your calendar &mdash; all before you wake up.
+          </p>
+        </AnimatedSection>
+
+        <!-- Example 2: Email triage -->
+        <AnimatedSection client:visible className="group relative bg-surface-subtle border border-border-default rounded-lg p-6 lg:p-8 hover:shadow-md hover:-translate-y-0.5 transition-all">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-primary-50 text-primary-600">
+              <Mail size={22} />
+            </div>
+            <span class="text-caption font-semibold text-primary-600 uppercase tracking-widest">Email triage</span>
+          </div>
+          <h3 class="text-heading-md font-semibold text-text-primary">
+            A system that reads and drafts email responses
+          </h3>
+          <p class="mt-3 text-body-md text-text-secondary leading-relaxed">
+            It uses your policies and past replies to draft responses, then flags the ones that need your eyes. You review and send &mdash; or let it handle the routine ones.
+          </p>
+        </AnimatedSection>
+
+        <!-- Example 3: Quote automation -->
+        <AnimatedSection client:visible className="group relative bg-surface-subtle border border-border-default rounded-lg p-6 lg:p-8 hover:shadow-md hover:-translate-y-0.5 transition-all">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-primary-50 text-primary-600">
+              <Zap size={22} />
+            </div>
+            <span class="text-caption font-semibold text-primary-600 uppercase tracking-widest">Auto-quoting</span>
+          </div>
+          <h3 class="text-heading-md font-semibold text-text-primary">
+            An automation that turns calls into quotes
+          </h3>
+          <p class="mt-3 text-body-md text-text-secondary leading-relaxed">
+            It takes a phone call recording, pulls out the job details, drafts a quote, and sends it &mdash; all before you&apos;re back from the job site.
+          </p>
+        </AnimatedSection>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       WHAT WE BUILD — surface.muted
+       ============================================================ -->
+  <section id="services" class="bg-surface-muted py-16 sm:py-20 lg:py-24" aria-labelledby="services-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">Services</p>
+        <h2 id="services-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+          What we build
+        </h2>
+        <p class="mt-4 text-body-lg text-text-secondary max-w-[60ch] leading-relaxed">
+          Techshift AI Consulting builds AI systems in six categories. The shape depends on what your business actually needs &mdash; not on what&apos;s in a catalog.
+        </p>
+      </AnimatedSection>
+
+      <AnimatedSection client:visible variant="stagger" className="mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {services.map((service) => {
+          const IconComponent = iconMap[service.icon];
+          return (
+            <AnimatedItem client:visible className="bg-white border border-border-default rounded-lg p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+              <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-primary-50 text-primary-600 mb-4">
+                {IconComponent && <IconComponent size={28} />}
+              </div>
+              <h3 class="text-heading-md font-semibold text-text-primary">{service.title}</h3>
+              <p class="mt-2 text-body-sm text-text-secondary leading-relaxed">{service.description}</p>
+            </AnimatedItem>
+          );
+        })}
+      </AnimatedSection>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       HOW WE WORK — surface.default
+       ============================================================ -->
+  <section id="process" class="bg-surface-default py-16 sm:py-20 lg:py-24" aria-labelledby="process-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <div class="text-center max-w-2xl mx-auto">
+          <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">Process</p>
+          <h2 id="process-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+            How we work
+          </h2>
+          <p class="mt-4 text-body-lg text-text-secondary leading-relaxed">
+            Techshift AI Consulting follows a four-step process from first call to running system. You know what to expect at every stage.
+          </p>
+        </div>
+      </AnimatedSection>
+
+      <AnimatedSection client:visible variant="stagger" className="mt-12 lg:mt-16">
+        <!-- Desktop: horizontal with connecting line -->
+        <div class="hidden lg:grid grid-cols-4 gap-8 relative">
+          <!-- Connecting line -->
+          <div class="absolute top-[28px] left-[calc(12.5%+20px)] right-[calc(12.5%+20px)] h-[2px] border-t-2 border-dashed border-neutral-200" aria-hidden="true"></div>
+
+          {processSteps.map((step) => (
+            <AnimatedItem client:visible className="relative text-center">
+              <div class="relative z-10 inline-flex items-center justify-center w-14 h-14 rounded-full bg-navy-900 text-white text-heading-sm font-bold mb-5">
+                {step.number}
+              </div>
+              <h3 class="text-heading-md font-semibold text-text-primary">{step.title}</h3>
+              <p class="mt-2 text-body-sm text-text-secondary leading-relaxed max-w-[30ch] mx-auto">
+                {step.description}
+              </p>
+            </AnimatedItem>
+          ))}
+        </div>
+
+        <!-- Mobile/tablet: vertical stack -->
+        <div class="lg:hidden space-y-8 relative pl-10">
+          <!-- Connecting line -->
+          <div class="absolute left-[27px] top-7 bottom-7 w-[2px] border-l-2 border-dashed border-neutral-200" aria-hidden="true"></div>
+
+          {processSteps.map((step) => (
+            <AnimatedItem client:visible className="relative">
+              <div class="absolute -left-10 top-0 z-10 inline-flex items-center justify-center w-14 h-14 rounded-full bg-navy-900 text-white text-heading-sm font-bold">
+                {step.number}
+              </div>
+              <div class="ml-8">
+                <h3 class="text-heading-md font-semibold text-text-primary">{step.title}</h3>
+                <p class="mt-1.5 text-body-md text-text-secondary leading-relaxed">
+                  {step.description}
+                </p>
+              </div>
+            </AnimatedItem>
+          ))}
+        </div>
+      </AnimatedSection>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       WHY US — surface.default (continued)
+       ============================================================ -->
+  <section class="bg-surface-default pb-16 sm:pb-20 lg:pb-24" aria-labelledby="why-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <!-- Divider -->
+      <div class="border-t border-border-default mb-16 sm:mb-20 lg:mb-24" aria-hidden="true"></div>
+
+      <AnimatedSection client:visible>
+        <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">Why Techshift</p>
+        <h2 id="why-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+          Why businesses choose us
+        </h2>
+        <p class="mt-4 text-body-lg text-text-secondary max-w-[60ch] leading-relaxed">
+          Techshift AI Consulting builds and runs AI systems for small businesses in Barrie and across Ontario. Here&apos;s what sets us apart.
+        </p>
+      </AnimatedSection>
+
+      <AnimatedSection client:visible variant="stagger" className="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        {differentiators.map((item) => {
+          const IconComponent = iconMap[item.icon];
+          return (
+            <AnimatedItem client:visible className="flex gap-5 p-6 lg:p-8 bg-surface-subtle border border-border-default rounded-lg">
+              <div class="shrink-0 flex items-center justify-center w-12 h-12 rounded-lg bg-primary-50 text-primary-600">
+                {IconComponent && <IconComponent size={24} />}
+              </div>
+              <div>
+                <h3 class="text-heading-md font-semibold text-text-primary">{item.title}</h3>
+                <p class="mt-2 text-body-md text-text-secondary leading-relaxed">{item.description}</p>
+              </div>
+            </AnimatedItem>
+          );
+        })}
+      </AnimatedSection>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       STATS BAR — surface.inverse (dark)
+       ============================================================ -->
+  <section class="bg-surface-inverse py-16 sm:py-20 lg:py-24" aria-labelledby="stats-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <h2 id="stats-heading" class="sr-only">AI adoption by the numbers</h2>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+          {stats.map((stat) => (
+            <div class="text-center">
+              <p class="text-display-md lg:text-display-lg font-extrabold text-white tracking-tight">
+                {stat.number}
+              </p>
+              <p class="mt-2 text-body-sm font-medium text-neutral-300">{stat.label}</p>
+              <p class="text-caption text-neutral-400 mt-0.5">{stat.sublabel}</p>
+              <p class="mt-2 text-caption text-neutral-500">&mdash; {stat.source}</p>
+            </div>
+          ))}
+        </div>
+      </AnimatedSection>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       PRICING — surface.default
+       ============================================================ -->
+  <section id="pricing" class="bg-surface-default py-16 sm:py-20 lg:py-24" aria-labelledby="pricing-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">Pricing</p>
+        <h2 id="pricing-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+          Simple pricing. No surprises.
+        </h2>
+        <p class="mt-4 text-body-lg text-text-secondary max-w-[60ch] leading-relaxed">
+          Techshift AI Consulting uses a two-part pricing model: one setup fee and one monthly subscription. You know what you&apos;re paying before we start.
+        </p>
+      </AnimatedSection>
+
+      <AnimatedSection client:visible variant="stagger" className="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-4xl">
+        <!-- Setup fee -->
+        <AnimatedItem client:visible className="p-6 lg:p-8 bg-white border-2 border-primary-600 rounded-lg shadow-md relative">
+          <div class="absolute -top-3 left-6">
+            <span class="inline-block bg-primary-600 text-white text-caption font-semibold px-3 py-1 rounded-full uppercase tracking-widest">One-time</span>
+          </div>
+          <h3 class="text-heading-lg font-semibold text-text-primary mt-2">Setup fee</h3>
+          <p class="mt-3 text-body-md text-text-secondary leading-relaxed">
+            Covers the full build: the AI system, integrations with your existing tools, training on your business data, testing, and go-live.
+          </p>
+          <ul class="mt-5 space-y-2.5">
+            <li class="flex items-start gap-2 text-body-sm text-text-secondary">
+              <CheckCircle size={18} className="shrink-0 text-state-success mt-0.5" />
+              50% due upfront to start
+            </li>
+            <li class="flex items-start gap-2 text-body-sm text-text-secondary">
+              <CheckCircle size={18} className="shrink-0 text-state-success mt-0.5" />
+              50% due at go-live
+            </li>
+            <li class="flex items-start gap-2 text-body-sm text-text-secondary">
+              <CheckCircle size={18} className="shrink-0 text-state-success mt-0.5" />
+              Four-week default build timeline
+            </li>
+          </ul>
+        </AnimatedItem>
+
+        <!-- Monthly subscription -->
+        <AnimatedItem client:visible className="relative p-6 lg:p-8 bg-white border border-border-default rounded-lg shadow-sm">
+          <div class="absolute -top-3 left-6">
+            <span class="inline-block bg-navy-900 text-white text-caption font-semibold px-3 py-1 rounded-full uppercase tracking-widest">Monthly</span>
+          </div>
+          <h3 class="text-heading-lg font-semibold text-text-primary mt-2">Monthly subscription</h3>
+          <p class="mt-3 text-body-md text-text-secondary leading-relaxed">
+            Covers monitoring, tuning, improvements, and new features as your business grows. Think of it as having an AI specialist on retainer.
+          </p>
+          <ul class="mt-5 space-y-2.5">
+            <li class="flex items-start gap-2 text-body-sm text-text-secondary">
+              <CheckCircle size={18} className="shrink-0 text-state-success mt-0.5" />
+              Starts the month after launch
+            </li>
+            <li class="flex items-start gap-2 text-body-sm text-text-secondary">
+              <CheckCircle size={18} className="shrink-0 text-state-success mt-0.5" />
+              No long-term contracts
+            </li>
+            <li class="flex items-start gap-2 text-body-sm text-text-secondary">
+              <CheckCircle size={18} className="shrink-0 text-state-success mt-0.5" />
+              Cancel anytime if it&apos;s not working
+            </li>
+          </ul>
+        </AnimatedItem>
+      </AnimatedSection>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FAQ — surface.subtle
+       ============================================================ -->
+  <section id="faq" class="bg-surface-subtle py-16 sm:py-20 lg:py-24" aria-labelledby="faq-heading">
+    <div class="mx-auto max-w-[800px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <div class="text-center">
+          <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">FAQ</p>
+          <h2 id="faq-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+            Common questions
+          </h2>
+          <p class="mt-4 text-body-lg text-text-secondary leading-relaxed">
+            Answers to what business owners ask us most.
+          </p>
+        </div>
+      </AnimatedSection>
+
+      <div class="mt-10 lg:mt-12">
+        <FAQAccordion items={faqItems} client:visible />
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FINAL CTA — surface.brand (#0066FF)
+       ============================================================ -->
+  <section id="book" class="bg-surface-brand py-16 sm:py-20 lg:py-24" aria-labelledby="cta-heading">
+    <div class="mx-auto max-w-[600px] px-4 sm:px-6 lg:px-12 text-center">
+      <AnimatedSection client:visible>
+        <h2 id="cta-heading" class="text-display-md font-bold text-white tracking-[-0.015em]">
+          Find out where AI saves you the most time and money.
+        </h2>
+        <p class="mt-4 text-body-lg text-primary-100 leading-relaxed">
+          A 30-minute call to diagnose your biggest time and money drains. Free. No pitch. You describe your business, we identify where AI fits, and you decide if it&apos;s worth pursuing.
+        </p>
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Button variant="inverse" size="lg" href="mailto:hello@techshift.ai?subject=Free%20AI%20Diagnostic%20%E2%80%93%20[Your%20Business%20Name]">
+            Book your free diagnostic
+            <svg class="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </Button>
+        </div>
+        <p class="mt-6 text-body-sm text-primary-200">
+          Or email us directly at <a href="mailto:hello@techshift.ai" class="underline underline-offset-2 hover:text-white transition-colors">hello@techshift.ai</a>
+        </p>
+      </AnimatedSection>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,207 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Design tokens — from clients/techshift/design-system/tokens.json
+   Source of truth: tokens.json. No hardcoded colors, sizes,
+   durations, or easings in component code.
+   ============================================================ */
+
+@theme {
+  /* ---- Primary Blue ---- */
+  --color-primary-50: #EFF6FF;
+  --color-primary-100: #DBEAFE;
+  --color-primary-200: #BFDBFE;
+  --color-primary-300: #93C5FD;
+  --color-primary-400: #60A5FA;
+  --color-primary-500: #3B82F6;
+  --color-primary-600: #0066FF;
+  --color-primary-700: #0052CC;
+  --color-primary-800: #003D99;
+  --color-primary-900: #002966;
+  --color-primary-950: #001A4D;
+
+  /* ---- Navy ---- */
+  --color-navy-50: #F0F4F8;
+  --color-navy-100: #D9E2EC;
+  --color-navy-200: #BCCCDC;
+  --color-navy-300: #9FB3C8;
+  --color-navy-400: #829AB1;
+  --color-navy-500: #627D98;
+  --color-navy-600: #486581;
+  --color-navy-700: #334E68;
+  --color-navy-800: #243B53;
+  --color-navy-900: #0F1B2D;
+  --color-navy-950: #091420;
+
+  /* ---- Accent (Amber) ---- */
+  --color-accent-50: #FFFBEB;
+  --color-accent-100: #FEF3C7;
+  --color-accent-200: #FDE68A;
+  --color-accent-300: #FCD34D;
+  --color-accent-400: #FBBF24;
+  --color-accent-500: #F59E0B;
+  --color-accent-600: #D97706;
+  --color-accent-700: #B45309;
+  --color-accent-800: #92400E;
+  --color-accent-900: #78350F;
+
+  /* ---- Neutral (Warm Gray) ---- */
+  --color-neutral-0: #FFFFFF;
+  --color-neutral-50: #FAFAF9;
+  --color-neutral-100: #F5F5F4;
+  --color-neutral-200: #E7E5E4;
+  --color-neutral-300: #D6D3D1;
+  --color-neutral-400: #A8A29E;
+  --color-neutral-500: #78716C;
+  --color-neutral-600: #57534E;
+  --color-neutral-700: #44403C;
+  --color-neutral-800: #292524;
+  --color-neutral-900: #1C1917;
+  --color-neutral-950: #0C0A09;
+
+  /* ---- Semantic: Surfaces ---- */
+  --color-surface-default: #FFFFFF;
+  --color-surface-subtle: #FAFAF9;
+  --color-surface-muted: #F5F5F4;
+  --color-surface-raised: #FFFFFF;
+  --color-surface-inverse: #0F1B2D;
+  --color-surface-brand: #0066FF;
+  --color-surface-accent: #FFFBEB;
+
+  /* ---- Semantic: Text ---- */
+  --color-text-primary: #0F1B2D;
+  --color-text-secondary: #334E68;
+  --color-text-muted: #78716C;
+  --color-text-disabled: #A8A29E;
+  --color-text-inverse: #FFFFFF;
+  --color-text-brand: #0066FF;
+  --color-text-link: #0066FF;
+  --color-text-link-hover: #0052CC;
+
+  /* ---- Semantic: Borders ---- */
+  --color-border-default: #E7E5E4;
+  --color-border-muted: #F5F5F4;
+  --color-border-strong: #D6D3D1;
+  --color-border-focus: #0066FF;
+  --color-border-error: #DC2626;
+
+  /* ---- Semantic: Actions ---- */
+  --color-action-primary: #0066FF;
+  --color-action-primary-hover: #0052CC;
+  --color-action-primary-active: #003D99;
+  --color-action-secondary: #FFFFFF;
+  --color-action-secondary-hover: #FAFAF9;
+  --color-action-accent: #F59E0B;
+
+  /* ---- Semantic: State ---- */
+  --color-state-success: #16A34A;
+  --color-state-success-bg: #F0FDF4;
+  --color-state-warning: #D97706;
+  --color-state-warning-bg: #FFFBEB;
+  --color-state-error: #DC2626;
+  --color-state-error-bg: #FEF2F2;
+  --color-state-info: #0066FF;
+  --color-state-info-bg: #EFF6FF;
+
+  /* ---- Typography ---- */
+  --font-display: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+
+  --text-display-2xl: clamp(2.25rem, 1.5rem + 3.33vw, 4.5rem);
+  --text-display-xl: clamp(2rem, 1.33rem + 2.96vw, 3.5rem);
+  --text-display-lg: clamp(1.75rem, 1.25rem + 2.22vw, 2.75rem);
+  --text-display-md: clamp(1.5rem, 1.125rem + 1.67vw, 2.25rem);
+  --text-display-sm: clamp(1.25rem, 1rem + 1.11vw, 1.75rem);
+  --text-heading-lg: clamp(1.25rem, 1.125rem + 0.56vw, 1.5rem);
+  --text-heading-md: clamp(1.125rem, 1.063rem + 0.28vw, 1.25rem);
+  --text-heading-sm: 1.125rem;
+  --text-body-lg: 1.125rem;
+  --text-body-md: 1rem;
+  --text-body-sm: 0.875rem;
+  --text-caption: 0.75rem;
+  --text-overline: 0.75rem;
+
+  /* ---- Spacing ---- */
+  --spacing-0: 0;
+  --spacing-0_5: 0.125rem;
+  --spacing-1: 0.25rem;
+  --spacing-1_5: 0.375rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-10: 2.5rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+  --spacing-20: 5rem;
+  --spacing-24: 6rem;
+  --spacing-32: 8rem;
+  --spacing-40: 10rem;
+
+  /* ---- Radii ---- */
+  --radius-none: 0px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* ---- Shadows ---- */
+  --shadow-sm: 0 1px 2px 0 rgba(15, 27, 45, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(15, 27, 45, 0.07), 0 2px 4px -2px rgba(15, 27, 45, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 27, 45, 0.08), 0 4px 6px -4px rgba(15, 27, 45, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(15, 27, 45, 0.1), 0 8px 10px -6px rgba(15, 27, 45, 0.05);
+
+  /* ---- Motion ---- */
+  --duration-instant: 0ms;
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --duration-extra-slow: 600ms;
+
+  --ease-snap: cubic-bezier(0.2, 0, 0, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---- Base styles ---- */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-default);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Brand-colored text selection */
+::selection {
+  background-color: var(--color-primary-100);
+  color: var(--color-navy-900);
+}
+
+/* Focus ring utility */
+.focus-ring {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

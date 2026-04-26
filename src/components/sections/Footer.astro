@@ -1,0 +1,95 @@
+---
+const currentYear = new Date().getFullYear();
+
+const footerLinks = [
+  { label: 'Services', href: '#services' },
+  { label: 'How We Work', href: '#process' },
+  { label: 'Pricing', href: '#pricing' },
+  { label: 'FAQ', href: '#faq' },
+  { label: 'Book a Call', href: '#book' },
+];
+---
+
+<footer class="bg-surface-inverse text-text-inverse" role="contentinfo">
+  <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12 pt-16 pb-8">
+    <!-- Top section: logo + nav + contact -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 pb-10 border-b border-navy-700">
+
+      <!-- Logo + tagline -->
+      <div class="md:col-span-5">
+        <a href="/" aria-label="Techshift AI Consulting — Home">
+          <img
+            src="/assets/logo-horizontal-reverse.png"
+            alt="Techshift AI Consulting"
+            class="h-8 w-auto"
+            width="140"
+            height="32"
+            loading="lazy"
+          />
+        </a>
+        <p class="mt-4 text-body-sm text-neutral-300 max-w-[32ch] leading-relaxed">
+          AI that pays for itself.
+        </p>
+      </div>
+
+      <!-- Navigation -->
+      <div class="md:col-span-3">
+        <h2 class="text-caption font-semibold text-neutral-400 uppercase tracking-widest mb-4">
+          Navigate
+        </h2>
+        <nav aria-label="Footer navigation">
+          <ul class="space-y-2.5">
+            {footerLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="text-body-sm text-neutral-300 hover:text-white transition-colors"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Contact -->
+      <div class="md:col-span-4">
+        <h2 class="text-caption font-semibold text-neutral-400 uppercase tracking-widest mb-4">
+          Get in touch
+        </h2>
+        <ul class="space-y-2.5">
+          <li>
+            <a
+              href="#book"
+              class="text-body-sm text-neutral-300 hover:text-white transition-colors"
+            >
+              Book your free diagnostic
+            </a>
+          </li>
+          <li>
+            <a
+              href="mailto:hello@techshift.ai"
+              class="text-body-sm text-neutral-300 hover:text-white transition-colors"
+            >
+              hello@techshift.ai
+            </a>
+          </li>
+          <li class="text-body-sm text-neutral-400">
+            Barrie, Ontario, Canada
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom bar: copyright -->
+    <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-caption text-neutral-400">
+        &copy; {currentYear} Techshift AI Consulting. All rights reserved.
+      </p>
+      <p class="text-caption text-neutral-500">
+        AI-built. Human-run.
+      </p>
+    </div>
+  </div>
+</footer>
