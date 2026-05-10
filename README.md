@@ -1,6 +1,6 @@
 # Techshift AI Consulting — Website
 
-Marketing site for [Techshift AI Consulting](https://techshift-website.pages.dev/). Built with Astro, Tailwind CSS 4, React, and Framer Motion. Deployed to Cloudflare Pages.
+Marketing site for [Techshift AI Consulting](https://techshift.ai/). Built with Astro, Tailwind CSS 4, React, and Framer Motion. Deployed to Cloudflare Pages (production URL: techshift.ai).
 
 ## Quick start
 
@@ -18,7 +18,7 @@ npm run preview  # preview the build locally
 
 ## Deploy
 
-Merging to `main` auto-deploys to [techshift-website.pages.dev](https://techshift-website.pages.dev/) via GitHub Actions.
+Merging to `main` auto-deploys production to [techshift.ai](https://techshift.ai/) via GitHub Actions (Cloudflare Pages).
 
 Pull requests get preview deploys at `<branch>.techshift-website.pages.dev`.
 

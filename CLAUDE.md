@@ -1,6 +1,6 @@
 # Techshift AI Consulting — Website
 
-Marketing site for Techshift AI Consulting, deployed to [techshift-website.pages.dev](https://techshift-website.pages.dev/).
+Marketing site for Techshift AI Consulting, deployed to [techshift.ai](https://techshift.ai/).
 
 ## Stack
 

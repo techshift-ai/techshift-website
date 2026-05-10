@@ -1,0 +1,27 @@
+---
+description: Copy standards — banned words, tone, and site voice for Techshift AI Consulting
+globs: src/**/*.{astro,tsx}
+alwaysApply: false
+---
+
+# Copy Rules
+
+All site copy follows the brief at `techshift-ai-workforce/clients/techshift/copy-brief.md`.
+
+## Banned Words and Phrases
+
+**Internal firm language — never appears on site:**
+- "solve / save / grow", "outcomes over hours", "client zero", "build once deploy many"
+- "solutions" as a generic noun — name the thing: *agent*, *system*, *automation*, *website*
+
+**AI hype — never:**
+- "revolutionary", "cutting-edge", "next-gen", "transformative"
+
+**Jargon — never:**
+- "leverage", "synergy", "unlock", "harness", "empower"
+
+## Voice
+
+- Direct, specific, confident — not breathless
+- Name the actual deliverable, not the category
+- Reader-first: what does this do *for them*, not what it is

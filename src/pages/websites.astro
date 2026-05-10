@@ -1,0 +1,509 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import FAQAccordion from '../components/ui/FAQAccordion.tsx';
+import AnimatedSection, { AnimatedItem } from '../components/ui/AnimatedSection.tsx';
+import { HeroContainer, HeroHeadline, HeroSubhead, HeroCta } from '../components/ui/HeroAnimated.tsx';
+import CalendarBooking from '../components/ui/CalendarBooking.astro';
+import {
+  Bot, Calendar, FileText, Send, Search, Gauge,
+  Building2, Stethoscope, Briefcase, UtensilsCrossed,
+  CheckCircle, X, ChevronRight,
+} from 'lucide-react';
+import type { FAQPage, WithContext } from 'schema-dts';
+
+// ---- Structured Data ----
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://techshift.ai/' },
+    { '@type': 'ListItem', position: 2, name: 'Websites', item: 'https://techshift.ai/websites' },
+  ],
+};
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'AI-Powered Website Design and Development',
+  description: 'Custom business websites with built-in AI assistants, automated booking, smart forms, and lead follow-up. Built for SEO, AEO, and conversion.',
+  provider: {
+    '@type': 'Organization',
+    name: 'Techshift',
+    url: 'https://techshift.ai',
+  },
+  serviceType: 'Web Design and Development',
+  areaServed: {
+    '@type': 'Country',
+    name: 'Canada',
+  },
+};
+
+const faqItems = [
+  {
+    question: 'Can you rebuild my existing website?',
+    answer: 'Yes. We take your current site, keep what works, and rebuild it with modern design, faster performance, and AI features baked in. You keep your domain, your content, and your SEO authority — we just make the site actually work for your business.',
+  },
+  {
+    question: 'How long does a website build take?',
+    answer: 'Most websites go live within 3–4 weeks. You see a working demo every week, so you\'re never guessing at progress. Complex sites with custom integrations may take 5–6 weeks.',
+  },
+  {
+    question: 'How does the AI assistant work?',
+    answer: 'The AI assistant is trained on your business — your services, pricing, hours, policies, and FAQs. When a visitor asks a question, it answers accurately using your information, can book appointments directly, and captures lead details for follow-up. It works 24/7 and handles multiple conversations at once.',
+  },
+  {
+    question: 'Will the site work on mobile?',
+    answer: 'Every site we build is responsive from the start. We design for mobile first, then scale up for tablet and desktop. Over 60% of your visitors are on their phone — the mobile experience is the priority, not an afterthought.',
+  },
+  {
+    question: 'Do I need to manage the AI or update the site myself?',
+    answer: 'No. The monthly subscription covers all updates, content changes, AI tuning, and maintenance. If you want to make a change, tell us and we handle it. If the AI needs adjusting based on customer interactions, we monitor and improve it.',
+  },
+  {
+    question: 'What about hosting, security, and speed?',
+    answer: 'All included. We host on fast, globally distributed infrastructure with SSL certificates, daily backups, and DDoS protection. Sites load in under 2 seconds. You don\'t manage any of it.',
+  },
+  {
+    question: 'Will my site rank on Google?',
+    answer: 'We build every site with SEO best practices: proper heading structure, meta tags, structured data, fast load times, mobile-first design, and clean URLs. We also optimize for AI search engines so your business shows up in AI-generated answers, not just traditional search results.',
+  },
+  {
+    question: 'What if I already have a site that ranks well?',
+    answer: 'We preserve your existing SEO authority. We set up proper redirects, keep your URL structure where it makes sense, and migrate your content carefully. You don\'t lose what you\'ve built — you build on top of it.',
+  },
+];
+
+const faqSchema: WithContext<FAQPage> = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question' as const,
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer' as const,
+      text: item.answer,
+    },
+  })),
+};
+
+const aiFeatures = [
+  {
+    icon: 'Bot',
+    title: 'AI chat assistant',
+    description: 'Answers visitor questions instantly using your business information. Handles pricing, availability, directions — everything you\'d normally answer by phone or email.',
+  },
+  {
+    icon: 'Calendar',
+    title: 'Automated booking',
+    description: 'Visitors book appointments directly on your site. Syncs with your calendar, sends confirmations, and handles rescheduling — no back-and-forth.',
+  },
+  {
+    icon: 'FileText',
+    title: 'Smart forms',
+    description: 'Forms that adapt based on what the visitor needs. A roofing lead gets different questions than a gutter cleaning request. Better data in, better follow-up out.',
+  },
+  {
+    icon: 'Send',
+    title: 'Automated follow-up',
+    description: 'When someone fills out a form or starts a chat, they get a follow-up within minutes — not hours. Email, SMS, or both. No lead falls through the cracks.',
+  },
+  {
+    icon: 'Search',
+    title: 'SEO and AEO optimized',
+    description: 'Built for Google and AI search engines. Structured data, clean code, fast loads, and content formatted so your business appears in AI-generated answers.',
+  },
+  {
+    icon: 'Gauge',
+    title: 'Fast by default',
+    description: 'Sites load in under 2 seconds on any device. No bloated page builders, no unnecessary plugins. Clean code, optimized images, global CDN delivery.',
+  },
+];
+
+const useCases = [
+  {
+    icon: 'Building2',
+    industry: 'Home services',
+    title: 'A roofer stops losing leads at 6 PM',
+    before: 'A static website with a phone number. After hours, voicemails piled up and leads went to competitors who responded first.',
+    after: 'The AI assistant answers questions about pricing, availability, and service areas 24/7. Visitors book a free inspection directly on the site. Automated follow-up texts confirm the appointment within minutes.',
+    metric: '40% more booked inspections, zero missed leads after hours.',
+  },
+  {
+    icon: 'Stethoscope',
+    industry: 'Health & wellness',
+    title: 'A dental clinic fills its empty appointment slots',
+    before: 'Patients called during business hours to book. The receptionist juggled phones, walk-ins, and scheduling — and cancellations left gaps in the calendar.',
+    after: 'Online booking integrated with their practice management system. The AI handles rescheduling requests, sends appointment reminders, and fills cancelled slots from a waitlist — automatically.',
+    metric: '25% fewer no-shows, 15 hours saved per week on phone calls.',
+  },
+  {
+    icon: 'Briefcase',
+    industry: 'Professional services',
+    title: 'A law firm qualifies leads before the first call',
+    before: 'Every contact form submission got the same follow-up, and the intake team spent hours on calls with people who weren\'t a fit.',
+    after: 'Smart intake forms ask the right questions upfront. The AI pre-qualifies leads based on case type, urgency, and location — then routes qualified leads directly to the right attorney with a summary.',
+    metric: '50% less time on unqualified leads, faster response to high-value inquiries.',
+  },
+  {
+    icon: 'UtensilsCrossed',
+    industry: 'Restaurants & hospitality',
+    title: 'A restaurant handles reservations and catering around the clock',
+    before: 'Reservation requests came through phone calls, Instagram DMs, email, and walk-ins. Catering inquiries often went unanswered for days.',
+    after: 'One website handles it all. The AI takes reservation requests, answers menu and dietary questions, and captures catering leads with the right details — then routes them to the events manager with a full brief.',
+    metric: '3x more catering inquiries captured, zero missed reservation requests.',
+  },
+];
+
+const comparisonItems = [
+  { old: 'Static brochure nobody reads', modern: 'AI assistant that answers questions 24/7' },
+  { old: 'Contact form that goes to a cluttered inbox', modern: 'Smart forms that qualify and route leads automatically' },
+  { old: '"Call us" button (and voicemail after hours)', modern: 'Automated booking that syncs with your calendar' },
+  { old: 'No follow-up — leads go cold', modern: 'Instant follow-up via email and SMS' },
+  { old: 'Slow, bloated page builder', modern: 'Sub-2-second load times on every device' },
+  { old: 'Built for Google circa 2018', modern: 'Optimized for Google, AI search, and voice assistants' },
+  { old: 'You manage updates yourself (or pay per change)', modern: 'We manage everything — updates, content, AI tuning' },
+];
+
+const includedItems = [
+  'Custom design — no templates, no page builders',
+  'Mobile-first responsive layout',
+  'AI chat assistant trained on your business',
+  'Online booking and appointment scheduling',
+  'Smart lead capture forms',
+  'Automated email and SMS follow-up',
+  'SEO setup — meta tags, structured data, sitemap',
+  'AEO optimization — AI-ready content and schema',
+  'SSL certificate and security hardening',
+  'Fast hosting on global CDN',
+  'Analytics and conversion tracking',
+  'Monthly maintenance, updates, and AI tuning',
+];
+
+const iconMap: Record<string, typeof Bot> = {
+  Bot, Calendar, FileText, Send, Search, Gauge,
+  Building2, Stethoscope, Briefcase, UtensilsCrossed,
+};
+---
+
+<BaseLayout
+  title="AI-Powered Websites | Techshift"
+  description="Custom business websites with built-in AI assistants, automated booking, smart forms, and lead follow-up. Built for SEO, AEO, and conversion."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
+
+  <!-- ============================================================
+       HERO — surface.brand
+       ============================================================ -->
+  <section class="relative bg-surface-brand overflow-hidden" aria-labelledby="hero-heading">
+    <div class="absolute inset-0 opacity-[0.06]" aria-hidden="true">
+      <div class="absolute top-1/4 -left-20 w-80 h-80 rounded-full border-2 border-white"></div>
+      <div class="absolute bottom-1/3 -right-10 w-60 h-60 rounded-full border-2 border-white"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-white"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12 pt-24 sm:pt-32 lg:pt-40 pb-16 sm:pb-20 lg:pb-24">
+      <nav aria-label="Breadcrumb" class="mb-8">
+        <ol class="flex items-center gap-2 text-body-sm text-primary-200">
+          <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+          <li aria-hidden="true"><ChevronRight size={14} /></li>
+          <li class="text-white font-medium">Websites</li>
+        </ol>
+      </nav>
+
+      <HeroContainer client:load className="max-w-3xl">
+        <HeroHeadline client:load>
+          <h1 id="hero-heading" class="text-display-2xl font-bold text-white leading-[1.05] tracking-[-0.03em]">
+            Your website should be your best employee.
+          </h1>
+        </HeroHeadline>
+        <HeroSubhead client:load className="mt-6">
+          <p class="text-body-lg sm:text-[1.25rem] text-primary-100 leading-relaxed max-w-[55ch]">
+            Most business websites sit there doing nothing. Ours qualify leads, book appointments, answer questions, and follow up with visitors — automatically, around the clock.
+          </p>
+        </HeroSubhead>
+        <HeroCta client:load className="mt-10 flex flex-col sm:flex-row gap-4">
+          <Button variant="inverse" size="lg" href="#book-websites">
+            Book a free consultation
+            <svg class="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </Button>
+          <Button variant="ghost" size="lg" href="#whats-included" class="!text-white/90 hover:!text-white hover:!bg-white/10">
+            See what's included
+          </Button>
+        </HeroCta>
+      </HeroContainer>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       THE PROBLEM — surface.default
+       ============================================================ -->
+  <section class="bg-surface-default py-16 sm:py-20 lg:py-24" aria-labelledby="problem-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <div class="max-w-3xl">
+          <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">The problem</p>
+          <h2 id="problem-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+            Your website is probably costing you customers
+          </h2>
+          <p class="mt-4 text-body-lg text-text-secondary leading-relaxed">
+            Most small business websites were built years ago and haven't kept up. They look outdated, load slowly, and do nothing to turn visitors into customers. People land on your site, don't find what they need, and leave — often to a competitor who made it easier.
+          </p>
+        </div>
+      </AnimatedSection>
+
+      <AnimatedSection client:visible variant="stagger" className="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        <AnimatedItem client:visible className="p-6 lg:p-8 bg-surface-subtle border border-border-default rounded-lg">
+          <p class="text-display-md font-extrabold text-primary-600">88%</p>
+          <p class="mt-2 text-heading-md font-semibold text-text-primary">won't come back</p>
+          <p class="mt-2 text-body-sm text-text-secondary leading-relaxed">
+            of visitors who have a bad experience on your website won't return. First impressions are the only impression.
+          </p>
+        </AnimatedItem>
+
+        <AnimatedItem client:visible className="p-6 lg:p-8 bg-surface-subtle border border-border-default rounded-lg">
+          <p class="text-display-md font-extrabold text-primary-600">53%</p>
+          <p class="mt-2 text-heading-md font-semibold text-text-primary">leave after 3 seconds</p>
+          <p class="mt-2 text-body-sm text-text-secondary leading-relaxed">
+            of mobile visitors abandon a page that takes longer than 3 seconds to load. Speed isn't a nice-to-have — it's a business metric.
+          </p>
+        </AnimatedItem>
+
+        <AnimatedItem client:visible className="p-6 lg:p-8 bg-surface-subtle border border-border-default rounded-lg">
+          <p class="text-display-md font-extrabold text-primary-600">78%</p>
+          <p class="mt-2 text-heading-md font-semibold text-text-primary">of leads go cold</p>
+          <p class="mt-2 text-body-sm text-text-secondary leading-relaxed">
+            if you don't respond within 5 minutes. A contact form that emails you at midnight means a cold lead by morning.
+          </p>
+        </AnimatedItem>
+      </AnimatedSection>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       AI FEATURES — surface.muted
+       ============================================================ -->
+  <section id="ai-features" class="bg-surface-muted py-16 sm:py-20 lg:py-24" aria-labelledby="features-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">What makes these different</p>
+        <h2 id="features-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+          AI built in — not bolted on
+        </h2>
+        <p class="mt-4 text-body-lg text-text-secondary max-w-[60ch] leading-relaxed">
+          Every website we build has AI capabilities baked into the foundation. These aren't plugins or third-party widgets — they're part of how the site works.
+        </p>
+      </AnimatedSection>
+
+      <AnimatedSection client:visible variant="stagger" className="mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {aiFeatures.map((feature) => {
+          const IconComponent = iconMap[feature.icon];
+          return (
+            <AnimatedItem client:visible className="bg-white border border-border-default rounded-lg p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+              <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-primary-50 text-primary-600 mb-4">
+                {IconComponent && <IconComponent size={28} />}
+              </div>
+              <h3 class="text-heading-md font-semibold text-text-primary">{feature.title}</h3>
+              <p class="mt-2 text-body-sm text-text-secondary leading-relaxed">{feature.description}</p>
+            </AnimatedItem>
+          );
+        })}
+      </AnimatedSection>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       USE CASES — surface.default
+       ============================================================ -->
+  <section id="use-cases" class="bg-surface-default py-16 sm:py-20 lg:py-24" aria-labelledby="use-cases-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">Real-world results</p>
+        <h2 id="use-cases-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+          What this looks like in practice
+        </h2>
+        <p class="mt-4 text-body-lg text-text-secondary max-w-[60ch] leading-relaxed">
+          AI-powered websites are already working for businesses like yours. Here's what changes when your website starts working as hard as you do.
+        </p>
+      </AnimatedSection>
+
+      <div class="mt-12 lg:mt-16 space-y-6 lg:space-y-8">
+        {useCases.map((useCase) => {
+          const IconComponent = iconMap[useCase.icon];
+          return (
+            <AnimatedSection client:visible className="bg-surface-subtle border border-border-default rounded-lg overflow-hidden">
+              <div class="p-6 lg:p-8">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-primary-50 text-primary-600">
+                    {IconComponent && <IconComponent size={22} />}
+                  </div>
+                  <span class="text-caption font-semibold text-primary-600 uppercase tracking-widest">{useCase.industry}</span>
+                </div>
+                <h3 class="text-heading-lg font-semibold text-text-primary">{useCase.title}</h3>
+                <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
+                  <div>
+                    <p class="text-caption font-semibold text-text-muted uppercase tracking-widest mb-1.5">Before</p>
+                    <p class="text-body-md text-text-secondary leading-relaxed">{useCase.before}</p>
+                  </div>
+                  <div>
+                    <p class="text-caption font-semibold text-text-muted uppercase tracking-widest mb-1.5">After</p>
+                    <p class="text-body-md text-text-secondary leading-relaxed">{useCase.after}</p>
+                  </div>
+                  <div class="lg:pl-4 lg:border-l lg:border-border-default">
+                    <p class="text-caption font-semibold text-state-success uppercase tracking-widest mb-1.5">Impact</p>
+                    <p class="text-body-md text-text-primary font-medium leading-relaxed">{useCase.metric}</p>
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       BEFORE / AFTER — surface.subtle
+       ============================================================ -->
+  <section class="bg-surface-subtle py-16 sm:py-20 lg:py-24" aria-labelledby="upgrade-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <div class="text-center max-w-2xl mx-auto">
+          <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">The upgrade</p>
+          <h2 id="upgrade-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+            Old website vs. AI-powered website
+          </h2>
+          <p class="mt-4 text-body-lg text-text-secondary leading-relaxed">
+            Side by side, the difference is clear. Every feature on the right is included when we build your site.
+          </p>
+        </div>
+      </AnimatedSection>
+
+      <AnimatedSection client:visible className="mt-12 lg:mt-16 max-w-4xl mx-auto">
+        <div class="hidden sm:grid grid-cols-2 gap-4 mb-6">
+          <div class="flex items-center gap-2 text-heading-md font-semibold text-text-muted">
+            <X size={20} className="text-state-error" />
+            Your old site
+          </div>
+          <div class="flex items-center gap-2 text-heading-md font-semibold text-primary-600">
+            <CheckCircle size={20} className="text-state-success" />
+            What we build
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          {comparisonItems.map((item) => (
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-4 sm:p-5 bg-white border border-border-default rounded-lg">
+              <div class="flex items-start gap-3">
+                <X size={18} className="shrink-0 text-state-error mt-0.5 hidden sm:block" />
+                <div>
+                  <span class="sm:hidden text-caption font-semibold text-state-error uppercase tracking-widest">Old site: </span>
+                  <span class="text-body-md text-text-secondary">{item.old}</span>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <CheckCircle size={18} className="shrink-0 text-state-success mt-0.5 hidden sm:block" />
+                <div>
+                  <span class="sm:hidden text-caption font-semibold text-state-success uppercase tracking-widest">New site: </span>
+                  <span class="text-body-md text-text-primary font-medium">{item.modern}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </AnimatedSection>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       WHAT'S INCLUDED — surface.default
+       ============================================================ -->
+  <section id="whats-included" class="bg-surface-default py-16 sm:py-20 lg:py-24" aria-labelledby="included-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <div class="text-center max-w-2xl mx-auto">
+          <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">What's included</p>
+          <h2 id="included-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+            Everything you need. Nothing you don't.
+          </h2>
+          <p class="mt-4 text-body-lg text-text-secondary leading-relaxed">
+            Every website we build includes the full package — design, AI features, hosting, and ongoing maintenance. One price, no add-ons.
+          </p>
+        </div>
+      </AnimatedSection>
+
+      <AnimatedSection client:visible variant="stagger" className="mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4 max-w-4xl mx-auto">
+        {includedItems.map((item) => (
+          <AnimatedItem client:visible className="flex items-start gap-3 py-2">
+            <CheckCircle size={20} className="shrink-0 text-state-success mt-0.5" />
+            <span class="text-body-md text-text-primary">{item}</span>
+          </AnimatedItem>
+        ))}
+      </AnimatedSection>
+
+      <AnimatedSection client:visible className="mt-12 text-center">
+        <Button variant="primary" size="lg" href="#book-websites">
+          Get started
+          <svg class="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+        </Button>
+      </AnimatedSection>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FAQ — surface.subtle
+       ============================================================ -->
+  <section id="websites-faq" class="bg-surface-subtle py-16 sm:py-20 lg:py-24" aria-labelledby="websites-faq-heading">
+    <div class="mx-auto max-w-[800px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <div class="text-center">
+          <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">FAQ</p>
+          <h2 id="websites-faq-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+            Questions about our websites
+          </h2>
+          <p class="mt-4 text-body-lg text-text-secondary leading-relaxed">
+            What business owners ask us before getting started.
+          </p>
+        </div>
+      </AnimatedSection>
+
+      <div class="mt-10 lg:mt-12">
+        <FAQAccordion items={faqItems} client:visible />
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FINAL CTA — surface.brand
+       ============================================================ -->
+  <section id="book-websites" class="bg-surface-brand py-16 sm:py-20 lg:py-24" aria-labelledby="websites-cta-heading">
+    <div class="mx-auto max-w-[800px] px-4 sm:px-6 lg:px-12 text-center">
+      <AnimatedSection client:visible>
+        <h2 id="websites-cta-heading" class="text-display-md font-bold text-white tracking-[-0.015em]">
+          Ready for a website that actually works?
+        </h2>
+        <p class="mt-4 text-body-lg text-primary-100 leading-relaxed max-w-[50ch] mx-auto">
+          A free consultation to look at your current site, understand your business, and show you what's possible. No pitch, no pressure.
+        </p>
+        <div class="mt-8">
+          <CalendarBooking />
+        </div>
+        <p class="mt-6 text-body-sm text-primary-200">
+          Or email us directly at <a href="mailto:info@techshift.ai" class="underline underline-offset-2 hover:text-white transition-colors">info@techshift.ai</a>
+        </p>
+      </AnimatedSection>
+    </div>
+  </section>
+</BaseLayout>

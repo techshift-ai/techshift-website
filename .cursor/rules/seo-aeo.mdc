@@ -1,0 +1,39 @@
+---
+description: SEO and AEO requirements — structured data, meta tags, and AI crawler endpoints
+globs: src/pages/**/*
+alwaysApply: false
+---
+
+# SEO & AEO
+
+## Structured Data (JSON-LD)
+
+Schemas live in `src/pages/index.astro` frontmatter and inject via the `<BaseHead>` slot:
+- `Organization` — business name, Barrie ON address, contact, logo
+- `FAQPage` — all FAQ items; add new Q&A to the `faqItems` array
+
+## Meta Tags
+
+Pass via `<BaseLayout>` props — `BaseHead` handles title, description, canonical, OG, Twitter Card:
+
+```astro
+<BaseLayout
+  title="Page Title | Techshift AI Consulting"
+  description="150-160 char description"
+>
+```
+
+## AEO Files — Update on Every Content Change
+
+| File | Purpose |
+|---|---|
+| `src/pages/llms.txt.ts` | Markdown index for AI crawlers |
+| `src/pages/llms-full.txt.ts` | Full plaintext content (~5.6 KB) |
+
+Both must reflect any new or changed content.
+
+## Heading Hierarchy
+
+- Single `<h1>` per page — always in the hero
+- Sections use `<h2>` with `id` matching `aria-labelledby` on the `<section>`
+- Never skip levels

@@ -2,11 +2,12 @@
 const currentYear = new Date().getFullYear();
 
 const footerLinks = [
-  { label: 'Services', href: '#services' },
-  { label: 'How We Work', href: '#process' },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'FAQ', href: '#faq' },
-  { label: 'Book a Call', href: '#book' },
+  { label: 'Services', href: '/#services' },
+  { label: 'Websites', href: '/websites' },
+  { label: 'How We Work', href: '/#process' },
+  { label: 'Pricing', href: '/#pricing' },
+  { label: 'FAQ', href: '/#faq' },
+  { label: 'Book a Call', href: '/#book' },
 ];
 ---
 
@@ -17,10 +18,10 @@ const footerLinks = [
 
       <!-- Logo + tagline -->
       <div class="md:col-span-5">
-        <a href="/" aria-label="Techshift AI Consulting — Home">
+        <a href="/" aria-label="Techshift — Home">
           <img
             src="/assets/logo-horizontal-reverse.png"
-            alt="Techshift AI Consulting"
+            alt="Techshift"
             class="h-8 w-auto"
             width="140"
             height="32"
@@ -28,7 +29,7 @@ const footerLinks = [
           />
         </a>
         <p class="mt-4 text-body-sm text-neutral-300 max-w-[32ch] leading-relaxed">
-          AI that pays for itself.
+          Transform your business.
         </p>
       </div>
 
@@ -61,22 +62,19 @@ const footerLinks = [
         <ul class="space-y-2.5">
           <li>
             <a
-              href="#book"
+              href="/#book"
               class="text-body-sm text-neutral-300 hover:text-white transition-colors"
             >
-              Book your free diagnostic
+              Book a free consultation
             </a>
           </li>
           <li>
             <a
-              href="mailto:hello@techshift.ai"
+              href="mailto:info@techshift.ai"
               class="text-body-sm text-neutral-300 hover:text-white transition-colors"
             >
-              hello@techshift.ai
+              info@techshift.ai
             </a>
-          </li>
-          <li class="text-body-sm text-neutral-400">
-            Barrie, Ontario, Canada
           </li>
         </ul>
       </div>
@@ -85,7 +83,7 @@ const footerLinks = [
     <!-- Bottom bar: copyright -->
     <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
       <p class="text-caption text-neutral-400">
-        &copy; {currentYear} Techshift AI Consulting. All rights reserved.
+        &copy; {currentYear} Techshift. All rights reserved.
       </p>
       <p class="text-caption text-neutral-500">
         AI-built. Human-run.

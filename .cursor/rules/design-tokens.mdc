@@ -1,0 +1,32 @@
+---
+description: Enforce design token usage — never hardcode colors, spacing, fonts, or motion values
+globs: src/**/*.{astro,tsx,ts,css}
+alwaysApply: false
+---
+
+# Design Tokens — Never Hardcode
+
+All values come from `@theme` in `src/styles/global.css`. Raw values in component code are a bug.
+
+## Banned — Always Replace With Tokens
+
+| Hardcoded | Use Instead |
+|---|---|
+| `#hex` / `rgb()` | `text-primary-600`, `bg-surface-brand`, `border-border-default` |
+| `px` spacing | `p-4`, `mt-12`, `gap-8` (Tailwind scale) |
+| Font sizes in px/rem | `text-display-2xl`, `text-body-md`, `text-heading-sm` |
+| `font-family` strings | `font-display`, `font-body`, `font-mono` |
+| `box-shadow` values | `shadow-sm`, `shadow-md`, `shadow-lg`, `shadow-xl` |
+| Raw durations/easings | Use exports from `src/lib/motion.ts` or CSS custom properties |
+
+## Token Class Patterns
+
+- Colors: `text-primary-{50-900}`, `bg-surface-{default|inverse|brand|subtle}`, `border-border-{default|subtle}`
+- Type scale: `text-display-{2xl|xl|lg|md}`, `text-heading-{xl|lg|md|sm}`, `text-body-{lg|md|sm}`
+- Font families: `font-display`, `font-body`, `font-mono`
+
+## Adding New Tokens
+
+1. Add to `src/styles/global.css` under `@theme`
+2. If it's a motion value, also update `src/lib/motion.ts`
+3. Keep in sync with the source of truth: `techshift-ai-workforce/clients/techshift/design-system/tokens.json`

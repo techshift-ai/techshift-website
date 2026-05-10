@@ -1,0 +1,41 @@
+---
+description: Astro vs React split, animation patterns, and component conventions
+globs: src/components/**/*
+alwaysApply: false
+---
+
+# Component Conventions
+
+## Astro vs React — The Rule
+
+| Use `.astro` for | Use `.tsx` for |
+|---|---|
+| Static sections, layout, buttons, footer, header | Client-side interactivity: animations, accordion state, mobile menu |
+
+- React islands hydrate with `client:visible` (lazy, preferred) or `client:load` (immediate, only when needed)
+
+## Animation Pattern
+
+All animations use `src/lib/motion.ts` — never define ad hoc variants inline.
+
+```tsx
+// Scroll-triggered section reveal
+<AnimatedSection client:visible>
+  ...
+</AnimatedSection>
+
+// Staggered children
+<AnimatedSection variant="stagger" client:visible>
+  <AnimatedItem>...</AnimatedItem>
+  <AnimatedItem>...</AnimatedItem>
+</AnimatedSection>
+
+// Hero (dedicated components only)
+<HeroContainer> <HeroOverline> <HeroHeadline> <HeroSubhead> <HeroCta>
+```
+
+- Every animated component **must** call `useReducedMotion()` and render instantly when true
+
+## Tailwind 4 Reminder
+
+There is no `tailwind.config.js`. All customisation lives in `@theme` inside `src/styles/global.css`. The `@tailwindcss/vite` plugin handles the build.

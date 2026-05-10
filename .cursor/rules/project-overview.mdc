@@ -1,0 +1,36 @@
+---
+description: Core project context, stack, quality bar, and section structure for the Techshift AI Consulting website
+alwaysApply: true
+---
+
+# Techshift Website — Project Overview
+
+**Stack:** Astro 6 · Tailwind CSS 4 (CSS-first, no config file) · React + Framer Motion · Cloudflare Pages · TypeScript strict
+
+## Quality Bar
+
+Every change must satisfy all five:
+1. **Aesthetic** — editorial layouts, generous whitespace, intentional type, purposeful motion
+2. **SEO** — single `<h1>`, structured data, meta tags, alt text
+3. **AEO** — direct answers first, named entities, FAQ schema, `llms.txt` updated
+4. **Performance** — minimal client JS, optimised images, LCP < 2.5 s
+5. **Accessibility** — keyboard nav, 4.5:1 contrast, 44 px touch targets, focus rings, `prefers-reduced-motion`
+
+## Section Template
+
+```html
+<section id="section-id" class="bg-surface-{variant} py-16 sm:py-20 lg:py-24" aria-labelledby="section-heading">
+  <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+    <!-- content -->
+  </div>
+</section>
+```
+
+Container is always `max-w-[1280px]` with responsive horizontal padding.
+
+## When Adding a New Section
+
+1. Add HTML in `src/pages/index.astro` at the right position
+2. Wrap in `<AnimatedSection client:visible>` for scroll reveal
+3. Update `src/pages/llms.txt.ts` and `src/pages/llms-full.txt.ts`
+4. If it contains Q&A content, add to `faqItems` for FAQPage schema
