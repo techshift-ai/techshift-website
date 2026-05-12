@@ -212,32 +212,34 @@ body {
 }
 
 /* ---- View transitions (ClientRouter) — token durations / easings ---- */
-@keyframes view-transition-fade-out {
+@keyframes view-transition-slide-out {
   from {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
   to {
-    opacity: 0;
-    transform: translateY(calc(var(--spacing-2) * -1));
+    opacity: 0.85;
+    transform: translateX(calc(var(--spacing-8) * -1));
   }
 }
 
-@keyframes view-transition-fade-in {
+@keyframes view-transition-slide-in {
   from {
-    opacity: 0;
-    transform: translateY(var(--spacing-3));
+    opacity: 0.96;
+    transform: translateX(100%);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
 }
 
 ::view-transition-old(root) {
-  animation: view-transition-fade-out var(--duration-slow) var(--ease-smooth) both;
+  animation: view-transition-slide-out var(--duration-slow) var(--ease-smooth) both;
+  z-index: 0;
 }
 
 ::view-transition-new(root) {
-  animation: view-transition-fade-in var(--duration-slow) var(--ease-smooth) both;
+  animation: view-transition-slide-in var(--duration-slow) var(--ease-smooth) both;
+  z-index: 1;
 }

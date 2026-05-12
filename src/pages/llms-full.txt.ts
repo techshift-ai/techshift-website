@@ -24,10 +24,10 @@ We build AI that does work for your business. This isn't just a chatbot anymore�
 AI-powered business websites with built-in chat assistants, automated booking, smart forms, and lead follow-up. Not brochures — sites that qualify visitors, answer questions, and feed leads into your pipeline automatically. Full details: https://techshift.ai/websites
 
 ### AI Employees
-Agents that handle customer calls, booking, order tracking, and lead follow-up around the clock. Think of it as hiring someone who works 24/7, uses your actual pricing and policies, and never calls in sick.
+Agents that handle customer calls, booking, order tracking, and lead follow-up around the clock. Think of it as hiring someone who works 24/7, uses your actual pricing and policies, and never calls in sick. Full details: https://techshift.ai/ai-employees
 
 ### Business Automations
-The repetitive tasks you or your staff do every day, week, or month — handled automatically. Quoting, scheduling, data entry, follow-ups, reporting.
+Task-focused automation tied to quoting, invoicing, scheduling, data hygiene, approvals, reminders, and reporting—aligned with integrations you already rely on—and cross-team orchestration with checkpoints and visible handoffs. Task automation details: https://techshift.ai/business-automation — orchestration specifics: https://techshift.ai/business-process-automation
 
 ### Marketing and Lead Generation
 AI-driven SEO, content, and outbound that keeps your pipeline full without adding headcount.
@@ -177,6 +177,74 @@ A: Built with SEO best practices and AEO optimization so your business appears i
 
 Q: What if I already have a site that ranks well?
 A: We preserve existing SEO authority with proper redirects and careful content migration.
+
+---
+
+## AI Employees — Full Details
+
+Techshift builds customer-facing AI agents grounded in your services, pricing, hours, and policies. They answer inquiries, book appointments, track orders, and follow up on leads across chat, messaging, and optional voice — with clear escalation when a human should step in.
+
+### Typical capabilities
+- Inbound calls and messaging with consistent scripts you approve
+- Booking and rescheduling tied to your calendar rules
+- Order status and logistics lookups connected to your systems
+- Lead qualification with structured handoffs to staff
+
+### Example deployments
+- Home services businesses capturing after-hours calls into booked jobs
+- Clinics reducing repetitive scheduling questions while preserving compliance boundaries
+- Professional services firms pre-qualifying inquiries before senior staff engage
+- Hospitality teams organizing catering and reservation details into clean briefs
+
+### Engagement scope
+Discovery on channels and escalation rules, training from real materials, integrations as scoped, weekly demos during the build, and ongoing monitoring plus tuning in the monthly subscription.
+
+### AI employee FAQ (summary)
+- Channels covered depend on your workflows; we map priorities on the first call.
+- Training uses your FAQs, scripts, and policies — not generic guesses.
+- Escalations can transfer to people, take messages, or schedule callbacks.
+- Disclosure follows industry needs; trust stays explicit.
+- Monthly subscription covers monitoring, tuning, and improvements after launch.
+
+Full page and FAQ: https://techshift.ai/ai-employees
+
+---
+
+## Business Automation — Full Details
+
+Techshift automates repeatable operational work end-to-end: quoting, invoicing, scheduling, CRM hygiene, approvals, reporting, and triggered follow-ups. Integrations connect to tools you already pay for instead of replacing your stack.
+
+### What we automate (summary)
+- Quotes and invoices from CRM or intake through accounting once approved
+- Scheduling that respects crews, territories, buffers, and calendars
+- Data sync between spreadsheets, portals, CRM, and dispatch — without retyping
+- Compliance checkpoints and multi-step pipelines with human review where needed
+- Monitoring and alerts when steps stall or vendor APIs change
+
+### Example industries (summary)
+- Trades: site visit to paid invoice with fewer double entries
+- Health and wellness: structured intake into scheduling and billing with exceptions routed to staff
+- Professional services: proposals driven by matter type and rate cards with CRM updates on signature
+
+### Automation FAQ (summary)
+- Workflows need clear rules; fuzzy cases route to people you designate.
+- Tools stay in place; we integrate rather than rip-and-replace.
+- Monthly subscription covers monitoring, breakage fixes when vendors change surfaces, and tuning.
+- AI employees talk to customers; business automation runs behind the scenes in your records and systems.
+
+Full page and FAQ: https://techshift.ai/business-automation
+
+---
+
+## Business Process Automation — Orchestration & Handoffs
+
+Techshift treats business process automation as the layer above integrations: structuring how jobs traverse departments—with gate rules, SLA timers tied to operators, branching when scopes change, and leadership visibility into stalled queues—not only pushing records between spreadsheets.
+
+Cross-functional engagements cover facilitated discovery with each role owning a stage, stage diagrams annotated with escalation paths, automation builds that log transitions for audit readiness, cohort training cadences, staged pilots beside legacy habits, and subscription monitoring afterward.
+
+FAQ themes include how orchestration differs from broader business automation outlines, prerequisites for playbook definition, honoring human approvals, allowable systems participating, rework modeling, rollout discipline, and timeline expectations grounded in dependency mapping.
+
+Full page and FAQ: https://techshift.ai/business-process-automation
 
 ---
 

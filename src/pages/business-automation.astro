@@ -1,0 +1,505 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import FAQAccordion from '../components/ui/FAQAccordion.tsx';
+import AnimatedSection, { AnimatedItem } from '../components/ui/AnimatedSection.tsx';
+import { HeroContainer, HeroHeadline, HeroSubhead, HeroCta } from '../components/ui/HeroAnimated.tsx';
+import CalendarBooking from '../components/ui/CalendarBooking.astro';
+import {
+  Zap, FileSpreadsheet, CalendarClock, ClipboardList, Database, Layers,
+  Building2, Stethoscope, Briefcase,
+  CheckCircle, X, ChevronRight,
+} from 'lucide-react';
+import type { FAQPage, WithContext } from 'schema-dts';
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://techshift.ai/' },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Business automation',
+      item: 'https://techshift.ai/business-automation',
+    },
+  ],
+};
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Business automation implementation',
+  description:
+    'End-to-end automation for quoting, invoicing, scheduling, data entry, and reporting — wired into the tools you already use so your team focuses on higher-value work.',
+  provider: {
+    '@type': 'Organization',
+    name: 'Techshift',
+    url: 'https://techshift.ai',
+  },
+  serviceType: 'Business automation consulting',
+  areaServed: {
+    '@type': 'Country',
+    name: 'Canada',
+  },
+};
+
+const faqItems = [
+  {
+    question: 'What kinds of workflows do you automate?',
+    answer:
+      'Anything repetitive with clear rules: quoting from a price sheet, turning approved quotes into invoices, syncing jobs to calendars, importing leads into CRM, nightly reporting, reminders, and copying data between apps so nobody re-types it.',
+  },
+  {
+    question: 'Do we need to rip out QuickBooks / our CRM?',
+    answer:
+      'No. We connect to tools you already use — accounting, invoicing, scheduling, CRMs, spreadsheets, and industry packages. Automation runs around your stack so you keep familiarity and approvals where they belong.',
+  },
+  {
+    question: 'Who handles exceptions and approvals?',
+    answer:
+      'You stay in charge. High-stakes sends, unusual discounts, refunds, or anything fuzzy routes to the right person for review. Routine cases run without interrupting anyone.',
+  },
+  {
+    question: 'How long does implementation take?',
+    answer:
+      'It depends how many steps and integrations are involved, but we work in weekly demos so you always see tangible progress. A focused payroll or invoicing lane can move faster than a multi-department rollout.',
+  },
+  {
+    question: 'Who keeps workflows running month to month?',
+    answer:
+      'The monthly subscription covers monitoring, breakage fixes when APIs or vendor UIs change, tuning based on edge cases we learn from logs, and small workflow adjustments as your process evolves.',
+  },
+  {
+    question: 'Is our business data handled safely?',
+    answer:
+      'We design with least privilege: only the data each step needs, auditable triggers, and access aligned with how your team already works. We document what touches what before anything goes live.',
+  },
+  {
+    question: 'What if we receive PDFs or images from customers?',
+    answer:
+      'When useful, we add extraction or structuring so attachments become fields in your system instead of someone reading and typing. Feasibility depends on format and consistency — we test on your real samples first.',
+  },
+  {
+    question: 'How is this different from an AI employee on the phone?',
+    answer:
+      'AI employees mainly talk to customers. Business process automation runs the operational work behind the scenes — forms, records, scheduling, billing, and handoffs between systems — often without a customer conversation at all.',
+  },
+];
+
+const faqSchema: WithContext<FAQPage> = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question' as const,
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer' as const,
+      text: item.answer,
+    },
+  })),
+};
+
+const automationPillars = [
+  {
+    icon: 'FileSpreadsheet',
+    title: 'Quotes and invoices',
+    description:
+      'Generate paperwork from CRM or job intake, chase missing fields, attach line items correctly, and post to accounting once approved — fewer errors and fewer half-finished files in email.',
+  },
+  {
+    icon: 'CalendarClock',
+    title: 'Scheduling',
+    description:
+      'Turn requests into bookings that respect crews, territories, buffers, and calendar rules — with confirmations and updates written back wherever your team manages the day.',
+  },
+  {
+    icon: 'Database',
+    title: 'Data entry and sync',
+    description:
+      'Move records between spreadsheets, portals, CRM, and dispatch boards without copying by hand. One source updates the others on a cadence your business trusts.',
+  },
+  {
+    icon: 'ClipboardList',
+    title: 'Compliance and checkpoints',
+    description:
+      'Checklists triggered by milestones: photos uploaded, warranties filed, approvals captured before the next department sees the job. Less chasing and fewer stalled jobs.',
+  },
+  {
+    icon: 'Layers',
+    title: 'Multi-step pipelines',
+    description:
+      'When a workflow spans several departments, automation carries context forward — who did what, what changed, and what still needs a human decision — without starting over in each tool.',
+  },
+  {
+    icon: 'Zap',
+    title: 'Monitoring and alerts',
+    description:
+      'When something fails or stalls, the right people get notified with enough detail to fix it quickly instead of discovering the problem days later in a report.',
+  },
+];
+
+const useCases = [
+  {
+    icon: 'Building2',
+    industry: 'Trades and home services',
+    title: 'From site visit to paid invoice',
+    before:
+      'Estimators retyped measurements into a spreadsheet, emailed a PDF quote, and someone else copied line items into accounting when a job finally closed.',
+    after:
+      'Approved quotes flow into jobs, materials lists, and invoices with pre-built rules. Status changes update the calendar and notify crews and office staff from the same source of truth.',
+    metric: 'Fewer invoice mistakes, faster closeout, and less office time on double entry.',
+  },
+  {
+    icon: 'Stethoscope',
+    industry: 'Health and wellness',
+    title: 'Intake that lands in the right chart',
+    before:
+      'New patient forms arrived as mixed PDFs and portal exports. Front desk staff re-keyed details into scheduling and billing while providers waited.',
+    after:
+      'Structured intake populates scheduling, insurance flags, and reminder templates. Exceptions route to the front desk with the exact field that needs human review.',
+    metric: 'Less time on forms, fewer mismatched records at the first appointment.',
+  },
+  {
+    icon: 'Briefcase',
+    industry: 'Professional services',
+    title: 'Proposals that match your template and your CRM',
+    before:
+      'Partners pulled last month’s Word file, edited rates by hand, and paralegals chased version history before anything could be sent.',
+    after:
+      'Matter type, scope, and rate cards drive the document. Once signed, the CRM stage, tasks, and billing codes update together so nothing starts “half in the system.”',
+    metric: 'Shorter proposal cycles and cleaner handoffs to delivery teams.',
+  },
+];
+
+const comparisonItems = [
+  { old: 'Copy-paste between five tabs', modern: 'One trigger updates every connected system' },
+  { old: 'Quotes living in inboxes and folders', modern: 'Living records with status and history' },
+  { old: 'Spreadsheets that only one person understands', modern: 'Documented logic your team can review' },
+  { old: '“Did anyone invoice that job yet?”', modern: 'Automatic checks and alerts on stalled steps' },
+  { old: 'Manual reminders in personal calendars', modern: 'Consistent follow-ups tied to business rules' },
+  { old: 'Surprise breakage when a vendor changes a form', modern: 'Monitoring and fixes included in the monthly plan' },
+];
+
+const includedItems = [
+  'Process mapping workshop with your operators',
+  'Integration design for your existing tools',
+  'Built workflows with human review where needed',
+  'Error handling, logging, and alerts',
+  'Documentation of triggers, data paths, and owners',
+  'Pilot run on real jobs before full rollout',
+  'Training for staff on new touchpoints',
+  'Post-launch monitoring and tuning via monthly subscription',
+];
+
+const iconMap: Record<string, typeof Zap> = {
+  Zap,
+  FileSpreadsheet,
+  CalendarClock,
+  ClipboardList,
+  Database,
+  Layers,
+  Building2,
+  Stethoscope,
+  Briefcase,
+};
+---
+
+<BaseLayout
+  title="Business Automation | Techshift"
+  description="End-to-end automation for quoting, invoicing, scheduling, and data entry — connected to your existing tools so your team focuses on higher-value work."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
+  <!-- HERO -->
+  <section
+    class="relative bg-surface-brand overflow-hidden"
+    aria-labelledby="hero-heading"
+  >
+    <div class="absolute inset-0 opacity-[0.06]" aria-hidden="true">
+      <div class="absolute top-1/4 -left-20 w-80 h-80 rounded-full border-2 border-white"></div>
+      <div class="absolute bottom-1/3 -right-10 w-60 h-60 rounded-full border-2 border-white"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-white"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12 pt-24 sm:pt-32 lg:pt-40 pb-16 sm:pb-20 lg:pb-24">
+      <nav aria-label="Breadcrumb" class="mb-8">
+        <ol class="flex items-center gap-2 text-body-sm text-primary-200">
+          <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+          <li aria-hidden="true"><ChevronRight size={14} /></li>
+          <li class="text-white font-medium">Business automation</li>
+        </ol>
+      </nav>
+
+      <HeroContainer client:load className="max-w-3xl">
+        <HeroHeadline client:load>
+          <h1 id="hero-heading" class="text-display-2xl font-bold text-white leading-[1.05] tracking-[-0.03em]">
+            Stop paying people to repeat the same clicks.
+          </h1>
+        </HeroHeadline>
+        <HeroSubhead client:load className="mt-6">
+          <p class="text-body-lg sm:text-[1.25rem] text-primary-100 leading-relaxed max-w-[55ch]">
+            Quotes, invoices, scheduling, and data entry add up to real payroll hours. We wire those steps into reliable automations that run in your existing tools — so your team works on the work only humans can do.
+          </p>
+        </HeroSubhead>
+        <HeroCta client:load className="mt-10 flex flex-col sm:flex-row gap-4">
+          <Button variant="inverse" size="lg" href="#book-automation">
+            Book a free consultation
+            <svg class="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </Button>
+          <Button variant="ghost" size="lg" href="#what-we-automate" class="!text-white/90 hover:!text-white hover:!bg-white/10">
+            See what we automate
+          </Button>
+        </HeroCta>
+      </HeroContainer>
+    </div>
+  </section>
+
+  <!-- THE PROBLEM -->
+  <section class="bg-surface-default py-16 sm:py-20 lg:py-24" aria-labelledby="problem-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <div class="max-w-3xl">
+          <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">The problem</p>
+          <h2 id="problem-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+            Admin work doesn’t look expensive until you add it up
+          </h2>
+          <p class="mt-4 text-body-lg text-text-secondary leading-relaxed">
+            Most teams don’t have a headline “broken system” — they have drag. Small manual steps multiply across every job, every invoice, every new lead. Nobody trained for it; it simply became part of the day.
+          </p>
+        </div>
+      </AnimatedSection>
+
+      <AnimatedSection client:visible variant="stagger" className="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        <AnimatedItem client:visible className="p-6 lg:p-8 bg-surface-subtle border border-border-default rounded-lg">
+          <p class="text-heading-md font-semibold text-text-primary">Invisible rework</p>
+          <p class="mt-2 text-body-sm text-text-secondary leading-relaxed">
+            Copying fields between spreadsheets, CRMs, accounting, and email means the same data gets touched three times — and quietly drifts apart.
+          </p>
+        </AnimatedItem>
+
+        <AnimatedItem client:visible className="p-6 lg:p-8 bg-surface-subtle border border-border-default rounded-lg">
+          <p class="text-heading-md font-semibold text-text-primary">No single timeline</p>
+          <p class="mt-2 text-body-sm text-text-secondary leading-relaxed">
+            Scheduling, billing, and delivery each live in separate tools. Nobody sees “stuck between steps” until a customer asks where their job went.
+          </p>
+        </AnimatedItem>
+
+        <AnimatedItem client:visible className="p-6 lg:p-8 bg-surface-subtle border border-border-default rounded-lg">
+          <p class="text-heading-md font-semibold text-text-primary">Key-person risk</p>
+          <p class="mt-2 text-body-sm text-text-secondary leading-relaxed">
+            The one teammate who remembers the quirks of each vendor portal becomes the bottleneck for every rush request and every new hire.
+          </p>
+        </AnimatedItem>
+      </AnimatedSection>
+    </div>
+  </section>
+
+  <!-- WHAT WE AUTOMATE -->
+  <section id="what-we-automate" class="bg-surface-muted py-16 sm:py-20 lg:py-24" aria-labelledby="pillars-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">What we automate</p>
+        <h2 id="pillars-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+          Operations work, end to end
+        </h2>
+        <p class="mt-4 text-body-lg text-text-secondary max-w-[60ch] leading-relaxed">
+          These are the areas we most often connect first — always scoped to your real process, not a generic checklist.
+        </p>
+      </AnimatedSection>
+
+      <AnimatedSection client:visible variant="stagger" className="mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {automationPillars.map((item) => {
+          const IconComponent = iconMap[item.icon];
+          return (
+            <AnimatedItem client:visible className="bg-white border border-border-default rounded-lg p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+              <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-primary-50 text-primary-600 mb-4">
+                {IconComponent && <IconComponent size={28} />}
+              </div>
+              <h3 class="text-heading-md font-semibold text-text-primary">{item.title}</h3>
+              <p class="mt-2 text-body-sm text-text-secondary leading-relaxed">{item.description}</p>
+            </AnimatedItem>
+          );
+        })}
+      </AnimatedSection>
+    </div>
+  </section>
+
+  <!-- USE CASES -->
+  <section id="use-cases" class="bg-surface-default py-16 sm:py-20 lg:py-24" aria-labelledby="use-cases-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">Examples</p>
+        <h2 id="use-cases-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+          Before, after, and what changes
+        </h2>
+        <p class="mt-4 text-body-lg text-text-secondary max-w-[60ch] leading-relaxed">
+          Every build starts with interviews and sample files — here are representative patterns we automate for SMBs.
+        </p>
+      </AnimatedSection>
+
+      <div class="mt-12 lg:mt-16 space-y-6 lg:space-y-8">
+        {useCases.map((useCase) => {
+          const IconComponent = iconMap[useCase.icon];
+          return (
+            <AnimatedSection client:visible className="bg-surface-subtle border border-border-default rounded-lg overflow-hidden">
+              <div class="p-6 lg:p-8">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-primary-50 text-primary-600">
+                    {IconComponent && <IconComponent size={22} />}
+                  </div>
+                  <span class="text-caption font-semibold text-primary-600 uppercase tracking-widest">{useCase.industry}</span>
+                </div>
+                <h3 class="text-heading-lg font-semibold text-text-primary">{useCase.title}</h3>
+                <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
+                  <div>
+                    <p class="text-caption font-semibold text-text-muted uppercase tracking-widest mb-1.5">Before</p>
+                    <p class="text-body-md text-text-secondary leading-relaxed">{useCase.before}</p>
+                  </div>
+                  <div>
+                    <p class="text-caption font-semibold text-text-muted uppercase tracking-widest mb-1.5">After</p>
+                    <p class="text-body-md text-text-secondary leading-relaxed">{useCase.after}</p>
+                  </div>
+                  <div class="lg:pl-4 lg:border-l lg:border-border-default">
+                    <p class="text-caption font-semibold text-primary-600 uppercase tracking-widest mb-1.5">What improves</p>
+                    <p class="text-body-md text-text-primary font-medium leading-relaxed">{useCase.metric}</p>
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- OLD VS NEW -->
+  <section class="bg-surface-subtle py-16 sm:py-20 lg:py-24" aria-labelledby="compare-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <div class="text-center max-w-2xl mx-auto">
+          <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">The contrast</p>
+          <h2 id="compare-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+            Manual vs. connected operations
+          </h2>
+          <p class="mt-4 text-body-lg text-text-secondary leading-relaxed">
+            You should feel the difference in fewer round trips, fewer typos, and fewer “where is that file?” moments.
+          </p>
+        </div>
+      </AnimatedSection>
+
+      <AnimatedSection client:visible className="mt-12 lg:mt-16 max-w-4xl mx-auto">
+        <div class="hidden sm:grid grid-cols-2 gap-4 mb-6">
+          <div class="flex items-center gap-2 text-heading-md font-semibold text-text-muted">
+            <X size={20} className="text-state-error" />
+            Manual today
+          </div>
+          <div class="flex items-center gap-2 text-heading-md font-semibold text-primary-600">
+            <CheckCircle size={20} className="text-state-success" />
+            What we build
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          {comparisonItems.map((row) => (
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-4 sm:p-5 bg-white border border-border-default rounded-lg">
+              <div class="flex items-start gap-3">
+                <X size={18} className="shrink-0 text-state-error mt-0.5 hidden sm:block" />
+                <div>
+                  <span class="sm:hidden text-caption font-semibold text-state-error uppercase tracking-widest">Manual: </span>
+                  <span class="text-body-md text-text-secondary">{row.old}</span>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <CheckCircle size={18} className="shrink-0 text-state-success mt-0.5 hidden sm:block" />
+                <div>
+                  <span class="sm:hidden text-caption font-semibold text-state-success uppercase tracking-widest">Automated: </span>
+                  <span class="text-body-md text-text-primary font-medium">{row.modern}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </AnimatedSection>
+    </div>
+  </section>
+
+  <!-- WHAT'S INCLUDED -->
+  <section id="whats-included" class="bg-surface-default py-16 sm:py-20 lg:py-24" aria-labelledby="included-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <div class="text-center max-w-2xl mx-auto">
+          <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">Delivery</p>
+          <h2 id="included-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+            What you get in a typical automation project
+          </h2>
+          <p class="mt-4 text-body-lg text-text-secondary leading-relaxed">
+            The same upfront pricing posture as other Techshift builds: scope before invoices, demos every week during the build.
+          </p>
+        </div>
+      </AnimatedSection>
+
+      <AnimatedSection client:visible variant="stagger" className="mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4 max-w-4xl mx-auto">
+        {includedItems.map((item) => (
+          <AnimatedItem client:visible className="flex items-start gap-3 py-2">
+            <CheckCircle size={20} className="shrink-0 text-state-success mt-0.5" />
+            <span class="text-body-md text-text-primary">{item}</span>
+          </AnimatedItem>
+        ))}
+      </AnimatedSection>
+
+      <AnimatedSection client:visible className="mt-12 text-center">
+        <Button variant="primary" size="lg" href="#book-automation">
+          Talk through your workflows
+          <svg class="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+        </Button>
+      </AnimatedSection>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="automation-faq" class="bg-surface-subtle py-16 sm:py-20 lg:py-24" aria-labelledby="automation-faq-heading">
+    <div class="mx-auto max-w-[800px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <div class="text-center">
+          <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">FAQ</p>
+          <h2 id="automation-faq-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+            Questions about business automation
+          </h2>
+          <p class="mt-4 text-body-lg text-text-secondary leading-relaxed">
+            What operators ask before green-lighting integrations and workflow changes.
+          </p>
+        </div>
+      </AnimatedSection>
+
+      <div class="mt-10 lg:mt-12">
+        <FAQAccordion items={faqItems} client:visible />
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="book-automation" class="bg-surface-brand py-16 sm:py-20 lg:py-24" aria-labelledby="automation-cta-heading">
+    <div class="mx-auto max-w-[800px] px-4 sm:px-6 lg:px-12 text-center">
+      <AnimatedSection client:visible>
+        <h2 id="automation-cta-heading" class="text-display-md font-bold text-white tracking-[-0.015em]">
+          Ready to trim the repetitive work?
+        </h2>
+        <p class="mt-4 text-body-lg text-primary-100 leading-relaxed max-w-[50ch] mx-auto">
+          A free consultation to map your busiest manual steps and see what automation would change first — no obligation.
+        </p>
+        <div class="mt-8">
+          <CalendarBooking />
+        </div>
+        <p class="mt-6 text-body-sm text-primary-200">
+          Or email us directly at{' '}
+          <a href="mailto:info@techshift.ai" class="underline underline-offset-2 hover:text-white transition-colors">info@techshift.ai</a>
+        </p>
+      </AnimatedSection>
+    </div>
+  </section>
+</BaseLayout>

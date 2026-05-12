@@ -75,11 +75,13 @@ const services: { icon: string; title: string; description: string; href?: strin
     icon: 'Cpu',
     title: 'AI employees',
     description: 'Agents that handle customer calls, booking, order tracking, and lead follow-up around the clock.',
+    href: '/ai-employees',
   },
   {
     icon: 'Settings',
     title: 'Business automations',
     description: 'The repetitive tasks you or your staff do every day, week, or month — handled automatically.',
+    href: '/business-automation',
   },
   {
     icon: 'TrendingUp',
@@ -242,12 +244,10 @@ const iconMap: Record<string, typeof Globe> = {
       <AnimatedSection client:visible variant="stagger" className="mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
         {services.map((service) => {
           const IconComponent = iconMap[service.icon];
-          const isWebsitesCard = service.href === '/websites';
           return (
             <AnimatedItem client:visible className="h-full min-h-0">
               <div
                 class="bg-white border border-border-default rounded-lg p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all h-full"
-                transition:name={isWebsitesCard ? 'websites-entry' : undefined}
               >
                 <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-primary-50 text-primary-600 mb-4">
                   {IconComponent && <IconComponent size={28} />}
@@ -299,6 +299,10 @@ const iconMap: Record<string, typeof Globe> = {
           <p class="mt-3 text-body-md text-text-secondary leading-relaxed">
             An AI agent that handles customer inquiries, books appointments, and takes orders &mdash; through chat, WhatsApp, or phone &mdash; around the clock.
           </p>
+          <a href="/ai-employees" class="inline-flex items-center gap-1.5 mt-4 text-body-sm font-medium text-primary-600 hover:text-primary-700 transition-colors group">
+            Learn more
+            <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+          </a>
         </AnimatedSection>
 
         <!-- Example 2: Business Process Automation -->
@@ -315,6 +319,10 @@ const iconMap: Record<string, typeof Globe> = {
           <p class="mt-3 text-body-md text-text-secondary leading-relaxed">
             From quoting and invoicing to scheduling and data entry &mdash; the work that eats your day, automated end-to-end so your team focuses on higher-value work.
           </p>
+          <a href="/business-process-automation" class="inline-flex items-center gap-1.5 mt-4 text-body-sm font-medium text-primary-600 hover:text-primary-700 transition-colors group">
+            Learn more
+            <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+          </a>
         </AnimatedSection>
 
         <!-- Example 3: Marketing & Lead Generation -->

@@ -1,0 +1,486 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import FAQAccordion from '../components/ui/FAQAccordion.tsx';
+import AnimatedSection, { AnimatedItem } from '../components/ui/AnimatedSection.tsx';
+import { HeroContainer, HeroHeadline, HeroSubhead, HeroCta } from '../components/ui/HeroAnimated.tsx';
+import CalendarBooking from '../components/ui/CalendarBooking.astro';
+import {
+  ArrowLeftRight, ClipboardCheck, ClipboardList, Timer, Layers,
+  Boxes, Server, UtensilsCrossed,
+  CheckCircle, X, ChevronRight,
+} from 'lucide-react';
+import type { FAQPage, WithContext } from 'schema-dts';
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://techshift.ai/' },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Business process automation',
+      item: 'https://techshift.ai/business-process-automation',
+    },
+  ],
+};
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Cross-functional business process automation',
+  description:
+    'Automation for jobs that span teams—structured handoffs, checkpoints, SLA visibility, and context carried from intake through billing—with human review exactly where stakes are highest.',
+  provider: {
+    '@type': 'Organization',
+    name: 'Techshift',
+    url: 'https://techshift.ai',
+  },
+  serviceType: 'Business process automation consulting',
+  areaServed: {
+    '@type': 'Country',
+    name: 'Canada',
+  },
+};
+
+const faqItems = [
+  {
+    question: 'How is this different from the general Business automation page?',
+    answer:
+      'Our Business automation overview covers repeatable tasks wired into everyday tools — quotes pushed to invoicing, calendar syncs, approvals, reconciliation. This page zooms one level higher: workflows that traverse departments—where sequencing, checkpoints, stall visibility, and “what ops handed to finance” matter as much as the API call itself.',
+  },
+  {
+    question: 'What signals a good fit?',
+    answer:
+      'Repeated examples of “we waited on X before Y could start,” jobs that revisit earlier steps when scopes change, and leadership uncovering misses only during month-end reconciliations. If work moves like a checklist across roles, orchestration tooling usually pays sooner than layering more manual status meetings.',
+  },
+  {
+    question: 'Who defines the playbook?',
+    answer:
+      'We interview the people who truly run the workflow today—dispatch, production planners, coordinators, accountants—and convert their tacit sequencing into documented stages. Nothing deploys until those owners sign off.',
+  },
+  {
+    question: 'Do approvals still belong to humans?',
+    answer:
+      'Yes whenever money, commitments, compliance, or customer promises are involved. Automation prepares packets, attaches history, reminds stakeholders, and enforces prerequisites (photos uploaded, QA signed, signatures captured)—but judgement stays yours.',
+  },
+  {
+    question: 'Which systems can participate?',
+    answer:
+      'Any platform with supported APIs, exports, webhooks, or stable UI patterns fits. Typical stacks mix CRM/work orders, spreadsheets, calendars, ERP or accounting shells, ticketing, chat, or industry-specific portals. Scope matches what operators already trust.',
+  },
+  {
+    question: 'Can you model rework or amendments mid-job?',
+    answer:
+      'That is often the fragile part—we keep explicit branching: what reopens downstream tasks, how billing reflects changes, and who must acknowledge scope shifts before work proceeds.',
+  },
+  {
+    question: 'What does go-live discipline look like?',
+    answer:
+      'Parallel runs alongside existing habits, scripted fallback if a connector hiccups, logging on every automated transition, and office hours coaching until teams trust the cues. Monthly cover keeps latency and alerting tuned as velocity changes.',
+  },
+  {
+    question: 'Timeline expectations?',
+    answer:
+      'Cross-team flows take longer than a single integration because discovery surfaces hidden dependencies—but weekly demos remain the forcing function so surprises surface early.',
+  },
+];
+
+const faqSchema: WithContext<FAQPage> = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question' as const,
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer' as const,
+      text: item.answer,
+    },
+  })),
+};
+
+const orchestrationStreams = [
+  {
+    icon: 'ArrowLeftRight',
+    title: 'Structured handoffs',
+    description:
+      'Packets move between roles with summaries, timestamps, attachments, and who owns the next decision—rather than disappearing into “someone Slack me when it ships.”',
+  },
+  {
+    icon: 'ClipboardCheck',
+    title: 'Checkpoints before the next lane opens',
+    description:
+      'Production, fulfillment, billing, or client success cannot start prematurely. Gate rules reflect your real prerequisites—documents signed, QA passed, procurement cleared.',
+  },
+  {
+    icon: 'Timer',
+    title: 'SLA visibility for stalls',
+    description:
+      'Timers that reflect your operating cadence: if a milestone sits past its window, escalation routes to predefined owners with full context—not a brittle generic reminder.',
+  },
+  {
+    icon: 'Layers',
+    title: 'Playbooks per job type',
+    description:
+      'Installations behave differently than emergency repairs. Distinct branching keeps automation aligned with crews, inventories, subcontractors, or compliance paths you already separate manually.',
+  },
+  {
+    icon: 'ClipboardList',
+    title: 'Amendments and rework loops',
+    description:
+      'Scope changes reopen only the downstream tasks that genuinely need replaying; finance sees revised artifacts without restarting the engagement from scratch.',
+  },
+];
+
+const useCases = [
+  {
+    icon: 'Boxes',
+    industry: 'Custom manufacturing',
+    title: 'Order releases that survive the shop floor',
+    before:
+      'Sales promised dates lived in email, routers were recreated from memory, QA photos sat on phones, and accounting learned about completions last.',
+    after:
+      'Stages mirror your traveler: release gates, BOM confirmation, spindle time, QA sign-off—each unlocks downstream automatically while packaging context for invoicing attachments.',
+    metric: 'Fewer frantic “did we invoice that lot yet?” hunts at month-end.',
+  },
+  {
+    icon: 'Server',
+    industry: 'Managed services',
+    title: 'Incidents glide into billable narratives',
+    before:
+      'Engineers solved tickets brilliantly, yet finance rebuilt timesheets manually for retainer reconciliations and project surcharges lagged billing cycles.',
+    after:
+      'Status transitions annotate effort categories, SLA breaches auto-flag uplift conversations, and month-end dashboards compile without dumping exports into brittle macros.',
+    metric: 'Billing mirrors actual effort without nagging dozens of inbox threads.',
+  },
+  {
+    icon: 'UtensilsCrossed',
+    industry: 'Hospitality and events',
+    title: 'Run-of-show packets everyone trusts',
+    before:
+      'Catering briefs mutated across voicemail, handwritten margin notes on PDFs never reached the expo lead, dietary flags slipped between sales and banquet captains.',
+    after:
+      'Each milestone—from BEO approvals to staffing counts to load-in timelines—hands off cleanly with approvals stored alongside customer signatures and dietary deltas.',
+    metric: 'Event teams coordinate without duplicating frantic status calls.',
+  },
+];
+
+const comparisonItems = [
+  { old: 'Status lives in Slack threads nobody archives', modern: 'Stage history recorded with timestamps and attachments' },
+  { old: 'Ops “remembers” finance needs next', modern: 'Automation routes only when prerequisites pass' },
+  { old: 'Scope changes scramble everyone’s spreadsheets', modern: 'Branch logic reopens impacted tasks selectively' },
+  { old: 'Execs chase Friday exports for pulse checks', modern: 'Live bottleneck views summarize queues and aging' },
+  { old: 'New hires absorb tribal routing rules verbally', modern: 'Documented sequencing they can onboard against' },
+  { old: 'Customers hear inconsistent timelines', modern: 'Internal alignment surfaces consistent external answers' },
+];
+
+const includedItems = [
+  'Facilitated process discovery across departments',
+  'Stage diagrams with owners and exception paths',
+  'Automation build with checkpoints, logs, rollback notes',
+  'Pilot cohort training for each role impacted',
+  'Weekly demos until parity with existing habits',
+  'Launch calendar with parallel-run milestones',
+  'Post-launch monitoring and tuning subscription',
+];
+
+const iconMap: Record<string, typeof ArrowLeftRight> = {
+  ArrowLeftRight,
+  ClipboardCheck,
+  ClipboardList,
+  Timer,
+  Layers,
+  Boxes,
+  Server,
+  UtensilsCrossed,
+};
+---
+
+<BaseLayout
+  title="Business Process Automation — Handoffs & Orchestration | Techshift"
+  description="Orchestration for SMB operations: structured handoffs, checkpoints, SLA visibility, job playbooks, and amendment handling across teams—with automation supporting every stage."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
+  <section class="relative bg-surface-brand overflow-hidden" aria-labelledby="hero-heading">
+    <div class="absolute inset-0 opacity-[0.06]" aria-hidden="true">
+      <div class="absolute top-1/4 -left-20 w-80 h-80 rounded-full border-2 border-white"></div>
+      <div class="absolute bottom-1/3 -right-10 w-60 h-60 rounded-full border-2 border-white"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-white"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12 pt-24 sm:pt-32 lg:pt-40 pb-16 sm:pb-20 lg:pb-24">
+      <nav aria-label="Breadcrumb" class="mb-8">
+        <ol class="flex items-center gap-2 text-body-sm text-primary-200">
+          <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+          <li aria-hidden="true"><ChevronRight size={14} /></li>
+          <li class="text-white font-medium">Business process automation</li>
+        </ol>
+      </nav>
+
+      <HeroContainer client:load className="max-w-3xl">
+        <HeroHeadline client:load>
+          <h1 id="hero-heading" class="text-display-2xl font-bold text-white leading-[1.05] tracking-[-0.03em]">
+            When work crosses teams, give it rails.
+          </h1>
+        </HeroHeadline>
+        <HeroSubhead client:load className="mt-6">
+          <p class="text-body-lg sm:text-[1.25rem] text-primary-100 leading-relaxed max-w-[55ch]">
+            Business process automation is about more than moving fields—it is sequencing decisions, enforcing checkpoints between departments, and surfacing stalled work before clients notice. Techshift orchestrates multi-step SMB operations alongside the integrations described on our broader business automation page.
+          </p>
+        </HeroSubhead>
+        <HeroCta client:load className="mt-10 flex flex-col sm:flex-row gap-4">
+          <Button variant="inverse" size="lg" href="#book-process-automation">
+            Book a free consultation
+            <svg class="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </Button>
+          <Button variant="ghost" size="lg" href="#orchestration-focus" class="!text-white/90 hover:!text-white hover:!bg-white/10">
+            See orchestration focus
+          </Button>
+        </HeroCta>
+      </HeroContainer>
+    </div>
+  </section>
+
+  <section class="bg-surface-default py-16 sm:py-20 lg:py-24" aria-labelledby="problem-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <div class="max-w-3xl">
+          <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">Hidden drag</p>
+          <h2 id="problem-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+            Cross-team workflows hide in tacit choreography
+          </h2>
+          <p class="mt-4 text-body-lg text-text-secondary leading-relaxed">
+            Departments often automate their slice—yet friction remains in the seams. Ownership blurs (“I thought procurement opened the PO”), context fragments across tools, and leadership only sees breakage after cash or reputations stall.
+          </p>
+        </div>
+      </AnimatedSection>
+
+      <AnimatedSection client:visible variant="stagger" className="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        <AnimatedItem client:visible className="p-6 lg:p-8 bg-surface-subtle border border-border-default rounded-lg">
+          <p class="text-heading-md font-semibold text-text-primary">Invisible queues</p>
+          <p class="mt-2 text-body-sm text-text-secondary leading-relaxed">
+            Work waits in personal inboxes rather than observable lanes—creating heroics rather than repeatable throughput.
+          </p>
+        </AnimatedItem>
+
+        <AnimatedItem client:visible className="p-6 lg:p-8 bg-surface-subtle border border-border-default rounded-lg">
+          <p class="text-heading-md font-semibold text-text-primary">Context resets</p>
+          <p class="mt-2 text-body-sm text-text-secondary leading-relaxed">
+            Every handoff repeats the recap because systems never inherited the briefing the last owner already curated.
+          </p>
+        </AnimatedItem>
+
+        <AnimatedItem client:visible className="p-6 lg:p-8 bg-surface-subtle border border-border-default rounded-lg">
+          <p class="text-heading-md font-semibold text-text-primary">Amendments derail optics</p>
+          <p class="mt-2 text-body-sm text-text-secondary leading-relaxed">
+            Clients change scopes mid-flight—but finance still quotes the stale numbers because versioning lived in chatter, not orchestration.
+          </p>
+        </AnimatedItem>
+      </AnimatedSection>
+    </div>
+  </section>
+
+  <section id="orchestration-focus" class="bg-surface-muted py-16 sm:py-20 lg:py-24" aria-labelledby="streams-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">Orchestration focus</p>
+        <h2 id="streams-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+          What multi-step automation adds on top of integrations
+        </h2>
+        <p class="mt-4 text-body-lg text-text-secondary max-w-[60ch] leading-relaxed">
+          Each pillar below pairs with tooling work—CRM syncs, document generation, calendar writes—but names the choreography layer leadership actually feels.
+        </p>
+      </AnimatedSection>
+
+      <AnimatedSection client:visible variant="stagger" className="mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {orchestrationStreams.map((item) => {
+          const IconComponent = iconMap[item.icon];
+          return (
+            <AnimatedItem client:visible className="bg-white border border-border-default rounded-lg p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+              <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-primary-50 text-primary-600 mb-4">
+                {IconComponent && <IconComponent size={28} />}
+              </div>
+              <h3 class="text-heading-md font-semibold text-text-primary">{item.title}</h3>
+              <p class="mt-2 text-body-sm text-text-secondary leading-relaxed">{item.description}</p>
+            </AnimatedItem>
+          );
+        })}
+      </AnimatedSection>
+    </div>
+  </section>
+
+  <section id="use-cases" class="bg-surface-default py-16 sm:py-20 lg:py-24" aria-labelledby="use-cases-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">Examples</p>
+        <h2 id="use-cases-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+          Where sequencing matters as much as speed
+        </h2>
+        <p class="mt-4 text-body-lg text-text-secondary max-w-[60ch] leading-relaxed">
+          Illustrative composites from discovery sessions—never a promise of literal metrics until we model your workloads.
+        </p>
+      </AnimatedSection>
+
+      <div class="mt-12 lg:mt-16 space-y-6 lg:space-y-8">
+        {useCases.map((useCase) => {
+          const IconComponent = iconMap[useCase.icon];
+          return (
+            <AnimatedSection client:visible className="bg-surface-subtle border border-border-default rounded-lg overflow-hidden">
+              <div class="p-6 lg:p-8">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-primary-50 text-primary-600">
+                    {IconComponent && <IconComponent size={22} />}
+                  </div>
+                  <span class="text-caption font-semibold text-primary-600 uppercase tracking-widest">{useCase.industry}</span>
+                </div>
+                <h3 class="text-heading-lg font-semibold text-text-primary">{useCase.title}</h3>
+                <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
+                  <div>
+                    <p class="text-caption font-semibold text-text-muted uppercase tracking-widest mb-1.5">Before</p>
+                    <p class="text-body-md text-text-secondary leading-relaxed">{useCase.before}</p>
+                  </div>
+                  <div>
+                    <p class="text-caption font-semibold text-text-muted uppercase tracking-widest mb-1.5">After</p>
+                    <p class="text-body-md text-text-secondary leading-relaxed">{useCase.after}</p>
+                  </div>
+                  <div class="lg:pl-4 lg:border-l lg:border-border-default">
+                    <p class="text-caption font-semibold text-primary-600 uppercase tracking-widest mb-1.5">What improves</p>
+                    <p class="text-body-md text-text-primary font-medium leading-relaxed">{useCase.metric}</p>
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-surface-subtle py-16 sm:py-20 lg:py-24" aria-labelledby="compare-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <div class="text-center max-w-2xl mx-auto">
+          <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">Contrast</p>
+          <h2 id="compare-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+            Tribal choreography vs orchestrated pipelines
+          </h2>
+          <p class="mt-4 text-body-lg text-text-secondary leading-relaxed">
+            The left column is painfully familiar—we map it so migrating feels obvious instead of intimidating.
+          </p>
+        </div>
+      </AnimatedSection>
+
+      <AnimatedSection client:visible className="mt-12 lg:mt-16 max-w-4xl mx-auto">
+        <div class="hidden sm:grid grid-cols-2 gap-4 mb-6">
+          <div class="flex items-center gap-2 text-heading-md font-semibold text-text-muted">
+            <X size={20} className="text-state-error" />
+            Ad hoc coordination
+          </div>
+          <div class="flex items-center gap-2 text-heading-md font-semibold text-primary-600">
+            <CheckCircle size={20} className="text-state-success" />
+            Guided orchestration
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          {comparisonItems.map((row) => (
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-4 sm:p-5 bg-white border border-border-default rounded-lg">
+              <div class="flex items-start gap-3">
+                <X size={18} className="shrink-0 text-state-error mt-0.5 hidden sm:block" />
+                <div>
+                  <span class="sm:hidden text-caption font-semibold text-state-error uppercase tracking-widest">Problem: </span>
+                  <span class="text-body-md text-text-secondary">{row.old}</span>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <CheckCircle size={18} className="shrink-0 text-state-success mt-0.5 hidden sm:block" />
+                <div>
+                  <span class="sm:hidden text-caption font-semibold text-state-success uppercase tracking-widest">Improvement: </span>
+                  <span class="text-body-md text-text-primary font-medium">{row.modern}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </AnimatedSection>
+    </div>
+  </section>
+
+  <section id="whats-included" class="bg-surface-default py-16 sm:py-20 lg:py-24" aria-labelledby="included-heading">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <div class="text-center max-w-2xl mx-auto">
+          <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">Engagement blueprint</p>
+          <h2 id="included-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+            What orchestration engagements include
+          </h2>
+          <p class="mt-4 text-body-lg text-text-secondary leading-relaxed">
+            Expect the same disciplined delivery model as Techshift builds—clear scope gates, demos every week while construction runs, measurable pilot criteria.
+          </p>
+        </div>
+      </AnimatedSection>
+
+      <AnimatedSection client:visible variant="stagger" className="mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4 max-w-4xl mx-auto">
+        {includedItems.map((item) => (
+          <AnimatedItem client:visible className="flex items-start gap-3 py-2">
+            <CheckCircle size={20} className="shrink-0 text-state-success mt-0.5" />
+            <span class="text-body-md text-text-primary">{item}</span>
+          </AnimatedItem>
+        ))}
+      </AnimatedSection>
+
+      <AnimatedSection client:visible className="mt-12 text-center">
+        <Button variant="primary" size="lg" href="#book-process-automation">
+          Map your orchestration backlog
+          <svg class="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+        </Button>
+      </AnimatedSection>
+    </div>
+  </section>
+
+  <section id="process-automation-faq" class="bg-surface-subtle py-16 sm:py-20 lg:py-24" aria-labelledby="process-automation-faq-heading">
+    <div class="mx-auto max-w-[800px] px-4 sm:px-6 lg:px-12">
+      <AnimatedSection client:visible>
+        <div class="text-center">
+          <p class="text-overline font-semibold text-primary-600 uppercase tracking-[0.08em]">FAQ</p>
+          <h2 id="process-automation-faq-heading" class="mt-2 text-display-lg font-bold text-text-primary tracking-[-0.02em]">
+            Orchestration FAQs
+          </h2>
+          <p class="mt-4 text-body-lg text-text-secondary leading-relaxed">
+            How leaders decide when cross-functional automation earns priority over point fixes.
+          </p>
+        </div>
+      </AnimatedSection>
+
+      <div class="mt-10 lg:mt-12">
+        <FAQAccordion items={faqItems} client:visible />
+      </div>
+    </div>
+  </section>
+
+  <section id="book-process-automation" class="bg-surface-brand py-16 sm:py-20 lg:py-24" aria-labelledby="process-automation-cta-heading">
+    <div class="mx-auto max-w-[800px] px-4 sm:px-6 lg:px-12 text-center">
+      <AnimatedSection client:visible>
+        <h2 id="process-automation-cta-heading" class="text-display-md font-bold text-white tracking-[-0.015em]">
+          Ready for transparent handoffs across teams?
+        </h2>
+        <p class="mt-4 text-body-lg text-primary-100 leading-relaxed max-w-[50ch] mx-auto">
+          A free consultation sketches your cross-department choke points and aligns on whether orchestration—or classic task automation—is the sharper first bite.
+        </p>
+        <div class="mt-8">
+          <CalendarBooking />
+        </div>
+        <p class="mt-6 text-body-sm text-primary-200">
+          Or email us directly at{' '}
+          <a href="mailto:info@techshift.ai" class="underline underline-offset-2 hover:text-white transition-colors">info@techshift.ai</a>
+        </p>
+      </AnimatedSection>
+    </div>
+  </section>
+</BaseLayout>
