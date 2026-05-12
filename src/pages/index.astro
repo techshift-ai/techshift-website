@@ -192,15 +192,15 @@ const iconMap: Record<string, typeof Globe> = {
   <!-- ============================================================
        HERO — surface.brand (#0066FF)
        ============================================================ -->
-  <section class="relative bg-surface-brand overflow-hidden" aria-labelledby="hero-heading">
-    <!-- Subtle geometric pattern overlay -->
-    <div class="absolute inset-0 opacity-[0.06]" aria-hidden="true">
-      <div class="absolute top-1/4 -left-20 w-80 h-80 rounded-full border-2 border-white"></div>
-      <div class="absolute bottom-1/4 -right-10 w-60 h-60 rounded-full border-2 border-white"></div>
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-white"></div>
+  <section class="relative overflow-hidden" aria-labelledby="hero-heading">
+    <!-- Static gradient only — no motion (keeps copy crisp) -->
+    <div class="pointer-events-none absolute inset-0 z-0" aria-hidden="true">
+      <div class="absolute inset-0 bg-gradient-to-br from-primary-800 via-surface-brand to-primary-900"></div>
+      <div class="absolute inset-0 bg-gradient-to-tr from-navy-950/45 via-transparent to-primary-300/12"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-navy-950/35"></div>
     </div>
 
-    <div class="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12 pt-24 sm:pt-32 lg:pt-40 pb-16 sm:pb-20 lg:pb-24">
+    <div class="relative z-10 mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12 pt-24 sm:pt-32 lg:pt-40 pb-16 sm:pb-20 lg:pb-24">
       <HeroContainer client:load className="max-w-3xl">
         <HeroHeadline client:load>
           <h1 id="hero-heading" class="text-display-2xl font-bold text-white leading-[1.05] tracking-[-0.03em]">

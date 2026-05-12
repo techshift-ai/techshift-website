@@ -7,6 +7,8 @@ export const GET: APIRoute = () => {
 ## About
 Techshift finds where AI adds real value in a business, then builds it end-to-end — agents, websites, automations, lead engines, whatever fits the problem. One team, one invoice, one system that actually runs.
 
+The homepage hero uses a static blue gradient background (no animation).
+
 ## Services
 We build AI that does work for your business. This isn't just a chatbot anymore—it can book, update systems, chase leads, and run the repeatable parts of your operations. Whatever form fits best—agents, automations, or a customer-facing website—we scope it to the job instead of boxing you into one pattern.
 

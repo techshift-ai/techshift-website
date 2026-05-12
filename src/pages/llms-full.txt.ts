@@ -14,6 +14,8 @@ Techshift builds AI systems for small and medium businesses. We find where AI sa
 
 We don't hand you a strategy deck and wish you luck. We build the system, deploy it into your business, and keep it running.
 
+The homepage hero uses a static blue gradient background (no animation).
+
 ---
 
 ## Services
