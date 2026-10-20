@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/ui/Section.astro';
+import { breadcrumbs, faqPage, service } from '../../lib/schema';
+
+export async function getStaticPaths() {
+  const services = await getCollection('services', ({ data }) => !data.draft);
+  return services.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const path = `/services/${entry.id}`;
+
+const schema: object[] = [
+  service({ name: entry.data.name, description: entry.data.summary, path }),
+  breadcrumbs([
+    { name: 'Home', path: '/' },
+    { name: entry.data.name, path },
+  ]),
+];
+if (entry.data.faq.length > 0) schema.push(faqPage(entry.data.faq));
+---
+
+<BaseLayout {...entry.data.seo} canonical={path} schema={schema}>
+  <Section labelledby="service-heading">
+    <h1 id="service-heading" class="max-w-3xl text-4xl sm:text-5xl">
+      {entry.data.name}
+    </h1>
+    <p class="mt-4 max-w-2xl text-lg text-ink-muted">{entry.data.summary}</p>
+    <div class="mt-10 max-w-3xl space-y-4 text-ink-muted">
+      <Content />
+    </div>
+  </Section>
+</BaseLayout>

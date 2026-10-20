@@ -1,28 +1,40 @@
 {
   "name": "techshift-website",
   "type": "module",
-  "version": "0.0.1",
+  "version": "2.0.0",
+  "private": true,
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=22.22.0"
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check": "astro check",
+    "lint": "eslint . && node scripts/check-em-dash.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lighthouse": "node scripts/lighthouse.mjs",
+    "verify": "npm run format:check && npm run lint && npm run build"
   },
   "dependencies": {
-    "@astrojs/react": "^5.0.4",
-    "@astrojs/sitemap": "^3.7.2",
-    "@tailwindcss/vite": "^4.2.4",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "astro": "^6.1.9",
-    "framer-motion": "^12.38.0",
-    "lucide-react": "^1.11.0",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
-    "schema-dts": "^2.0.0",
-    "tailwindcss": "^4.2.4"
+    "@astrojs/sitemap": "3.7.4",
+    "@tailwindcss/vite": "4.3.3",
+    "astro": "7.4.1",
+    "schema-dts": "2.1.0",
+    "tailwindcss": "4.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.11",
+    "chrome-launcher": "1.2.2",
+    "eslint": "10.13.0",
+    "eslint-plugin-astro": "3.2.1",
+    "lighthouse": "13.5.0",
+    "prettier": "3.9.10",
+    "prettier-plugin-astro": "1.1.1",
+    "prettier-plugin-tailwindcss": "0.8.1",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.0"
   }
 }

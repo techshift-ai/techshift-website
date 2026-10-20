@@ -1,0 +1,24 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages', ({ data }) => !data.draft);
+  return pages.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout {...entry.data.seo} canonical={`/${entry.id}`}>
+  <Section labelledby="page-heading">
+    <h1 id="page-heading" class="max-w-3xl text-4xl sm:text-5xl">
+      {entry.data.heading}
+    </h1>
+    <div class="mt-10 max-w-3xl space-y-4 text-ink-muted">
+      <Content />
+    </div>
+  </Section>
+</BaseLayout>

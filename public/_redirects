@@ -1,1 +1,3 @@
-/business-process-automation /business-automation 301
+# Cloudflare redirects (works on Pages and Workers static assets).
+# Map every old URL that has search equity to its new home before launch, for example:
+# /old-path /new-path 301

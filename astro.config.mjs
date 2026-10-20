@@ -1,21 +1,52 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
-import tailwindcss from '@tailwindcss/vite';
-import react from '@astrojs/react';
+import { defineConfig, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import tailwindcss from '@tailwindcss/vite';
 
-// https://astro.build/config
+// Techshift standard website config. Static output, zero client JS by default.
 export default defineConfig({
   site: 'https://techshift.ai',
-  // Listen on LAN so phones/tablets on the same Wi‑Fi can open http://<your-ip>:4321
-  server: {
-    host: true,
+  output: 'static',
+  trailingSlash: 'never',
+  build: {
+    format: 'file',
+    // Inline all CSS: removes the render-blocking request on first load (mobile LCP).
+    // Revisit if page CSS grows past roughly 50 KB.
+    inlineStylesheets: 'always',
+  },
+  markdown: {
+    // No code blocks on marketing sites; Shiki's inline styles conflict with CSP.
+    syntaxHighlight: false,
   },
   prefetch: {
-    prefetchAll: true,
+    prefetchAll: false,
+    defaultStrategy: 'hover',
   },
+  image: {
+    layout: 'constrained',
+    responsiveStyles: true,
+  },
+  security: {
+    // Hashes every Astro-processed script and style into a CSP meta tag.
+    csp: true,
+  },
+  fonts: [
+    {
+      provider: fontProviders.fontsource(),
+      name: 'Poppins',
+      cssVariable: '--font-poppins',
+      weights: [400, 500, 600, 700],
+      styles: ['normal'],
+      subsets: ['latin'],
+      fallbacks: ['Arial', 'sans-serif'],
+    },
+  ],
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes('/404'),
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },
-  integrations: [react(), sitemap()],
 });

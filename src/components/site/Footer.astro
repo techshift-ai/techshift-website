@@ -1,0 +1,19 @@
+---
+import Container from '../ui/Container.astro';
+import { site } from '../../site.config';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-canvas-dark text-white/80">
+  <Container class="flex flex-col gap-6 py-12 text-sm sm:flex-row sm:items-center sm:justify-between">
+    <p>
+      <span class="font-semibold text-white">{site.name}</span>
+      <span aria-hidden="true"> · </span>
+      {site.address.addressLocality}, {site.address.addressRegion}
+    </p>
+    <p>
+      &copy; {year} {site.legalName}
+    </p>
+  </Container>
+</footer>
