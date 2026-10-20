@@ -4,3 +4,4 @@ node_modules/
 .lighthouse/
 package-lock.json
 public/favicon.ico
+public/review/v*/

@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#002244" />
+    <title>Design review | Techshift</title>
+    <style>
+      :root {
+        --navy: #002244;
+        --blue: #0062ff;
+        --cloud: #f3f7fc;
+        --rule: #d8e2ef;
+        --muted: #52657b;
+        --pad: 12px;
+        color-scheme: light;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        background: var(--cloud);
+        color: var(--navy);
+        font:
+          15px/1.4 -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          Roboto,
+          sans-serif;
+        -webkit-text-size-adjust: 100%;
+      }
+      .bar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        padding: calc(env(safe-area-inset-top) + 10px) calc(env(safe-area-inset-right) + var(--pad))
+          10px calc(env(safe-area-inset-left) + var(--pad));
+        background: var(--navy);
+        color: #fff;
+        box-shadow: 0 2px 12px rgb(0 34 68 / 0.25);
+      }
+      .bar h1 {
+        margin: 0 0 8px;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+      .controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .seg {
+        display: flex;
+        flex: 1;
+        padding: 3px;
+        border-radius: 10px;
+        background: rgb(255 255 255 / 0.12);
+      }
+      .seg button {
+        flex: 1;
+        min-height: 36px;
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        color: #fff;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .seg button[aria-pressed='true'] {
+        background: #fff;
+        color: var(--navy);
+      }
+      select,
+      .open {
+        min-height: 42px;
+        border: 0;
+        border-radius: 10px;
+        background: rgb(255 255 255 / 0.12);
+        color: #fff;
+        font: inherit;
+        font-weight: 600;
+        padding: 0 12px;
+      }
+      select option {
+        color: var(--navy);
+      }
+      .open {
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .note {
+        margin: 8px 0 0;
+        font-size: 12px;
+        color: rgb(255 255 255 / 0.75);
+      }
+      .stage {
+        padding: var(--pad) calc(env(safe-area-inset-right) + var(--pad))
+          calc(env(safe-area-inset-bottom) + var(--pad))
+          calc(env(safe-area-inset-left) + var(--pad));
+      }
+      .frame {
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 14px;
+        background: #fff;
+        box-shadow:
+          0 0 0 1px var(--rule),
+          0 12px 32px rgb(0 34 68 / 0.12);
+      }
+      iframe {
+        display: block;
+        border: 0;
+        background: #fff;
+      }
+      /* Mobile: a real 390px-wide viewport that scrolls inside the frame. */
+      .is-mobile .frame {
+        width: 390px;
+        max-width: 100%;
+      }
+      .is-mobile iframe {
+        width: 390px;
+        height: var(--mobile-h, 760px);
+      }
+      /* Desktop: a real 1440px-wide document, scaled to the phone's width; the page itself scrolls. */
+      .is-desktop .frame {
+        width: 100%;
+      }
+      .is-desktop iframe {
+        width: 1440px;
+        transform-origin: 0 0;
+        transform: scale(var(--scale, 0.28));
+      }
+    </style>
+  </head>
+  <body class="is-mobile">
+    <header class="bar">
+      <h1>Techshift design review</h1>
+      <div class="controls">
+        <div class="seg" role="group" aria-label="Viewport">
+          <button type="button" data-mode="mobile" aria-pressed="true">Mobile</button>
+          <button type="button" data-mode="desktop" aria-pressed="false">Desktop</button>
+        </div>
+        <label>
+          <span hidden>Version</span>
+          <select id="version" aria-label="Version"></select>
+        </label>
+        <a class="open" id="open" href="/review/v1/" target="_blank" rel="noopener">Open full</a>
+      </div>
+      <p class="note" id="note"></p>
+    </header>
+    <main class="stage">
+      <div class="frame" id="frame">
+        <iframe id="view" title="Mockup preview" src="about:blank"></iframe>
+      </div>
+    </main>
+    <script>
+      (function () {
+        var DESKTOP_W = 1440;
+        var MOBILE_W = 390;
+        var body = document.body;
+        var frame = document.getElementById('frame');
+        var view = document.getElementById('view');
+        var select = document.getElementById('version');
+        var open = document.getElementById('open');
+        var note = document.getElementById('note');
+        var bar = document.querySelector('.bar');
+        var params = new URLSearchParams(location.search);
+        var state = {
+          mode: params.get('mode') === 'desktop' ? 'desktop' : 'mobile',
+          v: params.get('v'),
+        };
+        var observer;
+
+        function save() {
+          var q = new URLSearchParams({ v: state.v, mode: state.mode });
+          history.replaceState(null, '', '?' + q.toString());
+        }
+
+        function fitMobile() {
+          var h = window.innerHeight - bar.offsetHeight - 24;
+          frame.style.height = '';
+          view.style.height = '';
+          document.documentElement.style.setProperty('--mobile-h', Math.max(480, h) + 'px');
+        }
+
+        // Desktop: the iframe is laid out at 1440px wide (so desktop media queries apply), sized to
+        // its full document height, then scaled down. The outer page scrolls through it.
+        function fitDesktop() {
+          var scale = frame.clientWidth / DESKTOP_W;
+          document.documentElement.style.setProperty('--scale', String(scale));
+          var docH = 900;
+          try {
+            var doc = view.contentDocument;
+            if (doc && doc.documentElement) docH = Math.max(900, doc.documentElement.scrollHeight);
+          } catch (e) {
+            /* cross-origin: keep a 900px desktop viewport that scrolls inside */
+          }
+          view.style.height = docH + 'px';
+          frame.style.height = Math.ceil(docH * scale) + 'px';
+          note.textContent =
+            'Desktop: full 1440px layout at ' +
+            Math.round(scale * 100) +
+            '% scale. Pinch to zoom. Sticky header and booking dialog behave best in Open full.';
+        }
+
+        function fit() {
+          if (state.mode === 'desktop') fitDesktop();
+          else {
+            fitMobile();
+            note.textContent = 'Mobile: ' + MOBILE_W + 'px viewport. Scroll inside the frame.';
+          }
+        }
+
+        function watchContent() {
+          if (observer) observer.disconnect();
+          if (state.mode !== 'desktop' || !('ResizeObserver' in window)) return;
+          try {
+            var doc = view.contentDocument;
+            if (!doc || !doc.body) return;
+            var last = 0;
+            observer = new ResizeObserver(function () {
+              var h = doc.documentElement.scrollHeight;
+              if (Math.abs(h - last) > 2) {
+                last = h;
+                fitDesktop();
+              }
+            });
+            observer.observe(doc.body);
+          } catch (e) {
+            /* ignore */
+          }
+        }
+
+        function load() {
+          var src = '/review/' + state.v + '/';
+          open.href = src;
+          body.className = 'is-' + state.mode;
+          document.querySelectorAll('.seg button').forEach(function (b) {
+            b.setAttribute('aria-pressed', String(b.dataset.mode === state.mode));
+          });
+          // Start desktop at a normal 900px viewport so the first layout matches a real screen.
+          view.style.height = state.mode === 'desktop' ? '900px' : '';
+          fit();
+          view.src = src;
+          save();
+        }
+
+        view.addEventListener('load', function () {
+          fit();
+          watchContent();
+          try {
+            view.contentDocument.fonts.ready.then(fit);
+          } catch (e) {
+            /* ignore */
+          }
+        });
+
+        document.querySelectorAll('.seg button').forEach(function (b) {
+          b.addEventListener('click', function () {
+            if (state.mode === b.dataset.mode) return;
+            state.mode = b.dataset.mode;
+            load();
+          });
+        });
+        select.addEventListener('change', function () {
+          state.v = select.value;
+          load();
+        });
+        window.addEventListener('resize', fit);
+        window.addEventListener('orientationchange', function () {
+          setTimeout(fit, 250);
+        });
+
+        fetch('/review/versions.json', { cache: 'no-store' })
+          .then(function (r) {
+            return r.json();
+          })
+          .catch(function () {
+            return [{ id: 'v1', label: 'v1' }];
+          })
+          .then(function (versions) {
+            versions.forEach(function (v) {
+              var o = document.createElement('option');
+              o.value = v.id;
+              o.textContent = v.label;
+              if (v.added) o.title = 'Added ' + v.added;
+              select.appendChild(o);
+            });
+            var ids = versions.map(function (v) {
+              return v.id;
+            });
+            if (!state.v || ids.indexOf(state.v) === -1) state.v = ids[0];
+            select.value = state.v;
+            load();
+          });
+      })();
+    </script>
+  </body>
+</html>

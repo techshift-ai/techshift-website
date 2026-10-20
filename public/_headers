@@ -21,6 +21,16 @@
 /og-default.png
   Cache-Control: public, max-age=86400
 
+# Design review pages (not part of the site): never indexed, and framable by the same origin only
+# so the viewer can show the mockup. The site-wide framing headers are detached here only.
+/review/*
+  ! X-Frame-Options
+  ! Content-Security-Policy
+  X-Frame-Options: SAMEORIGIN
+  Content-Security-Policy: frame-ancestors 'self'; base-uri 'self'; form-action 'self'
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-cache
+
 /llms.txt
   Content-Type: text/plain; charset=utf-8
   Cache-Control: public, max-age=3600
