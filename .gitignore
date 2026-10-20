@@ -28,3 +28,7 @@ pnpm-debug.log*
 
 # lighthouse reports (raw data stays out of git)
 .lighthouse/
+
+# worker local secrets
+.dev.vars
+worker/.dev.vars

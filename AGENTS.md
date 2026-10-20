@@ -51,6 +51,12 @@ Astro 7 (static output, zero client JS by default), TypeScript strict, Tailwind 
 - Every booking link and form is tested on the preview before release. A dead booking link blocks
   release.
 
+## Booking API
+
+`worker/` is a small Cloudflare Worker serving `/api/availability` and `/api/book` (Google Calendar,
+Turnstile, rate limits). See [docs/booking.md](docs/booking.md). `npm run worker:dev` runs it locally
+with a mock calendar; `npm test` runs its tests. Deploying it needs Azeem's approval.
+
 ## Deploy
 
 `.github/workflows/deploy.yml` builds and runs `wrangler pages deploy` to the Cloudflare Pages

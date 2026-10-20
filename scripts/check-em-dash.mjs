@@ -5,7 +5,7 @@ import { execSync } from 'node:child_process';
 const EM_DASH = String.fromCharCode(0x2014);
 const files = execSync('git ls-files --cached --others --exclude-standard', { encoding: 'utf8' })
   .split('\n')
-  .filter((f) => /\.(astro|ts|tsx|js|mjs|css|md|mdx|json|txt|html|yml|yaml)$/.test(f))
+  .filter((f) => /\.(astro|ts|tsx|js|mjs|css|md|mdx|json|jsonc|txt|html|yml|yaml)$/.test(f))
   .filter((f) => f !== 'package-lock.json');
 
 const hits = [];

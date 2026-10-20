@@ -5,4 +5,9 @@ export default [
   { ignores: ['dist/', '.astro/', 'node_modules/', '.lighthouse/'] },
   ...tseslint.configs.recommended,
   ...eslintPluginAstro.configs.recommended,
+  {
+    rules: {
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    },
+  },
 ];

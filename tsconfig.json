@@ -1,7 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist", "node_modules", ".lighthouse"],
+  "exclude": ["dist", "node_modules", ".lighthouse", "worker"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
