@@ -41,7 +41,7 @@ if (!/<meta\s+name="robots"/i.test(html)) {
 fs.writeFileSync(dest, html);
 
 const list = fs.existsSync(manifest) ? JSON.parse(fs.readFileSync(manifest, 'utf8')) : [];
-const entry = { id: version, label: version, added: new Date().toISOString().slice(0, 10) };
+const entry = { id: version, label: version, added: new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Toronto' }).format(new Date()) };
 const next = [entry, ...list.filter((v) => v.id !== version)];
 next.sort((a, b) => Number(b.id.replace(/\D/g, '')) - Number(a.id.replace(/\D/g, '')));
 fs.writeFileSync(manifest, JSON.stringify(next, null, 2) + '\n');

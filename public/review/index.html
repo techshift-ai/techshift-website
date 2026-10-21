@@ -128,14 +128,40 @@
         width: 390px;
         height: var(--mobile-h, 760px);
       }
-      /* Desktop: a real 1440px-wide document, scaled to the phone's width; the page itself scrolls. */
+      /* Desktop: a real 1440 x 900 screen, scaled to fit, scrolled inside like a real browser.
+         Keeping the iframe at a normal screen size lets scroll reveals, the pinned demo, and the
+         sticky header run naturally, and keeps the layer small enough for iOS Safari. */
       .is-desktop .frame {
-        width: 100%;
+        width: var(--frame-w, 100%);
+        height: var(--frame-h, 260px);
+        border-radius: 8px;
       }
       .is-desktop iframe {
         width: 1440px;
+        height: 900px;
         transform-origin: 0 0;
         transform: scale(var(--scale, 0.28));
+      }
+      .scrub {
+        display: none;
+        margin: 14px auto 0;
+        width: var(--frame-w, 100%);
+      }
+      .is-desktop .scrub {
+        display: block;
+      }
+      .scrub label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+      .scrub input {
+        width: 100%;
+        height: 44px;
+        margin: 0;
+        accent-color: var(--blue);
       }
     </style>
   </head>
@@ -159,84 +185,94 @@
       <div class="frame" id="frame">
         <iframe id="view" title="Mockup preview" src="about:blank"></iframe>
       </div>
+      <div class="scrub">
+        <label for="scrub"
+          ><span>Drag to scroll the desktop page</span><span id="pos">0%</span></label
+        >
+        <input id="scrub" type="range" min="0" max="1000" value="0" />
+      </div>
     </main>
     <script>
       (function () {
         var DESKTOP_W = 1440;
+        var DESKTOP_H = 900;
         var MOBILE_W = 390;
+        var root = document.documentElement;
         var body = document.body;
-        var frame = document.getElementById('frame');
         var view = document.getElementById('view');
         var select = document.getElementById('version');
         var open = document.getElementById('open');
         var note = document.getElementById('note');
+        var scrub = document.getElementById('scrub');
+        var pos = document.getElementById('pos');
         var bar = document.querySelector('.bar');
+        var stage = document.querySelector('.stage');
         var params = new URLSearchParams(location.search);
         var state = {
           mode: params.get('mode') === 'desktop' ? 'desktop' : 'mobile',
           v: params.get('v'),
         };
-        var observer;
 
         function save() {
           var q = new URLSearchParams({ v: state.v, mode: state.mode });
           history.replaceState(null, '', '?' + q.toString());
         }
 
-        function fitMobile() {
-          var h = window.innerHeight - bar.offsetHeight - 24;
-          frame.style.height = '';
-          view.style.height = '';
-          document.documentElement.style.setProperty('--mobile-h', Math.max(480, h) + 'px');
-        }
-
-        // Desktop: the iframe is laid out at 1440px wide (so desktop media queries apply), sized to
-        // its full document height, then scaled down. The outer page scrolls through it.
-        function fitDesktop() {
-          var scale = frame.clientWidth / DESKTOP_W;
-          document.documentElement.style.setProperty('--scale', String(scale));
-          var docH = 900;
-          try {
-            var doc = view.contentDocument;
-            if (doc && doc.documentElement) docH = Math.max(900, doc.documentElement.scrollHeight);
-          } catch (e) {
-            /* cross-origin: keep a 900px desktop viewport that scrolls inside */
-          }
-          view.style.height = docH + 'px';
-          frame.style.height = Math.ceil(docH * scale) + 'px';
-          note.textContent =
-            'Desktop: full 1440px layout at ' +
-            Math.round(scale * 100) +
-            '% scale. Pinch to zoom. Sticky header and booking dialog behave best in Open full.';
+        function available() {
+          var cs = getComputedStyle(stage);
+          return {
+            w: stage.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight),
+            h: window.innerHeight - bar.offsetHeight - 24,
+          };
         }
 
         function fit() {
-          if (state.mode === 'desktop') fitDesktop();
-          else {
-            fitMobile();
+          var a = available();
+          if (state.mode === 'desktop') {
+            // Fit the whole 1440 x 900 screen: width-bound in portrait, height-bound in landscape.
+            var scale = Math.min(a.w / DESKTOP_W, Math.max(120, a.h - 70) / DESKTOP_H);
+            root.style.setProperty('--scale', String(scale));
+            root.style.setProperty('--frame-w', Math.floor(DESKTOP_W * scale) + 'px');
+            root.style.setProperty('--frame-h', Math.floor(DESKTOP_H * scale) + 'px');
+            note.textContent =
+              'Desktop: a real ' +
+              DESKTOP_W +
+              ' x ' +
+              DESKTOP_H +
+              ' screen at ' +
+              Math.round(scale * 100) +
+              '%. Scroll inside it or drag the bar. Rotate your phone for a bigger view.';
+          } else {
+            root.style.setProperty('--mobile-h', Math.max(480, a.h) + 'px');
             note.textContent = 'Mobile: ' + MOBILE_W + 'px viewport. Scroll inside the frame.';
           }
         }
 
-        function watchContent() {
-          if (observer) observer.disconnect();
-          if (state.mode !== 'desktop' || !('ResizeObserver' in window)) return;
+        function win() {
           try {
-            var doc = view.contentDocument;
-            if (!doc || !doc.body) return;
-            var last = 0;
-            observer = new ResizeObserver(function () {
-              var h = doc.documentElement.scrollHeight;
-              if (Math.abs(h - last) > 2) {
-                last = h;
-                fitDesktop();
-              }
-            });
-            observer.observe(doc.body);
+            return view.contentWindow && view.contentWindow.document ? view.contentWindow : null;
           } catch (e) {
-            /* ignore */
+            return null;
           }
         }
+
+        function maxScroll(w) {
+          return Math.max(1, w.document.documentElement.scrollHeight - w.innerHeight);
+        }
+
+        function syncScrub() {
+          var w = win();
+          if (!w) return;
+          var ratio = w.scrollY / maxScroll(w);
+          scrub.value = String(Math.round(ratio * 1000));
+          pos.textContent = Math.round(ratio * 100) + '%';
+        }
+
+        scrub.addEventListener('input', function () {
+          var w = win();
+          if (!w) return;
+          w.scrollTo(0, (Number(scrub.value) / 1000) * maxScroll(w));
+        });
 
         function load() {
           var src = '/review/' + state.v + '/';
@@ -245,8 +281,8 @@
           document.querySelectorAll('.seg button').forEach(function (b) {
             b.setAttribute('aria-pressed', String(b.dataset.mode === state.mode));
           });
-          // Start desktop at a normal 900px viewport so the first layout matches a real screen.
-          view.style.height = state.mode === 'desktop' ? '900px' : '';
+          scrub.value = '0';
+          pos.textContent = '0%';
           fit();
           view.src = src;
           save();
@@ -254,12 +290,8 @@
 
         view.addEventListener('load', function () {
           fit();
-          watchContent();
-          try {
-            view.contentDocument.fonts.ready.then(fit);
-          } catch (e) {
-            /* ignore */
-          }
+          var w = win();
+          if (w) w.addEventListener('scroll', syncScrub, { passive: true });
         });
 
         document.querySelectorAll('.seg button').forEach(function (b) {
