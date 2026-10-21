@@ -1,0 +1,36 @@
+---
+import { Image } from 'astro:assets';
+import Container from '../ui/Container.astro';
+import Button from '../ui/Button.astro';
+import logo from '../../assets/brand/logo-horizontal-primary.png';
+import { site } from '../../site.config';
+
+// Navigation is set from the approved mockup. Keep it short.
+const nav: { label: string; href: string }[] = [];
+---
+
+<header class="sticky top-0 z-40 border-b border-rule/60 bg-white/80 backdrop-blur-md">
+  <Container class="flex h-16 items-center justify-between">
+    <a href="/" class="flex items-center" aria-label={`${site.name} home`}>
+      <Image src={logo} alt={site.name} width={160} height={38} loading="eager" />
+    </a>
+    {nav.length > 0 && (
+      <nav aria-label="Primary">
+        <ul class="hidden items-center gap-8 text-sm font-medium md:flex">
+          {nav.map((item) => (
+            <li>
+              <a href={item.href} class="hover:text-action">
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )}
+    {site.bookingUrl && (
+      <Button href={site.bookingUrl} external>
+        Book a consultation
+      </Button>
+    )}
+  </Container>
+</header>

@@ -1,0 +1,6 @@
+# Copy to worker/.dev.vars for local runs against real Google (never commit .dev.vars).
+# With `--env local` none of these are needed: the mock calendar is used.
+GOOGLE_AUTH_MODE=service_account
+GOOGLE_SA_CLIENT_EMAIL=
+GOOGLE_SA_PRIVATE_KEY=
+TURNSTILE_MODE=off
