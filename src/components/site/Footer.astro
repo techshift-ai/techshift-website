@@ -1,19 +1,56 @@
 ---
-import Container from '../ui/Container.astro';
+import Logo from '../brand/Logo.astro';
 import { site } from '../../site.config';
-
-const year = new Date().getFullYear();
 ---
 
-<footer class="bg-canvas-dark text-white/80">
-  <Container class="flex flex-col gap-6 py-12 text-sm sm:flex-row sm:items-center sm:justify-between">
-    <p>
-      <span class="font-semibold text-white">{site.name}</span>
-      <span aria-hidden="true"> · </span>
-      {site.address.addressLocality}, {site.address.addressRegion}
-    </p>
-    <p>
-      &copy; {year} {site.legalName}
-    </p>
-  </Container>
+<footer class="site-footer on-dark">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/" aria-label="Techshift home">
+          <Logo />
+        </a>
+        <p>Your trusted AI technology partner.</p>
+      </div>
+      <div class="footer-cols">
+        <nav aria-label="Footer">
+          <h2>Explore</h2>
+          <ul>
+            <li>
+              <a href="#services">Services</a>
+            </li>
+            <li>
+              <a href="#systems">Systems</a>
+            </li>
+            <li>
+              <a href="#how-we-work">How we work</a>
+            </li>
+            <li>
+              <a href="#about">About</a>
+            </li>
+            <li>
+              <a href="#faq">FAQ</a>
+            </li>
+          </ul>
+        </nav>
+        <div>
+          <h2>Contact</h2>
+          <ul>
+            <li>
+              <a href={site.bookingFallbackUrl} data-book>
+                Book a free consultation
+              </a>
+            </li>
+            <li>
+              <a href={`mailto:${site.email}`}>{site.email}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Techshift. All rights reserved.</span>
+      <span translate="no">techshift.ai</span>
+    </div>
+  </div>
 </footer>

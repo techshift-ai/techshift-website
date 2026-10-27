@@ -1,25 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Section from '../components/ui/Section.astro';
+import PageContent from '../components/home/PageContent.astro';
+import { faqItems } from '../data/faq';
+import { services } from '../data/services';
+import { faqPage, service } from '../lib/schema';
 import { site } from '../site.config';
 
-// Placeholder shell. The Creative Studio mockup is ported into sections here.
+const schema = [
+  faqPage(faqItems.map((item) => ({ question: item.question, answer: item.answer }))),
+  ...services.map((item) =>
+    service({ name: item.name, description: item.description, path: item.path }),
+  ),
+];
 ---
 
-<BaseLayout title={`${site.name} | TODO page title from mockup`} description={site.description}>
-  <Section labelledby="hero-heading" class="min-h-[70svh] content-center">
-    <p class="text-sm font-medium tracking-widest text-ink-muted uppercase" data-reveal>
-      Rebuild in progress
-    </p>
-    <h1
-      id="hero-heading"
-      class="mt-4 max-w-3xl text-5xl [--reveal-index:1] sm:text-6xl"
-      data-reveal
-    >
-      Homepage scaffold awaiting the approved mockup.
-    </h1>
-    <p class="mt-6 max-w-xl text-lg text-ink-muted [--reveal-index:2]" data-reveal>
-      Layout, tokens, SEO, and structured data are wired. Sections arrive from Creative Studio.
-    </p>
-  </Section>
+<BaseLayout title={site.title} description={site.description} schema={schema}>
+  <PageContent />
 </BaseLayout>

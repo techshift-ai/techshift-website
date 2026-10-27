@@ -16,6 +16,11 @@ const websiteId = `${site.url}/#website`;
 
 const absolute = (path: string) => new URL(path, site.url).toString();
 
+const areaServed =
+  site.areaServed.length > 0
+    ? site.areaServed.map((name) => ({ '@type': 'AdministrativeArea' as const, name }))
+    : undefined;
+
 const postalAddress = () => ({
   '@type': 'PostalAddress' as const,
   addressLocality: site.address.addressLocality,
@@ -45,7 +50,7 @@ export function organization(logoUrl: string): WithContext<Organization> {
 
 /**
  * ProfessionalService is a schema.org subtype of LocalBusiness, so this one node is the
- * LocalBusiness entry too. Address, phone, and area served are the local signals.
+ * LocalBusiness entry too. Phone and area served are included only when site config sets them.
  */
 export function professionalService(logoUrl: string): WithContext<ProfessionalService> {
   return {
@@ -57,7 +62,7 @@ export function professionalService(logoUrl: string): WithContext<ProfessionalSe
     image: absolute(logoUrl),
     parentOrganization: { '@id': orgId },
     address: postalAddress(),
-    areaServed: site.areaServed.map((name) => ({ '@type': 'AdministrativeArea' as const, name })),
+    ...(areaServed && { areaServed }),
     ...(site.telephone && { telephone: site.telephone }),
     ...(site.email && { email: site.email }),
     ...(site.sameAs.length > 0 && { sameAs: [...site.sameAs] }),
@@ -105,7 +110,7 @@ export function service(opts: {
     description: opts.description,
     url: absolute(opts.path),
     provider: { '@id': businessId },
-    areaServed: site.areaServed.map((name) => ({ '@type': 'AdministrativeArea' as const, name })),
+    ...(areaServed && { areaServed }),
   };
 }
 

@@ -2,8 +2,10 @@
 import { Font } from 'astro:assets';
 import SEO, { type SEOProps } from '../components/seo/SEO.astro';
 import JsonLd from '../components/seo/JsonLd.astro';
+import Icons from '../components/brand/Icons.astro';
 import Header from '../components/site/Header.astro';
 import Footer from '../components/site/Footer.astro';
+import BookingDialog from '../components/site/BookingDialog.astro';
 import logo from '../assets/brand/logo-horizontal-primary.png';
 import { organization, professionalService, webPage, website } from '../lib/schema';
 import { site } from '../site.config';
@@ -34,16 +36,22 @@ const graph = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#002244" />
+    <meta name="theme-color" content={site.themeColor} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
     <Font cssVariable="--font-poppins" preload={[{ weight: 400 }, { weight: 600 }]} />
     <SEO {...seo} />
     <JsonLd data={graph} />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
   </head>
-  <body class="bg-canvas text-ink font-sans antialiased">
-    <a href="#main" class="skip-link">
+  <body>
+    <Icons />
+    <a href="#main" class="skip">
       Skip to content
     </a>
     {!bare && <Header />}
@@ -51,9 +59,11 @@ const graph = [
       <slot />
     </main>
     {!bare && <Footer />}
+    {!bare && <BookingDialog />}
   </body>
 </html>
 
 <script>
-  import '../scripts/reveal';
+  import '../scripts/site';
+  import '../scripts/booking';
 </script>

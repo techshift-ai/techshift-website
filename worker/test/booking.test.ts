@@ -20,11 +20,20 @@ const toronto = (y: number, m: number, d: number, h: number, min = 0) =>
 const iso = (ms: number) => new Date(ms).toISOString();
 const NOW = toronto(2026, 10, 19, 9);
 
+const dayWindow = {
+  summary: 'Open for consultations',
+  status: 'confirmed',
+  transparency: 'transparent',
+  start: { dateTime: iso(toronto(2026, 10, 20, 10)) },
+  end: { dateTime: iso(toronto(2026, 10, 20, 16)) },
+};
+
 function mockClient(busyByCalendar: Record<string, { start: string; end: string }[]> = {}) {
   const client = {
     freeBusy: vi.fn(async (ids: string[], _timeMin: string, _timeMax: string) => ({
       calendars: Object.fromEntries(ids.map((id) => [id, { busy: busyByCalendar[id] ?? [] }])),
     })),
+    listEvents: vi.fn(async () => [dayWindow]),
     insertEvent: vi.fn(async () => ({
       id: 'evt1',
       hangoutLink: 'https://meet.google.com/abc-defg-hij',
@@ -49,6 +58,7 @@ const request = {
   name: 'Jordan Lee',
   email: 'jordan@example.com',
   businessName: 'Lee Plumbing',
+  issue: 'customer-service' as const,
   problem: 'We miss calls after hours.',
   businessType: 'Trades',
   timeZone: 'America/Toronto',
@@ -91,6 +101,13 @@ describe('getAvailability', () => {
     await expect(getAvailability(deps(client))).rejects.toBeInstanceOf(BusyCheckError);
   });
 
+  it('fails closed when open windows cannot be read', async () => {
+    const client = mockClient();
+    client.listEvents.mockRejectedValueOnce(new Error('calendar down'));
+    await expect(getAvailability(deps(client))).rejects.toBeInstanceOf(BusyCheckError);
+    expect(client.freeBusy).not.toHaveBeenCalled();
+  });
+
   it('caps the span at the booking window', async () => {
     const client = mockClient();
     const result = await getAvailability(deps(client), NOW, NOW + 90 * 24 * 3600_000);
@@ -123,6 +140,7 @@ describe('createBooking', () => {
     });
     expect(event.end.dateTime).toBe('2026-10-20T14:30:00.000Z');
     expect(event.description).toContain('Lee Plumbing');
+    expect(event.description).toContain('Topic: Customer service');
     expect(event.description).toContain('We miss calls after hours.');
     expect(event.extendedProperties.private).toMatchObject({
       techshiftSource: 'techshift.ai/booking',
@@ -171,18 +189,32 @@ describe('createBooking', () => {
     await expect(createBooking(deps(client), request)).rejects.toBeInstanceOf(SlotTakenError);
   });
 
-  it('rejects off-grid, weekend, and too-soon starts without calling Google', async () => {
+  it('rejects off-grid and too-soon starts before reading a calendar', async () => {
     const client = mockClient();
-    for (const start of [
-      toronto(2026, 10, 20, 10, 10),
-      toronto(2026, 10, 24, 10),
-      toronto(2026, 10, 19, 15),
-    ]) {
+    for (const start of [toronto(2026, 10, 20, 10, 10), toronto(2026, 10, 19, 15)]) {
       await expect(
         createBooking(deps(client), { ...request, start: iso(start) }),
       ).rejects.toBeInstanceOf(InvalidSlotError);
     }
+    expect(client.listEvents).not.toHaveBeenCalled();
     expect(client.freeBusy).not.toHaveBeenCalled();
+  });
+
+  it('rejects a start that is not inside an open window', async () => {
+    const client = mockClient();
+    await expect(
+      createBooking(deps(client), { ...request, start: iso(toronto(2026, 10, 21, 10)) }),
+    ).rejects.toBeInstanceOf(InvalidSlotError);
+    expect(client.listEvents).toHaveBeenCalled();
+    expect(client.freeBusy).not.toHaveBeenCalled();
+  });
+
+  it('still books when freeBusy echoes the transparent open window', async () => {
+    const client = mockClient({
+      'admin@techshift.ai': [{ start: dayWindow.start.dateTime, end: dayWindow.end.dateTime }],
+    });
+    const result = await createBooking(deps(client), request);
+    expect(result.eventId).toBe('evt1');
   });
 });
 
@@ -214,5 +246,24 @@ describe('Google Calendar HTTP client', () => {
       (fetchFn.mock.calls[0]! as unknown as [string, RequestInit])[1].body as string,
     );
     expect(body.items).toEqual(CONFLICT_CALENDAR_IDS.map((id) => ({ id })));
+  });
+
+  it('lists events with singleEvents and the requested range', async () => {
+    const fetchFn = vi.fn(async () => new Response(JSON.stringify({ items: [] }), { status: 200 }));
+    const client = createGoogleCalendarClient(
+      async () => 'token',
+      fetchFn as unknown as typeof fetch,
+    );
+    await client.listEvents(
+      'admin@techshift.ai',
+      '2026-10-20T00:00:00.000Z',
+      '2026-11-19T00:00:00.000Z',
+    );
+    const [url, init] = fetchFn.mock.calls[0]! as unknown as [string, RequestInit];
+    expect(url).toContain('/calendars/admin%40techshift.ai/events?');
+    expect(url).toContain('singleEvents=true');
+    expect(url).toContain('timeMin=2026-10-20T00%3A00%3A00.000Z');
+    expect((init.headers as Record<string, string>).Authorization).toBe('Bearer token');
+    expect(init.method).toBe('GET');
   });
 });

@@ -1,0 +1,898 @@
+---
+import Faq from './Faq.astro';
+import { site } from '../../site.config';
+---
+
+<section class="hero on-dark" aria-labelledby="hero-title">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <h1 id="hero-title">
+        <span class="dim">Stop running your business.</span>{' '}
+        <span class="lit">
+          Start growing it.
+          <svg
+            class="swash"
+            viewBox="0 0 300 12"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path pathLength="1" d="M3 8.5C70 3.5 160 2.5 297 6" />
+          </svg>
+        </span>
+      </h1>
+
+      <p class="hero-support">
+        Intelligent systems built around your business, made to lower costs and drive growth.
+      </p>
+
+      <div class="hero-actions magnet-zone">
+        <a class="btn btn--lg magnet" href={site.bookingFallbackUrl} data-book>
+          Book a free consultation
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <figure class="hv" id="hv" aria-label="Example of a day of work handled by Techshift systems">
+        <div class="hv-panel">
+          <div class="glass hv-main">
+            <div class="hv-top">
+              <b>Today</b>
+              <span class="live-dot">Running for you</span>
+            </div>
+            <ul class="hv-rows">
+              <li class="hv-row k-0" data-in>
+                <span class="hv-ic">
+                  <svg class="icon" aria-hidden="true">
+                    <use href="#i-phone" />
+                  </svg>
+                </span>
+                <span>
+                  <b>Call answered</b>
+                  <small>Roofing, leak inspection</small>
+                </span>
+                <span class="chip-d">Booked</span>
+              </li>
+              <li class="hv-row k-1" data-in>
+                <span class="hv-ic">
+                  <svg class="icon" aria-hidden="true">
+                    <use href="#i-calendar" />
+                  </svg>
+                </span>
+                <span>
+                  <b>Reservation confirmed</b>
+                  <small>Restaurant, table for six</small>
+                </span>
+                <span class="chip-d pos">Confirmed</span>
+              </li>
+              <li class="hv-row k-2" data-in>
+                <span class="hv-ic">
+                  <svg class="icon" aria-hidden="true">
+                    <use href="#i-star" />
+                  </svg>
+                </span>
+                <span>
+                  <b>Review request sent</b>
+                  <small>HVAC, after furnace service</small>
+                </span>
+                <span class="chip-d cau">Sent</span>
+              </li>
+              <li class="hv-row k-3" data-in>
+                <span class="hv-ic">
+                  <svg class="icon" aria-hidden="true">
+                    <use href="#i-doc" />
+                  </svg>
+                </span>
+                <span>
+                  <b>Invoice reminder sent</b>
+                  <small>Clinic, automatic</small>
+                </span>
+                <span class="chip-d pos">Done</span>
+              </li>
+            </ul>
+          </div>
+          <div class="hv-float hv-a k-4" data-in aria-hidden="true">
+            <span class="hv-cal">
+              <span>THU</span>
+              <strong>9</strong>
+            </span>
+            <span>
+              <b>Furnace tune-up booked</b>
+              <small>8:00 AM, added to the schedule</small>
+            </span>
+          </div>
+          <div class="hv-float hv-b k-5" data-in aria-hidden="true">
+            <small>Website chat</small>
+            <span class="q">Can someone look at my roof this week?</span>
+          </div>
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="outcomes" aria-labelledby="outcomes-title">
+  <h2 class="sr-only" id="outcomes-title">
+    What changes for you
+  </h2>
+  <div class="wrap">
+    <ul class="outcome-bar" data-reveal>
+      <li class="outcome i-0">
+        <svg class="icon" aria-hidden="true">
+          <use href="#i-trend-down" />
+        </svg>
+        <h3>Lower costs</h3>
+        <p>Fewer manual steps, fewer errors, less spent on routine work.</p>
+      </li>
+      <li class="outcome i-1">
+        <svg class="icon" aria-hidden="true">
+          <use href="#i-hourglass" />
+        </svg>
+        <h3>Get your time back</h3>
+        <p>Repetitive tasks run on their own, so your team can focus.</p>
+      </li>
+      <li class="outcome i-2">
+        <svg class="icon" aria-hidden="true">
+          <use href="#i-trend-up" />
+        </svg>
+        <h3>Grow your business</h3>
+        <p>Systems built to win more customers and more revenue.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="services" aria-labelledby="services-title">
+  <div class="wrap">
+    <div class="head" data-reveal>
+      <h2 class="h2 i-1" id="services-title">
+        What we build for you.
+      </h2>
+      <p class="swipe i-2" aria-hidden="true">
+        Swipe to see all four.
+      </p>
+    </div>
+    <ul class="offers" data-reveal tabindex="0" aria-label="Services">
+      <li class="offer offer--dark i-0">
+        <div class="offer-art" aria-hidden="true">
+          <span class="moon">
+            <svg class="icon">
+              <use href="#i-moon" />
+            </svg>
+            Day and night
+          </span>
+          <div class="art-chat">
+            <p class="in">Can someone look at my furnace this week?</p>
+            <p class="out">Yes. Thursday at 8:00 AM is open. Shall I book it?</p>
+          </div>
+        </div>
+        <div class="offer-txt">
+          <h3>Digital front desk</h3>
+          <p>
+            Answers calls, chats and messages, books appointments and handles customer questions,
+            day and night.
+          </p>
+        </div>
+      </li>
+
+      <li class="offer i-1">
+        <div class="offer-art" aria-hidden="true">
+          <div class="art-flow">
+            <span class="node">
+              <svg class="icon">
+                <use href="#i-form" />
+              </svg>
+              <small>Forms</small>
+            </span>
+            <span class="wire">
+              <i class="k-0"></i>
+            </span>
+            <span class="node">
+              <svg class="icon">
+                <use href="#i-calendar" />
+              </svg>
+              <small>Calendar</small>
+            </span>
+            <span class="wire">
+              <i class="k-1"></i>
+            </span>
+            <span class="node">
+              <svg class="icon">
+                <use href="#i-mail" />
+              </svg>
+              <small>Email</small>
+            </span>
+          </div>
+        </div>
+        <div class="offer-txt">
+          <h3>Automate the repetitive work</h3>
+          <p>Connects the tools you already use and takes the manual steps off your team.</p>
+        </div>
+      </li>
+
+      <li class="offer i-2">
+        <div class="offer-art" aria-hidden="true">
+          <div class="art-search">
+            <span class="sbar">
+              <svg class="icon">
+                <use href="#i-search" />
+              </svg>
+              roofing company near me
+            </span>
+            <span class="sres">
+              <span class="ai">AI answer</span>
+              <b>Your business</b>
+              <span class="bar w8"></span>
+              <span class="bar w6"></span>
+            </span>
+            <span class="social">
+              <i></i>
+              <i></i>
+              <i></i>
+            </span>
+          </div>
+        </div>
+        <div class="offer-txt">
+          <h3>Get found online</h3>
+          <p>
+            A website that works for you and AI-managed social media, so you show up where customers
+            look: search, AI answers and social.
+          </p>
+        </div>
+      </li>
+
+      <li class="offer offer--start i-3">
+        <div class="offer-art" aria-hidden="true">
+          <div class="art-grid">
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+            <i class="hi">
+              <svg class="icon">
+                <use href="#i-search" />
+              </svg>
+            </i>
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+          </div>
+        </div>
+        <div class="offer-txt">
+          <h3>Not sure where to start?</h3>
+          <p>We will find it together on a free call.</p>
+
+          <a class="btn btn--sm offer-cta" href={site.bookingFallbackUrl} data-book>
+            Book a free consultation
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="band on-dark" id="systems" aria-labelledby="sys-title">
+  <div class="wrap sys-wrap">
+    <div class="head" data-reveal>
+      <h2 class="h2 i-1" id="sys-title">
+        Systems we can build for you.
+      </h2>
+      <p class="sub i-2">Three examples. Every system is designed around how your business runs.</p>
+    </div>
+
+    <article class="sys-row" aria-labelledby="ex1-title">
+      <div class="sys-copy" data-reveal>
+        <h3 class="sys-h i-0" id="ex1-title">
+          Booking system
+        </h3>
+        <p class="sys-line i-1">
+          Every message answered and followed up until it books. Shown here for a restaurant.
+        </p>
+        <ol class="story-steps i-2">
+          <li data-step="1">Answered right away, even after closing.</li>
+          <li data-step="2">Followed up until it books.</li>
+          <li data-step="3">Logged and measured.</li>
+        </ol>
+      </div>
+
+      <figure
+        class="live"
+        id="live"
+        data-mode="with"
+        aria-label="Example booking conversation for a restaurant"
+      >
+        <div class="toggle" role="group" aria-labelledby="tg-label">
+          <span class="toggle-label" id="tg-label">
+            A message at 11:48 PM:
+          </span>
+          <span class="seg">
+            <button type="button" data-mode-btn="without" aria-pressed="false">
+              Without a system
+            </button>
+            <button type="button" data-mode-btn="with" aria-pressed="true">
+              With Techshift
+            </button>
+          </span>
+        </div>
+        <div class="win glass">
+          <div class="win-bar">
+            <b>
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-inbox" />
+              </svg>
+              Reservations
+            </b>
+            <span class="win-meta">
+              <span class="chip-d" id="live-status">
+                New message
+              </span>
+              <span class="clock">
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-clock" />
+                </svg>
+                <span id="live-clock">11:48 PM</span>
+              </span>
+            </span>
+          </div>
+          <div class="thread" id="thread" aria-hidden="true">
+            <p class="sys" data-s="0">
+              After closing. The team has gone home.
+            </p>
+            <p class="m m-in" data-s="1">
+              Hi, do you have a table for six this Friday around 7?
+              <small>Website chat, 11:48 PM</small>
+            </p>
+            <p class="typing" data-m="with">
+              <i class="k-0"></i>
+              <i class="k-1"></i>
+              <i class="k-2"></i>
+            </p>
+            <p class="m m-out" data-s="2" data-m="with" data-typing>
+              Thanks for reaching out. For six on Friday we have 6:30 PM or 8:00 PM. Which works
+              best?<small>Reservations, 11:48 PM</small>
+            </p>
+            <p class="sys warn" data-s="2" data-m="without">
+              No reply. Nobody saw it.
+            </p>
+            <p class="sys" data-s="3">
+              Next morning, 9:00 AM
+            </p>
+            <p class="m m-out" data-s="3" data-m="with">
+              Just checking in. Would you like us to hold 8:00 PM on Friday for six?
+              <small>Follow-up, 9:00 AM</small>
+            </p>
+            <p class="sys warn" data-s="3" data-m="without">
+              Still no reply. The message is buried.
+            </p>
+            <p class="m m-in" data-s="4" data-m="with">
+              8:00 PM is perfect, thank you.<small>9:04 AM</small>
+            </p>
+            <p class="m m-in" data-s="4" data-m="without">
+              No worries, we booked somewhere else.<small>9:30 AM</small>
+            </p>
+            <div class="res ok" data-s="5" data-m="with">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-check" />
+              </svg>
+              <span>
+                <b>Reserved: Friday, 8:00 PM, table for six</b>
+                <small>Added to the reservation book. You have been notified.</small>
+              </span>
+            </div>
+            <div class="res lost" data-s="5" data-m="without">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-x-circle" />
+              </svg>
+              <span>
+                <b>Reservation lost</b>
+                <small>Nothing records that it happened.</small>
+              </span>
+            </div>
+            <div class="logline" data-s="6" data-m="with">
+              <span>Logged to your booking report</span>
+              <span class="chip-d pos">Measured</span>
+            </div>
+            <div class="logline" data-s="6" data-m="without">
+              <span>Logged: nothing</span>
+              <span class="chip-d neg">Untracked</span>
+            </div>
+          </div>
+        </div>
+      </figure>
+    </article>
+
+    <article class="sys-row sys-row--flip" aria-labelledby="ex2-title">
+      <div class="sys-copy" data-reveal>
+        <h3 class="sys-h i-0" id="ex2-title">
+          AI customer service agent
+        </h3>
+        <p class="sys-line i-1">
+          Takes calls and bookings over chat or voice, day and night. Shown here for a roofing
+          company.
+        </p>
+      </div>
+      <div class="agent glass" data-reveal aria-hidden="true">
+        <div class="agent-in">
+          <div class="agent-top">
+            <span class="agent-ic">
+              <svg class="icon">
+                <use href="#i-phone" />
+              </svg>
+            </span>
+            <span>
+              <b>Incoming call</b>
+              <small>Roofing, after a storm</small>
+            </span>
+            <span class="chip-d pos live-dot2">Live</span>
+          </div>
+          <div class="wave">
+            <i class="k-0"></i>
+            <i class="k-1"></i>
+            <i class="k-2"></i>
+            <i class="k-3"></i>
+            <i class="k-4"></i>
+            <i class="k-5"></i>
+            <i class="k-6"></i>
+            <i class="k-7"></i>
+            <i class="k-8"></i>
+            <i class="k-9"></i>
+            <i class="k-10"></i>
+            <i class="k-11"></i>
+            <i class="k-12"></i>
+            <i class="k-13"></i>
+            <i class="k-14"></i>
+            <i class="k-15"></i>
+            <i class="k-16"></i>
+            <i class="k-17"></i>
+            <i class="k-18"></i>
+            <i class="k-19"></i>
+          </div>
+          <p class="m m-in a-1">Water is coming through our ceiling after the storm.</p>
+          <p class="m m-out a-2">
+            I can help with that. An inspector can come Thursday at 8:00 AM. Shall I book it?
+          </p>
+          <div class="res ok a-3">
+            <svg class="icon">
+              <use href="#i-check" />
+            </svg>
+            <span>
+              <b>Inspection booked: Thursday, 8:00 AM</b>
+              <small>Details sent to the customer and your team.</small>
+            </span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="sys-row" aria-labelledby="ex3-title">
+      <div class="sys-copy" data-reveal>
+        <h3 class="sys-h i-0" id="ex3-title">
+          Automated customer follow-through
+        </h3>
+        <p class="sys-line i-1">
+          After the job, it thanks the customer, asks for a review and schedules the next visit, so
+          repeat business books itself. Shown here for HVAC.
+        </p>
+      </div>
+      <div class="tl-card glass" data-reveal aria-hidden="true">
+        <ol class="tl">
+          <li class="k-0">
+            <span class="tl-dot">
+              <svg class="icon">
+                <use href="#i-wrench" />
+              </svg>
+            </span>
+            <small>Job done</small>
+            <b>Furnace serviced</b>
+          </li>
+          <li class="k-1">
+            <span class="tl-dot">
+              <svg class="icon">
+                <use href="#i-mail" />
+              </svg>
+            </span>
+            <small>Same day</small>
+            <b>Thank-you sent</b>
+          </li>
+          <li class="k-2">
+            <span class="tl-dot">
+              <svg class="icon">
+                <use href="#i-star" />
+              </svg>
+            </span>
+            <small>Next day</small>
+            <b>Google review requested</b>
+          </li>
+          <li class="k-3">
+            <span class="tl-dot">
+              <svg class="icon">
+                <use href="#i-calendar" />
+              </svg>
+            </span>
+            <small>Next season</small>
+            <b>Maintenance reminder</b>
+          </li>
+          <li class="tl-end k-4">
+            <span class="tl-dot">
+              <svg class="icon">
+                <use href="#i-repeat" />
+              </svg>
+            </span>
+            <small>Repeat business</small>
+            <b>Next visit booked</b>
+          </li>
+        </ol>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section" id="how-we-work" aria-labelledby="how-title">
+  <div class="wrap">
+    <div class="head" data-reveal>
+      <h2 class="h2 i-1" id="how-title">
+        How We Work With You
+      </h2>
+    </div>
+    <ol class="acc" data-reveal data-acc-group>
+      <li class="acc-item i-0" data-acc-item>
+        <h3>
+          <button
+            class="acc-btn"
+            type="button"
+            data-acc
+            aria-expanded="false"
+            aria-controls="acc-p1"
+            id="acc-b1"
+          >
+            <span class="acc-n">1</span>
+            <span class="acc-t">We look</span>
+            <span class="acc-pm" aria-hidden="true"></span>
+          </button>
+        </h3>
+        <div class="acc-panel" id="acc-p1" role="region" aria-labelledby="acc-b1">
+          <div class="acc-body">
+            <div>
+              <p>
+                We start by understanding your biggest problems and exactly where they cost you time
+                or money.
+              </p>
+              <p>Then we find the clear, visible gaps where growth is being lost.</p>
+            </div>
+            <div class="acc-ex">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-search" />
+              </svg>
+              <p>
+                <b>For example</b>Calls that go to voicemail after hours, quotes that never get a
+                follow-up, or hours every week spent on manual data entry.
+              </p>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="acc-item i-1" data-acc-item>
+        <h3>
+          <button
+            class="acc-btn"
+            type="button"
+            data-acc
+            aria-expanded="false"
+            aria-controls="acc-p2"
+            id="acc-b2"
+          >
+            <span class="acc-n">2</span>
+            <span class="acc-t">We plan</span>
+            <span class="acc-pm" aria-hidden="true"></span>
+          </button>
+        </h3>
+        <div class="acc-panel" id="acc-p2" role="region" aria-labelledby="acc-b2">
+          <div class="acc-body">
+            <div>
+              <p>
+                We look at the systems you use today and design around them, so your daily
+                operations are improved, not disrupted.
+              </p>
+              <p>
+                Every design is built carefully to your requirements, so the real problem gets
+                solved.
+              </p>
+            </div>
+            <div class="acc-ex">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-plug" />
+              </svg>
+              <p>
+                <b>Our rule</b>We only replace a system when the new one genuinely adds more value,
+                without disrupting your business.
+              </p>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="acc-item i-2" data-acc-item>
+        <h3>
+          <button
+            class="acc-btn"
+            type="button"
+            data-acc
+            aria-expanded="false"
+            aria-controls="acc-p3"
+            id="acc-b3"
+          >
+            <span class="acc-n">3</span>
+            <span class="acc-t">We build</span>
+            <span class="acc-pm" aria-hidden="true"></span>
+          </button>
+        </h3>
+        <div class="acc-panel" id="acc-p3" role="region" aria-labelledby="acc-b3">
+          <div class="acc-body">
+            <div>
+              <p>
+                We build the system for you, using the latest AI technology in everything we make.
+              </p>
+              <p>
+                Timelines vary with the scope of the project, and we map yours out together during
+                planning.
+              </p>
+            </div>
+            <div class="acc-ex">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-layers" />
+              </svg>
+              <p>
+                <b>What you get</b>A working system connected to your tools, set up for your team
+                and your customers.
+              </p>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="acc-item i-3" data-acc-item>
+        <h3>
+          <button
+            class="acc-btn"
+            type="button"
+            data-acc
+            aria-expanded="false"
+            aria-controls="acc-p4"
+            id="acc-b4"
+          >
+            <span class="acc-n">4</span>
+            <span class="acc-t">We prove value</span>
+            <span class="acc-pm" aria-hidden="true"></span>
+          </button>
+        </h3>
+        <div class="acc-panel" id="acc-p4" role="region" aria-labelledby="acc-b4">
+          <div class="acc-body">
+            <div>
+              <p>
+                Every system starts with a pilot, lasting from one month to several depending on the
+                project and how long outcomes take to show. Depending on the system, we run it for
+                you or your team uses the tool directly.
+              </p>
+              <p>
+                At the end, we show you the numbers: a before and after, such as booked appointments
+                or hours saved, quantified in dollar value for your business.
+              </p>
+            </div>
+            <div class="acc-ex acc-ex--two">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-chart" />
+              </svg>
+              <p>
+                <b>Then you get two clear numbers</b>
+                <span class="two-n">
+                  <span>One-time setup fee</span>
+                  <span>Monthly cost to keep it running</span>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="acc-item i-4" data-acc-item>
+        <h3>
+          <button
+            class="acc-btn"
+            type="button"
+            data-acc
+            aria-expanded="false"
+            aria-controls="acc-p5"
+            id="acc-b5"
+          >
+            <span class="acc-n">5</span>
+            <span class="acc-t">We support and maintain</span>
+            <span class="acc-pm" aria-hidden="true"></span>
+          </button>
+        </h3>
+        <div class="acc-panel" id="acc-p5" role="region" aria-labelledby="acc-b5">
+          <div class="acc-body">
+            <div>
+              <p>
+                Your monthly cost covers technical support, plus managing, monitoring and
+                maintaining your systems on up-to-date technology. That keeps costs down and keeps
+                everything reliable.
+              </p>
+              <p>
+                To be transparent: AI providers bill by usage, and your monthly cost covers that
+                too.
+              </p>
+            </div>
+            <ul class="acc-list">
+              <li>
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-life" />
+                </svg>
+                Technical support
+              </li>
+              <li>
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-pulse" />
+                </svg>
+                Monitoring
+              </li>
+              <li>
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-cog" />
+                </svg>
+                Maintenance and updates
+              </li>
+              <li>
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-check" />
+                </svg>
+                AI usage included
+              </li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li class="acc-item i-5" data-acc-item>
+        <h3>
+          <button
+            class="acc-btn"
+            type="button"
+            data-acc
+            aria-expanded="false"
+            aria-controls="acc-p6"
+            id="acc-b6"
+          >
+            <span class="acc-n">6</span>
+            <span class="acc-t">We keep growing your business</span>
+            <span class="acc-pm" aria-hidden="true"></span>
+          </button>
+        </h3>
+        <div class="acc-panel" id="acc-p6" role="region" aria-labelledby="acc-b6">
+          <div class="acc-body">
+            <div>
+              <p>
+                Once a system is running well, we move on to the next problem. One problem at a
+                time, so you get the full value of AI across your business.
+              </p>
+            </div>
+            <div class="acc-ex">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-trend-up" />
+              </svg>
+              <p>
+                <b>For example</b>Start with a booking system, then add automated follow-through,
+                then an AI customer service agent.
+              </p>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="section about" id="about" aria-labelledby="about-title">
+  <div class="wrap about-grid">
+    <div class="about-copy" data-reveal>
+      <h2 class="h2 i-1" id="about-title">
+        Your trusted AI technology partner.
+      </h2>
+
+      <p class="lead i-2">
+        Techshift is a Canadian-based AI technology firm. We build reliable, sustainable,
+        fit-for-purpose systems that fix what costs businesses time and money.
+      </p>
+      <ul class="about-points i-3">
+        <li>
+          <svg class="icon" aria-hidden="true">
+            <use href="#i-shield" />
+          </svg>
+          Reliable
+        </li>
+        <li>
+          <svg class="icon" aria-hidden="true">
+            <use href="#i-repeat" />
+          </svg>
+          Sustainable
+        </li>
+        <li>
+          <svg class="icon" aria-hidden="true">
+            <use href="#i-check" />
+          </svg>
+          Fit for purpose
+        </li>
+      </ul>
+    </div>
+
+    <div class="orbitmark" data-reveal aria-hidden="true">
+      <svg viewBox="0 0 400 400" focusable="false">
+        <defs>
+          <radialGradient id="om-core" cx="50%" cy="40%" r="60%">
+            <stop offset="0" stop-color="#FFFFFF" />
+            <stop offset="1" stop-color="#E6EFFF" />
+          </radialGradient>
+        </defs>
+        <circle class="om-r3" cx="200" cy="200" r="182" />
+        <circle class="om-r2" cx="200" cy="200" r="132" />
+        <circle class="om-r1" cx="200" cy="200" r="84" />
+        <path class="om-red" d="M200 18A182 182 0 0 1 263 29" />
+        <g class="om-spin">
+          <circle class="om-sat" cx="200" cy="18" r="5" />
+          <circle class="om-sat om-sat--b" cx="382" cy="200" r="4" />
+          <circle class="om-sat om-sat--b" cx="200" cy="382" r="4" />
+          <circle class="om-sat om-sat--b" cx="18" cy="200" r="4" />
+        </g>
+        <g class="om-tick">
+          <path d="M200 68v-8M332 200h8M200 332v8M68 200h-8" />
+        </g>
+        <circle cx="200" cy="200" r="58" fill="url(#om-core)" />
+        <text class="om-core" x="200" y="196" text-anchor="middle">
+          Your
+        </text>
+        <text class="om-core" x="200" y="218" text-anchor="middle">
+          business
+        </text>
+        <g class="om-pill k-0">
+          <rect x="134" y="52" width="132" height="34" rx="17" />
+          <text x="200" y="74" text-anchor="middle">
+            Operations
+          </text>
+        </g>
+        <g class="om-pill k-1">
+          <rect x="262" y="183" width="124" height="34" rx="17" />
+          <text x="324" y="205" text-anchor="middle">
+            Customers
+          </text>
+        </g>
+        <g class="om-pill k-2">
+          <rect x="120" y="314" width="160" height="34" rx="17" />
+          <text x="200" y="336" text-anchor="middle">
+            Online presence
+          </text>
+        </g>
+        <g class="om-pill k-3">
+          <rect x="14" y="183" width="108" height="34" rx="17" />
+          <text x="68" y="205" text-anchor="middle">
+            Growth
+          </text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<Faq />
+
+<section class="cta on-dark" id="book" aria-labelledby="book-title">
+  <div class="wrap" data-reveal>
+    <h2 id="book-title" class="i-0">
+      See what we can take off your plate.
+    </h2>
+    <p class="sub i-1">Free online consultation with our team.</p>
+    <div class="i-2">
+      <div class="cta-actions magnet-zone">
+        <a class="btn btn--lg magnet" href={site.bookingFallbackUrl} data-book>
+          Book a free consultation
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

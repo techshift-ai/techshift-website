@@ -1,7 +1,15 @@
-import type { BookingRules } from './config';
+import { OPERATIONS_CALENDAR_ID, type BookingRules } from './config';
 import type { CalendarClient, CalendarEventInput, FreeBusyResponse } from './google/calendar';
-import { generateSlots, isValidSlotStart, type Interval, type Slot } from './slots';
-import type { BookingRequest } from './validate';
+import {
+  excludeOpenWindows,
+  generateSlots,
+  isOnBookingGrid,
+  isValidSlotStart,
+  windowsFromEvents,
+  type Interval,
+  type Slot,
+} from './slots';
+import { ISSUE_LABELS, type BookingRequest } from './validate';
 
 const MINUTE = 60_000;
 const DAY = 24 * 60 * MINUTE;
@@ -44,6 +52,19 @@ async function busyBetween(deps: BookingDeps, from: number, to: number): Promise
   return collectBusy(res, deps.conflictCalendarIds);
 }
 
+async function openWindows(deps: BookingDeps, from: number, to: number): Promise<Interval[]> {
+  try {
+    const events = await deps.calendar.listEvents(
+      OPERATIONS_CALENDAR_ID,
+      new Date(from).toISOString(),
+      new Date(to).toISOString(),
+    );
+    return windowsFromEvents(events, deps.rules.timeZone);
+  } catch (err) {
+    throw new BusyCheckError(err instanceof Error ? err.message : 'events.list failed');
+  }
+}
+
 export interface AvailabilityResult {
   timeZone: string;
   durationMinutes: number;
@@ -63,12 +84,19 @@ export async function getAvailability(
   if (start >= end) return { ...base, slots: [] };
 
   const buffer = deps.rules.bufferMin * MINUTE;
-  const busy = await busyBetween(
+  const windows = await openWindows(
     deps,
     start - buffer,
     end + deps.rules.durationMin * MINUTE + buffer,
   );
-  return { ...base, slots: generateSlots({ rules: deps.rules, now, from: start, to: end, busy }) };
+  const busy = excludeOpenWindows(
+    await busyBetween(deps, start - buffer, end + deps.rules.durationMin * MINUTE + buffer),
+    windows,
+  );
+  return {
+    ...base,
+    slots: generateSlots({ rules: deps.rules, now, from: start, to: end, busy, windows }),
+  };
 }
 
 function describe(req: BookingRequest): string {
@@ -83,7 +111,8 @@ function describe(req: BookingRequest): string {
   if (req.website) lines.push(`Website: ${req.website}`);
   if (req.phone) lines.push(`Phone: ${req.phone}`);
   if (req.timeZone) lines.push(`Visitor time zone: ${req.timeZone}`);
-  lines.push('', 'Main problem:', req.problem);
+  lines.push('', `Topic: ${ISSUE_LABELS[req.issue]}`);
+  if (req.problem) lines.push('', 'Notes:', req.problem);
   return lines.join('\n');
 }
 
@@ -105,11 +134,15 @@ export async function createBooking(
 ): Promise<BookingResult> {
   const now = deps.now();
   const start = Date.parse(req.start);
-  if (!isValidSlotStart(deps.rules, now, start)) throw new InvalidSlotError('Not a bookable slot');
-
   const end = start + deps.rules.durationMin * MINUTE;
   const buffer = deps.rules.bufferMin * MINUTE;
-  const busy = await busyBetween(deps, start - buffer, end + buffer);
+  // Off-grid and too-soon starts fail before any calendar read.
+  if (!isOnBookingGrid(deps.rules, now, start)) throw new InvalidSlotError('Not a bookable slot');
+  const windows = await openWindows(deps, start - DAY, end + DAY);
+  if (!isValidSlotStart(deps.rules, now, start, windows)) {
+    throw new InvalidSlotError('Not a bookable slot');
+  }
+  const busy = excludeOpenWindows(await busyBetween(deps, start - buffer, end + buffer), windows);
   if (busy.some((b) => b.start < end + buffer && b.end > start - buffer)) {
     throw new SlotTakenError('Slot no longer available');
   }

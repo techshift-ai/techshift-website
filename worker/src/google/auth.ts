@@ -116,6 +116,7 @@ export function createTokenProvider(env: Env, fetchFn: FetchLike = fetch): Token
           client_id: GOOGLE_OAUTH_CLIENT_ID,
           client_secret: GOOGLE_OAUTH_CLIENT_SECRET,
           refresh_token: GOOGLE_OAUTH_REFRESH_TOKEN,
+          scope: GOOGLE_SCOPES.join(' '),
         }),
         fetchFn,
       );

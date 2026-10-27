@@ -6,6 +6,7 @@ const base = {
   name: 'Jordan Lee',
   email: 'Jordan@Example.com',
   businessName: 'Lee Plumbing',
+  issue: 'lowering-costs',
   problem: 'We miss calls after hours.',
 };
 
@@ -20,17 +21,42 @@ describe('validateBookingRequest', () => {
     }
   });
 
-  it('requires name, email, business name, problem, and a slot', () => {
-    const r = validateBookingRequest({ name: ' ', email: '', businessName: '', problem: '' });
+  it('requires name, email, business name, a topic, and a slot', () => {
+    const r = validateBookingRequest({
+      name: ' ',
+      email: '',
+      businessName: '',
+      issue: '',
+      problem: '',
+    });
     expect(r.ok).toBe(false);
     if (!r.ok)
       expect(Object.keys(r.errors).sort()).toEqual([
         'businessName',
         'email',
+        'issue',
         'name',
-        'problem',
         'start',
       ]);
+  });
+
+  it('accepts each consultation topic and treats notes as optional', () => {
+    for (const issue of [
+      'lowering-costs',
+      'saving-time',
+      'growing-revenue',
+      'customer-service',
+      'online-presence',
+      'something-else',
+    ]) {
+      const r = validateBookingRequest({ ...base, issue, problem: '' });
+      expect(r.ok).toBe(true);
+      if (r.ok) {
+        expect(r.value.issue).toBe(issue);
+        expect(r.value.problem).toBeUndefined();
+      }
+    }
+    expect(validateBookingRequest({ ...base, issue: 'not-a-topic' }).ok).toBe(false);
   });
 
   it('validates optional phone, website, and time zone', () => {

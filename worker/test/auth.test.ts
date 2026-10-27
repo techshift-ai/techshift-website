@@ -40,8 +40,7 @@ describe('service account JWT', () => {
     expect(decode(c!)).toEqual({
       iss: 'booking@project.iam.gserviceaccount.com',
       sub: 'admin@techshift.ai',
-      scope:
-        'https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.freebusy',
+      scope: 'https://www.googleapis.com/auth/calendar',
       aud: 'https://oauth2.googleapis.com/token',
       iat: 1_800_000_000,
       exp: 1_800_003_600,
@@ -80,6 +79,7 @@ describe('token provider', () => {
     const body = (fetchFn.mock.calls[0]! as unknown as [string, RequestInit])[1]
       .body as URLSearchParams;
     expect(body.get('grant_type')).toBe('refresh_token');
+    expect(body.get('scope')).toBe('https://www.googleapis.com/auth/calendar');
   });
 
   it('uses the JWT bearer grant in service account mode', async () => {

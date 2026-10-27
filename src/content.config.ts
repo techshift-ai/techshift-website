@@ -9,20 +9,6 @@ const seo = z.object({
   noindex: z.boolean().default(false),
 });
 
-const faq = z.array(z.object({ question: z.string(), answer: z.string() })).default([]);
-
-const services = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/services' }),
-  schema: z.object({
-    name: z.string(),
-    summary: z.string(),
-    order: z.number().default(100),
-    draft: z.boolean().default(false),
-    seo,
-    faq,
-  }),
-});
-
 const pages = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
   schema: z.object({
@@ -33,4 +19,4 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { services, pages };
+export const collections = { pages };

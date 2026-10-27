@@ -8,18 +8,29 @@ tested locally. Not deployed, and no Google Cloud or Cloudflare resources exist 
 
 Approved in HQ's Email, Calendar and EA setup log. Defined once in `worker/src/config.ts`.
 
-| Rule                 | Value                                                               |
-| -------------------- | ------------------------------------------------------------------- |
-| Length               | 30 minutes, Google Meet link included                               |
-| Hours                | Monday to Friday, 10:00 to 16:00 America/Toronto (last start 15:30) |
-| Buffer               | 15 minutes clear before and after any existing event                |
-| Notice               | At least 24 hours ahead                                             |
-| Window               | Up to 30 days ahead                                                 |
-| Created on           | Client Meetings calendar                                            |
-| Conflicts checked on | Client Meetings and admin@techshift.ai (Techshift Operations)       |
+| Rule                 | Value                                                                                         |
+| -------------------- | --------------------------------------------------------------------------------------------- |
+| Length               | 30 minutes. The calendar event includes a video meeting. The site does not name the provider. |
+| Open windows         | Events titled exactly `Open for consultations` on the Techshift Operations calendar           |
+| Grid                 | 30-minute starts on the America/Toronto clock, and the whole 30 minutes must sit in a window  |
+| Buffer               | 15 minutes clear before and after any existing event                                          |
+| Notice               | At least 24 hours ahead                                                                       |
+| Window               | Up to 30 days ahead                                                                           |
+| Created on           | Client Meetings calendar                                                                      |
+| Conflicts checked on | Client Meetings and admin@techshift.ai (Techshift Operations)                                 |
 
-Start times sit on a 30-minute grid, so an event ending at 11:00 blocks 11:00 (buffer) and the next
-open start is 11:30. Calendly is not used.
+Bookable hours are not hardcoded. An event on `admin@techshift.ai` whose title is exactly
+`Open for consultations` (trimmed, case-insensitive) is a window. Those events are created with
+transparency `transparent` (show as free). `events.list` loads them (`singleEvents=true`, `timeMin`,
+`timeMax`). A read failure fails closed with 503.
+
+Slots are 30-minute starts on a 30-minute grid, fully inside a window. freeBusy on both calendars
+removes conflicts, with the 15-minute buffer on both sides. The open-window events themselves must
+not count as busy: freeBusy ignores transparent events, and the Worker also drops a busy block that
+matches a window exactly.
+
+A busy block ending at 11:00 still blocks an 11:00 start (buffer), so the next open start is 11:30
+when that start is inside a window. Calendly is not used.
 
 ## API
 
@@ -34,9 +45,10 @@ are clamped to the notice, the window, and a 31-day span.
 }
 ```
 
-`POST /api/book` with JSON: `start` (a slot start), `name`, `email`, `businessName`, `problem`
-(required), `phone`, `website`, `businessType`, `timeZone` (optional), `turnstileToken`, and the
-hidden `honeypot` field.
+`POST /api/book` with JSON: `start` (a slot start), `name`, `email`, `businessName`, `issue`
+(required, one of `lowering-costs`, `saving-time`, `growing-revenue`, `customer-service`,
+`online-presence`, `something-else`), `problem` (optional notes), `phone`, `website`, `businessType`,
+`timeZone` (optional), `turnstileToken`, and the hidden `honeypot` field.
 
 | Status | Meaning                                                                              |
 | ------ | ------------------------------------------------------------------------------------ |
@@ -70,7 +82,7 @@ Vars live in `worker/wrangler.jsonc`; secrets are set with `wrangler secret put`
 
 | Name                                                                                 | Kind     | Purpose                                                                               |
 | ------------------------------------------------------------------------------------ | -------- | ------------------------------------------------------------------------------------- |
-| `GOOGLE_AUTH_MODE`                                                                   | var      | `oauth`, `service_account`, or `mock` (local only)                                    |
+| `GOOGLE_AUTH_MODE`                                                                   | var      | `oauth` (production default), `service_account`, or `mock` (local only)               |
 | `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`, `GOOGLE_OAUTH_REFRESH_TOKEN` | secrets  | OAuth mode                                                                            |
 | `GOOGLE_SA_CLIENT_EMAIL`, `GOOGLE_SA_PRIVATE_KEY`                                    | secrets  | Service account mode                                                                  |
 | `GOOGLE_IMPERSONATE_USER`                                                            | var      | `admin@techshift.ai` (service account mode)                                           |
@@ -79,9 +91,11 @@ Vars live in `worker/wrangler.jsonc`; secrets are set with `wrangler secret put`
 | `ALLOWED_ORIGINS`                                                                    | var      | Origins allowed to POST                                                               |
 | `BOOKING_RATE_LIMITER`, `AVAILABILITY_RATE_LIMITER`                                  | bindings | 5 bookings and 60 availability calls per minute per IP, per Cloudflare location       |
 
-Scopes, both modes, nothing broader: `https://www.googleapis.com/auth/calendar.events` and
-`https://www.googleapis.com/auth/calendar.freebusy`. Auth uses `fetch` and Web Crypto (RS256 JWT), with
-no Google client library, so it runs on Workers.
+Production auth is `GOOGLE_AUTH_MODE=oauth`: a refresh token for admin@techshift.ai with scope
+`https://www.googleapis.com/auth/calendar`. That scope is what `events.list`, freeBusy, and
+`events.insert` need. It is broader than the earlier events and freeBusy pair: the token can read and
+change calendars that admin@techshift.ai can access. Service account mode uses the same scope.
+Auth uses `fetch` and Web Crypto (RS256 JWT), with no Google client library, so it runs on Workers.
 
 ## Local development
 
@@ -89,6 +103,10 @@ no Google client library, so it runs on Workers.
 npm run worker:dev   # http://localhost:8787, mock calendar, Turnstile off
 npm test             # slot, booking, auth, validation, and API tests
 ```
+
+The local mock publishes sample "Open for consultations" windows so the form has times to show.
+Those windows are not the production rules. Production reads the real Operations calendar.
+Local `ALLOWED_ORIGINS` includes `http://localhost:4321` and `http://127.0.0.1:4321`.
 
 ## One-time setup (needs Azeem's approval; none of this exists yet)
 
@@ -102,7 +120,7 @@ Google Cloud console or after `gcloud` is authenticated.
 2. Set the OAuth consent screen to **Internal**. Internal apps' refresh tokens do not expire after
    7 days the way External apps in testing do.
 3. Create an OAuth client ID (type Web application).
-4. Sign in once as admin@techshift.ai and grant only the two scopes above, for example with the
+4. Sign in once as admin@techshift.ai and grant `https://www.googleapis.com/auth/calendar`, for example with the
    OAuth 2.0 Playground set to use this client, to get a refresh token.
 5. `wrangler secret put` the client ID, client secret, and refresh token.
 
@@ -112,7 +130,7 @@ Google Cloud console or after `gcloud` is authenticated.
 2. Create a JSON key. New organizations often block this with the
    `iam.disableServiceAccountKeyCreation` policy; an admin exception would be needed.
 3. Workspace Admin console, Security, Access and data control, API controls, Domain-wide delegation:
-   add the service account's client ID with exactly the two scopes.
+   add the service account's client ID with `https://www.googleapis.com/auth/calendar`.
 4. `wrangler secret put GOOGLE_SA_CLIENT_EMAIL` and `GOOGLE_SA_PRIVATE_KEY`.
 
 Delegation lets that key act as any user in the domain for those scopes, so a leaked key is wider

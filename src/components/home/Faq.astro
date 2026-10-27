@@ -1,0 +1,42 @@
+---
+import { faqItems } from '../../data/faq';
+---
+
+<section class="section" id="faq" aria-labelledby="faq-title">
+  <div class="wrap faq-grid">
+    <div class="head" data-reveal>
+      <h2 class="h2 i-1" id="faq-title">
+        Straight answers.
+      </h2>
+    </div>
+    <div class="faq-list" data-acc-group>
+      {faqItems.map((item, index) => {
+        const n = index + 1;
+        return (
+          <div class="faq-item" data-acc-item>
+            <h3 class="faq-h">
+              <button
+                class="faq-btn"
+                type="button"
+                data-acc
+                aria-expanded="false"
+                aria-controls={`faq-p${n}`}
+                id={`faq-b${n}`}
+              >
+                {item.question}
+                <span class="pm" aria-hidden="true" />
+              </button>
+            </h3>
+            <div class="faq-panel" id={`faq-p${n}`} role="region" aria-labelledby={`faq-b${n}`}>
+              <div class="faq-in">
+                <div class="answer">
+                  <p>{item.answer}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>

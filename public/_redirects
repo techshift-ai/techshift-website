@@ -1,3 +1,6 @@
-# Cloudflare redirects (works on Pages and Workers static assets).
-# Map every old URL that has search equity to its new home before launch, for example:
-# /old-path /new-path 301
+# Old marketing URLs from the previous site. Fragments land on the matching homepage section.
+/ai-employees /#systems 301
+/business-automation /#services 301
+/business-process-automation /#services 301
+/websites /#services 301
+/llms-full.txt /llms.txt 301

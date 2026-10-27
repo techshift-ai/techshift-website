@@ -14,6 +14,7 @@ const form = {
   name: 'Jordan Lee',
   email: 'jordan@example.com',
   businessName: 'Lee Plumbing',
+  issue: 'customer-service',
   problem: 'We miss calls after hours.',
 };
 
@@ -68,7 +69,7 @@ describe('booking API (mock calendar)', () => {
     expect(res.status).toBe(400);
     const data = (await res.json()) as { fields: Record<string, string> };
     expect(Object.keys(data.fields)).toEqual(
-      expect.arrayContaining(['start', 'name', 'email', 'businessName', 'problem']),
+      expect.arrayContaining(['start', 'name', 'email', 'businessName', 'issue']),
     );
   });
 

@@ -1,32 +1,61 @@
 @import 'tailwindcss';
+@import './site.css';
 
 /*
-  Design tokens. Brand values come from the Techshift design system (tokens.json in Atlas).
-  Creative Studio's mockup may extend these; add tokens here, never hardcode values in components.
+  Design tokens. Brand values come from the approved v7 mockup and the Techshift design system.
+  site.css references these variables. Do not hardcode a new colour in a component.
 */
 @theme {
   --font-sans: var(--font-poppins), Arial, sans-serif;
 
   --color-brand-blue: #0062ff;
   --color-brand-navy: #002244;
+  --color-navy-deep: #001a35;
+  --color-navy-panel: #0a2e57;
+  --color-brand-red: #e0473b;
+  --color-sky: #8fb6ff;
+  --color-blue-tint: #e6efff;
   --color-action: #0062ff;
   --color-action-strong: #004cc7;
   --color-ink: #002244;
   --color-ink-muted: #52657b;
+  --color-ink-on-dark: rgb(255 255 255 / 74%);
+  --color-line-on-dark: rgb(255 255 255 / 12%);
   --color-canvas: #ffffff;
   --color-canvas-subtle: #f3f7fc;
   --color-canvas-dark: #002244;
+  --color-cloud-deep: #e4ecf6;
   --color-rule: #d8e2ef;
   --color-positive: #137a55;
+  --color-positive-on-dark: #6fd3a8;
+  --color-positive-bg: #e5f3ed;
   --color-caution: #8a5700;
+  --color-caution-on-dark: #f5c26b;
+  --color-caution-bg: #fff8eb;
+  --color-caution-line: #e9c98a;
   --color-negative: #b42318;
+  --color-negative-on-dark: #ff9b91;
+  --color-negative-bg: #fef3f2;
+  --color-negative-line: #f1b8b2;
+  --color-wire: #a9bcd3;
+  --color-bar-track: #e3eaf3;
+  --color-day-line: #c9d6e6;
+  --color-day-full: #7a8a9c;
+  --color-day-off: #a6b3c2;
+  --color-field-border: #8a9bb0;
+  --color-placeholder: #6b7c90;
+  --color-skeleton: #edf2f9;
+  --color-skeleton-mid: #f7fafd;
+  --color-mask: #000000;
 
   --radius-subtle: 8px;
+  --radius-card: 16px;
   --container-container: 80rem;
   --spacing-section: clamp(4rem, 8vw, 8rem);
   --spacing-13: 3.25rem;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-draw: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-reveal: 700ms;
 }
 
@@ -35,59 +64,11 @@
     scroll-behavior: smooth;
     text-rendering: optimizeLegibility;
   }
-  h1,
-  h2,
-  h3 {
-    font-weight: 600;
-    line-height: 1.12;
-    letter-spacing: -0.02em;
-    text-wrap: balance;
-  }
-  p {
-    text-wrap: pretty;
-  }
-  :focus-visible {
-    outline: 2px solid var(--color-action);
-    outline-offset: 2px;
-  }
 }
 
 /* Cross-document view transitions: native, zero JS, ignored by unsupported browsers. */
 @view-transition {
   navigation: auto;
-}
-
-.skip-link {
-  position: absolute;
-  left: 1rem;
-  top: -4rem;
-  z-index: 100;
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius-subtle);
-  background: var(--color-ink);
-  color: #fff;
-}
-.skip-link:focus {
-  top: 1rem;
-}
-
-/*
-  Scroll reveal. Add data-reveal to any element; src/scripts/reveal.ts adds .is-visible.
-  The hidden state only applies when scripting is enabled, so content never disappears without JS.
-*/
-@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
-  [data-reveal] {
-    opacity: 0;
-    transform: translateY(16px);
-    transition:
-      opacity var(--duration-reveal) var(--ease-out-expo),
-      transform var(--duration-reveal) var(--ease-out-expo);
-    transition-delay: calc(var(--reveal-index, 0) * 80ms);
-  }
-  [data-reveal].is-visible {
-    opacity: 1;
-    transform: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,11 +1,33 @@
 import { isValidTimeZone } from './slots';
 
+export const ISSUE_VALUES = [
+  'lowering-costs',
+  'saving-time',
+  'growing-revenue',
+  'customer-service',
+  'online-presence',
+  'something-else',
+] as const;
+
+export type Issue = (typeof ISSUE_VALUES)[number];
+
+export const ISSUE_LABELS: Record<Issue, string> = {
+  'lowering-costs': 'Lowering costs',
+  'saving-time': 'Saving time',
+  'growing-revenue': 'Growing revenue',
+  'customer-service': 'Customer service',
+  'online-presence': 'Online presence',
+  'something-else': 'Something else',
+};
+
 export interface BookingRequest {
   start: string;
   name: string;
   email: string;
   businessName: string;
-  problem: string;
+  issue: Issue;
+  /** Optional notes from the visitor. The topic itself is `issue`. */
+  problem?: string;
   phone?: string;
   website?: string;
   businessType?: string;
@@ -28,6 +50,10 @@ const LIMITS = {
   website: 300,
   businessType: 100,
 };
+
+function isIssue(value: string): value is Issue {
+  return (ISSUE_VALUES as readonly string[]).includes(value);
+}
 
 // Strip control characters except newlines and tabs, then trim.
 const clean = (v: unknown): string =>
@@ -67,6 +93,7 @@ export function validateBookingRequest(input: unknown): ValidationResult {
     name: clean(raw.name),
     email: clean(raw.email).toLowerCase(),
     businessName: clean(raw.businessName),
+    issue: clean(raw.issue),
     problem: clean(raw.problem),
     phone: clean(raw.phone),
     website: clean(raw.website),
@@ -77,9 +104,10 @@ export function validateBookingRequest(input: unknown): ValidationResult {
   };
 
   if (!v.start || Number.isNaN(Date.parse(v.start))) errors.start = 'Choose a time slot';
-  for (const field of ['name', 'businessName', 'problem'] as const) {
+  for (const field of ['name', 'businessName'] as const) {
     if (!v[field]) errors[field] = 'Required';
   }
+  if (!isIssue(v.issue)) errors.issue = 'Choose what you would like help with';
   if (!v.email) errors.email = 'Required';
   else if (!EMAIL.test(v.email)) errors.email = 'Enter a valid email address';
   if (v.phone && !PHONE.test(v.phone)) errors.phone = 'Enter a valid phone number';
@@ -103,7 +131,8 @@ export function validateBookingRequest(input: unknown): ValidationResult {
       name: v.name,
       email: v.email,
       businessName: v.businessName,
-      problem: v.problem,
+      issue: v.issue as Issue,
+      problem: v.problem || undefined,
       phone: v.phone || undefined,
       website,
       businessType: v.businessType || undefined,

@@ -28,7 +28,13 @@ export default defineConfig({
   },
   security: {
     // Hashes every Astro-processed script and style into a CSP meta tag.
-    csp: true,
+    // Turnstile is loaded only after the booking modal opens.
+    csp: {
+      scriptDirective: {
+        resources: ["'self'", 'https://challenges.cloudflare.com'],
+      },
+      directives: ['frame-src https://challenges.cloudflare.com', "connect-src 'self'"],
+    },
   },
   fonts: [
     {
@@ -48,5 +54,11 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      // Dev only. astro preview and pages.dev have no proxy, so a missing /api uses the fallback link.
+      proxy: {
+        '/api': 'http://localhost:8787',
+      },
+    },
   },
 });
