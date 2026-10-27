@@ -1,0 +1,58 @@
+// Booking API Worker. Not deployed yet: deploying needs Azeem's approval (see docs/booking.md).
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "techshift-booking",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-20",
+  "workers_dev": false,
+  // Serves techshift.ai/api/* in front of the static site. Requires the techshift.ai zone on Cloudflare.
+  "routes": [{ "pattern": "techshift.ai/api/*", "zone_name": "techshift.ai" }],
+  "vars": {
+    "ENVIRONMENT": "production",
+    "ALLOWED_ORIGINS": "https://techshift.ai,https://www.techshift.ai",
+    "GOOGLE_AUTH_MODE": "oauth",
+    "GOOGLE_IMPERSONATE_USER": "admin@techshift.ai",
+    "TURNSTILE_MODE": "on",
+  },
+  // Secrets (set with `wrangler secret put`, never committed):
+  // GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_CLIENT_SECRET, GOOGLE_OAUTH_REFRESH_TOKEN, TURNSTILE_SECRET_KEY
+  // Service account mode, if used instead: GOOGLE_SA_CLIENT_EMAIL, GOOGLE_SA_PRIVATE_KEY
+  "ratelimits": [
+    {
+      "name": "BOOKING_RATE_LIMITER",
+      "namespace_id": "4101",
+      "simple": { "limit": 5, "period": 60 },
+    },
+    {
+      "name": "AVAILABILITY_RATE_LIMITER",
+      "namespace_id": "4102",
+      "simple": { "limit": 60, "period": 60 },
+    },
+  ],
+  "observability": { "enabled": true },
+  "env": {
+    // `wrangler dev --env local`: mock calendar, Turnstile off, no routes.
+    "local": {
+      "routes": [],
+      "vars": {
+        "ENVIRONMENT": "local",
+        "ALLOWED_ORIGINS": "http://localhost:4321,http://127.0.0.1:4321,http://localhost:8787",
+        "GOOGLE_AUTH_MODE": "mock",
+        "GOOGLE_IMPERSONATE_USER": "admin@techshift.ai",
+        "TURNSTILE_MODE": "off",
+      },
+      "ratelimits": [
+        {
+          "name": "BOOKING_RATE_LIMITER",
+          "namespace_id": "4101",
+          "simple": { "limit": 5, "period": 60 },
+        },
+        {
+          "name": "AVAILABILITY_RATE_LIMITER",
+          "namespace_id": "4102",
+          "simple": { "limit": 60, "period": 60 },
+        },
+      ],
+    },
+  },
+}

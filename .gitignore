@@ -25,3 +25,10 @@ pnpm-debug.log*
 
 # wrangler
 .wrangler/
+
+# lighthouse reports (raw data stays out of git)
+.lighthouse/
+
+# worker local secrets
+.dev.vars
+worker/.dev.vars

@@ -1,36 +1,69 @@
 ---
+import { Font } from 'astro:assets';
+import SEO, { type SEOProps } from '../components/seo/SEO.astro';
+import JsonLd from '../components/seo/JsonLd.astro';
+import Icons from '../components/brand/Icons.astro';
+import Header from '../components/site/Header.astro';
+import Footer from '../components/site/Footer.astro';
+import BookingDialog from '../components/site/BookingDialog.astro';
+import logo from '../assets/brand/logo-horizontal-primary.png';
+import { organization, professionalService, webPage, website } from '../lib/schema';
+import { site } from '../site.config';
+import { absoluteUrl } from '../lib/url';
 import '../styles/global.css';
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/sections/Header.astro';
-import Footer from '../components/sections/Footer.astro';
 
-interface Props {
-  title: string;
-  description: string;
-  canonical?: string;
-  ogImage?: string;
+interface Props extends SEOProps {
+  /** Extra JSON-LD nodes for this page (Service, FAQPage, BreadcrumbList). */
+  schema?: object[];
+  /** Hide the shared header and footer, for example on a bespoke landing page. */
+  bare?: boolean;
 }
 
-const { title, description, canonical, ogImage } = Astro.props;
+const { schema = [], bare = false, ...seo } = Astro.props;
+const pageUrl = absoluteUrl(seo.canonical ?? Astro.url.pathname);
+
+const graph = [
+  organization(logo.src),
+  professionalService(logo.src),
+  website(),
+  webPage({ url: pageUrl, title: seo.title, description: seo.description }),
+  ...schema,
+];
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={site.language}>
   <head>
-    <BaseHead
-      title={title}
-      description={description}
-      canonical={canonical}
-      ogImage={ogImage}
-    >
-      <slot name="head" />
-    </BaseHead>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content={site.themeColor} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
+    <Font cssVariable="--font-poppins" preload={[{ weight: 400 }, { weight: 600 }]} />
+    <SEO {...seo} />
+    <JsonLd data={graph} />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
   </head>
-  <body class="min-h-screen flex flex-col">
-    <Header />
-    <main class="flex-1">
+  <body>
+    <Icons />
+    <a href="#main" class="skip">
+      Skip to content
+    </a>
+    {!bare && <Header />}
+    <main id="main">
       <slot />
     </main>
-    <Footer />
+    {!bare && <Footer />}
+    {!bare && <BookingDialog />}
   </body>
 </html>
+
+<script>
+  import '../scripts/site';
+  import '../scripts/booking';
+</script>

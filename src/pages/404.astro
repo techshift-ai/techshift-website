@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../site.config';
+---
+
+<BaseLayout
+  title={`Page not found | ${site.name}`}
+  description="The page you requested is not on techshift.ai. Return to the homepage to see what we build and book a free consultation."
+  canonical="/404"
+  noindex
+>
+  <section class="section" aria-labelledby="nf-heading">
+    <div class="wrap">
+      <p class="sub">404</p>
+      <h1 class="h2" id="nf-heading">
+        This page does not exist.
+      </h1>
+      <p class="sub">
+        The link may be old or mistyped. Head back to the homepage to find what you need.
+      </p>
+      <p class="story-link">
+        <a class="btn" href="/">
+          Back to homepage
+        </a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,1 +1,6 @@
-/business-process-automation /business-automation 301
+# Old marketing URLs from the previous site. Fragments land on the matching homepage section.
+/ai-employees /#systems 301
+/business-automation /#services 301
+/business-process-automation /#services 301
+/websites /#services 301
+/llms-full.txt /llms.txt 301

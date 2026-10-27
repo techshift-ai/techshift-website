@@ -1,0 +1,417 @@
+---
+import Logo from '../brand/Logo.astro';
+import { site } from '../../site.config';
+---
+
+<dialog
+  class="bk"
+  id="booking"
+  data-fallback-url={site.bookingFallbackUrl}
+  data-contact-email={site.email}
+  data-turnstile-site-key={site.turnstileSiteKey}
+  aria-modal="true"
+  aria-labelledby="bk-title"
+  aria-describedby="bk-desc"
+>
+  <div class="bk-grab" aria-hidden="true"></div>
+
+  <div class="bk-shell">
+    <aside class="bk-side on-dark" aria-label="About this consultation">
+      <span class="logo">
+        <Logo />
+      </span>
+      <h2 class="bk-desk-title" id="bk-title-desk">
+        Book a free consultation
+      </h2>
+      <p>A conversation about your business, your goals and where we can help.</p>
+      <ul class="bk-facts">
+        <li>
+          <svg class="icon" aria-hidden="true">
+            <use href="#i-clock" />
+          </svg>
+          30 minutes
+        </li>
+        <li>
+          <svg class="icon" aria-hidden="true">
+            <use href="#i-video" />
+          </svg>
+          Free online consultation with our team
+        </li>
+      </ul>
+      <div class="bk-cover">
+        <b>What we will cover</b>
+        <ul>
+          <li>Getting to know your business</li>
+          <li>Your pain points and goals</li>
+          <li>Where we can help most</li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="bk-main">
+      <div class="bk-top">
+        <div>
+          <h2 class="bk-title" id="bk-title">
+            Book a free consultation
+          </h2>
+          <p class="bk-sub" id="bk-desc">
+            Free online consultation with our team. No account needed.
+          </p>
+        </div>
+        <button class="bk-close" type="button" data-close aria-label="Close booking">
+          <svg class="icon" aria-hidden="true">
+            <use href="#i-close" />
+          </svg>
+        </button>
+      </div>
+      <ol class="bk-steps" aria-label="Booking progress">
+        <li data-step="pick">Day and time</li>
+        <li data-step="form">Your details</li>
+        <li data-step="done">Confirmed</li>
+      </ol>
+
+      <div class="bk-body" id="bk-body">
+        <div class="empty" data-fallback>
+          <p id="bk-fallback-copy">
+            <b>We could not load times right now.</b>
+            <br />
+            You can still book a free consultation.
+          </p>
+          <a class="btn" id="bk-fallback" href={site.bookingFallbackUrl}>
+            Book a free consultation
+          </a>
+        </div>
+
+        <section class="bk-pane" data-pane="pick" aria-labelledby="pick-h">
+          <div class="pick">
+            <div>
+              <h3 class="bk-h" id="pick-h">
+                Choose a day
+              </h3>
+              <p class="bk-tz">
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-globe" />
+                </svg>
+                <span data-tz-label>Times shown in your time zone</span>
+              </p>
+              <div class="cal">
+                <div class="cal-head" aria-hidden="true">
+                  <span>Mon</span>
+                  <span>Tue</span>
+                  <span>Wed</span>
+                  <span>Thu</span>
+                  <span>Fri</span>
+                  <span>Sat</span>
+                  <span>Sun</span>
+                </div>
+                <div class="cal-grid" id="cal-grid" role="group" aria-label="Available days"></div>
+                <div class="cal-key" aria-hidden="true">
+                  <span>
+                    <i></i>Times available
+                  </span>
+                  <span>
+                    <i class="k-full"></i>Fully booked
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="times-wrap" id="times-wrap" aria-live="polite">
+              <h3 class="times-h" id="times-h">
+                Pick a day to see times
+              </h3>
+              <div id="times-body"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="bk-pane" data-pane="form" aria-labelledby="form-h" hidden>
+          <h3 class="sr-only" id="form-h">
+            Your details
+          </h3>
+          <div id="form-alert"></div>
+          <div class="slot-sum">
+            <div>
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-calendar" />
+              </svg>
+              <span>
+                <b data-slot-label>Selected time</b>
+                <br />
+                <span class="bk-sub" data-slot-tz></span>
+              </span>
+            </div>
+            <button type="button" class="linkbtn" data-goto="pick">
+              Change
+            </button>
+          </div>
+          <form id="bk-form" novalidate>
+            <div class="fields">
+              <div class="two">
+                <div class="field" data-field="name">
+                  <label for="f-name">Your name</label>
+                  <input
+                    class="input"
+                    id="f-name"
+                    name="name"
+                    autocomplete="name"
+                    required
+                    aria-describedby="e-name"
+                  />
+                  <p class="err" id="e-name">
+                    <svg class="icon" aria-hidden="true">
+                      <use href="#i-alert" />
+                    </svg>
+                    <span>Enter your name.</span>
+                  </p>
+                </div>
+                <div class="field" data-field="email">
+                  <label for="f-email">Email</label>
+                  <input
+                    class="input"
+                    id="f-email"
+                    name="email"
+                    type="email"
+                    inputmode="email"
+                    autocomplete="email"
+                    spellcheck="false"
+                    placeholder="you@business.ca"
+                    required
+                    aria-describedby="e-email"
+                  />
+                  <p class="err" id="e-email">
+                    <svg class="icon" aria-hidden="true">
+                      <use href="#i-alert" />
+                    </svg>
+                    <span>Enter an email address, like you@business.ca.</span>
+                  </p>
+                </div>
+              </div>
+              <div class="field" data-field="business">
+                <label for="f-business">Business name</label>
+                <input
+                  class="input"
+                  id="f-business"
+                  name="business"
+                  autocomplete="organization"
+                  required
+                  aria-describedby="e-business"
+                />
+                <p class="err" id="e-business">
+                  <svg class="icon" aria-hidden="true">
+                    <use href="#i-alert" />
+                  </svg>
+                  <span>Enter your business name.</span>
+                </p>
+              </div>
+              <fieldset class="field" data-field="issue" aria-describedby="e-issue">
+                <legend>What would you like help with?</legend>
+                <div class="chips">
+                  <label class="chip">
+                    <input type="radio" name="issue" value="lowering-costs" required />
+                    <span>Lowering costs</span>
+                  </label>
+                  <label class="chip">
+                    <input type="radio" name="issue" value="saving-time" />
+                    <span>Saving time</span>
+                  </label>
+                  <label class="chip">
+                    <input type="radio" name="issue" value="growing-revenue" />
+                    <span>Growing revenue</span>
+                  </label>
+                  <label class="chip">
+                    <input type="radio" name="issue" value="customer-service" />
+                    <span>Customer service</span>
+                  </label>
+                  <label class="chip">
+                    <input type="radio" name="issue" value="online-presence" />
+                    <span>Online presence</span>
+                  </label>
+                  <label class="chip">
+                    <input type="radio" name="issue" value="something-else" />
+                    <span>Something else</span>
+                  </label>
+                </div>
+                <p class="err" id="e-issue">
+                  <svg class="icon" aria-hidden="true">
+                    <use href="#i-alert" />
+                  </svg>
+                  <span>Choose what you would like help with.</span>
+                </p>
+              </fieldset>
+              <div class="field" data-field="details">
+                <label for="f-details">
+                  Anything else we should know? <span class="opt">(optional)</span>
+                </label>
+                <textarea
+                  class="input"
+                  id="f-details"
+                  name="details"
+                  maxlength="280"
+                  rows="2"
+                  placeholder="For example: scheduling takes us hours every week…"
+                ></textarea>
+              </div>
+              <div class="opt-group">
+                <p>
+                  A little more context <span>(optional)</span>
+                </p>
+                <div class="opt-grid">
+                  <div class="field" data-field="phone">
+                    <label for="f-phone">Phone</label>
+                    <input
+                      class="input"
+                      id="f-phone"
+                      name="phone"
+                      type="tel"
+                      inputmode="tel"
+                      autocomplete="tel"
+                      placeholder="416 555 0123"
+                      aria-describedby="e-phone"
+                    />
+                    <p class="err" id="e-phone">
+                      <svg class="icon" aria-hidden="true">
+                        <use href="#i-alert" />
+                      </svg>
+                      <span>Check the number, or leave it blank.</span>
+                    </p>
+                  </div>
+                  <div class="field" data-field="website">
+                    <label for="f-website">Website</label>
+                    <input
+                      class="input"
+                      id="f-website"
+                      name="website"
+                      inputmode="url"
+                      autocomplete="url"
+                      spellcheck="false"
+                      placeholder="yourbusiness.ca"
+                      aria-describedby="e-website"
+                    />
+                    <p class="err" id="e-website">
+                      <svg class="icon" aria-hidden="true">
+                        <use href="#i-alert" />
+                      </svg>
+                      <span>Enter a web address like yourbusiness.ca, or leave it blank.</span>
+                    </p>
+                  </div>
+                  <div class="field" data-field="type">
+                    <label for="f-type">Type of business</label>
+                    <input
+                      class="input"
+                      id="f-type"
+                      name="type"
+                      list="types"
+                      autocomplete="off"
+                      placeholder="Dental clinic"
+                    />
+                    <datalist id="types">
+                      <option value="Clinic or health practice"></option>
+                      <option value="Law firm"></option>
+                      <option value="Home services or trades"></option>
+                      <option value="Restaurant or café"></option>
+                      <option value="Family entertainment venue"></option>
+                      <option value="Salon or spa"></option>
+                      <option value="Retail store"></option>
+                    </datalist>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hp" aria-hidden="true">
+              <label for="f-honeypot">Leave this empty</label>
+              <input id="f-honeypot" name="honeypot" type="text" tabindex="-1" autocomplete="off" />
+            </div>
+            <div class="turnstile-slot" id="bk-turnstile"></div>
+            <p class="form-note">
+              No account needed. You will get a calendar invitation with the link to join.
+            </p>
+          </form>
+        </section>
+
+        <section class="bk-pane" data-pane="done" aria-labelledby="done-h" hidden>
+          <div class="done">
+            <div class="done-mark" aria-hidden="true">
+              <svg class="icon">
+                <use href="#i-check" />
+              </svg>
+            </div>
+            <div>
+              <h3 id="done-h" tabindex="-1">
+                You are booked.
+              </h3>
+              <p class="bk-sub done-lead">We look forward to speaking with you.</p>
+            </div>
+            <div class="done-card">
+              <div>
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-calendar" />
+                </svg>
+                <span>
+                  <b data-slot-label>Selected time</b>
+                  <br />
+                  <span class="bk-sub" data-slot-tz></span>
+                </span>
+              </div>
+              <div>
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-video" />
+                </svg>
+                <span>
+                  Free online consultation with our team. The link is in your calendar invitation.
+                </span>
+              </div>
+              <div>
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-mail" />
+                </svg>
+                <span>
+                  Confirmation sent to <b data-email>your email</b>
+                </span>
+              </div>
+            </div>
+            <div class="cal-btns">
+              <a class="btn btn--ghost" id="gcal" href="#" target="_blank" rel="noopener">
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-calendar" />
+                </svg>
+                Add to Google Calendar
+              </a>
+              <a class="btn btn--ghost" id="ics" href="#" download="techshift-consultation.ics">
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-download" />
+                </svg>
+                Download .ics (Apple, Outlook)
+              </a>
+            </div>
+            <div>
+              <p class="times-h">What happens next</p>
+              <ol class="next next-list">
+                <li>
+                  <span>Check your inbox for the calendar invitation with the link to join.</span>
+                </li>
+                <li>
+                  <span>
+                    Before the call, we review what you shared, including your website if you added
+                    it.
+                  </span>
+                </li>
+                <li>
+                  <span>On the call, we show you where to start and whether we can help.</span>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="bk-foot" id="bk-foot">
+        <p class="bk-foot-note" id="foot-note" aria-live="polite">
+          <span>No time selected</span>
+        </p>
+        <button class="btn" type="button" id="bk-next" disabled>
+          Continue
+        </button>
+      </div>
+    </div>
+  </div>
+</dialog>

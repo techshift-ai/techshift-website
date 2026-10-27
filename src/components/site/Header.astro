@@ -1,0 +1,46 @@
+---
+import Logo from '../brand/Logo.astro';
+import { site } from '../../site.config';
+---
+
+<header class="site-header on-dark" id="top">
+  <div class="wrap header-bar">
+    <a class="brand" href="/" aria-label="Techshift home">
+      <Logo />
+    </a>
+    <button
+      class="menu-btn"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-nav"
+      aria-label="Open menu"
+    >
+      <span class="bars" aria-hidden="true"></span>
+    </button>
+    <nav class="nav" id="site-nav" aria-label="Main">
+      <ul>
+        <li>
+          <a href="#services">Services</a>
+        </li>
+        <li>
+          <a href="#systems">Systems</a>
+        </li>
+        <li>
+          <a href="#how-we-work">How we work</a>
+        </li>
+        <li>
+          <a href="#about">About</a>
+        </li>
+        <li>
+          <a href="#faq">FAQ</a>
+        </li>
+
+        <li>
+          <a class="btn btn--sm" href={site.bookingFallbackUrl} data-book>
+            Book a free consultation
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
