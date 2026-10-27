@@ -3,6 +3,7 @@
  * pages.dev and any failed, non-JSON, or empty response use the fallback consultation link.
  * The Turnstile script loads only after the visitor reaches the details step.
  */
+import { zoneLabel } from '../lib/zone-label';
 
 interface Slot {
   start: string;
@@ -79,13 +80,10 @@ if (bookingRoot instanceof HTMLDialogElement && typeof bookingRoot.showModal ===
   };
   const fmt = (date: Date, options: Intl.DateTimeFormatOptions) =>
     new Intl.DateTimeFormat(undefined, { timeZone: visitorTz, ...options }).format(date);
-  const tzName = (date: Date) => {
-    const name = new Intl.DateTimeFormat(undefined, { timeZone: visitorTz, timeZoneName: 'long' })
-      .formatToParts(date)
-      .find((part) => part.type === 'timeZoneName')?.value;
-    const city = visitorTz.split('/').pop()?.replace(/_/g, ' ') ?? visitorTz;
-    return `${name ?? visitorTz} (${city})`;
-  };
+  // Long name follows the selected instant. Generic name is used until a date is chosen,
+  // so a calendar that crosses the November change is not stuck on today's daylight name.
+  const tzName = (date: Date) => zoneLabel(visitorTz, date, 'long');
+  const tzGeneric = () => zoneLabel(visitorTz, undefined, 'longGeneric');
   const timeLabel = (iso: string) => fmt(new Date(iso), { hour: 'numeric', minute: '2-digit' });
   const slotLabel = (iso: string) =>
     `${fmt(new Date(iso), { weekday: 'long', month: 'long', day: 'numeric' })}, ${timeLabel(iso)}`;
@@ -367,8 +365,34 @@ if (bookingRoot instanceof HTMLDialogElement && typeof bookingRoot.showModal ===
     });
   }
 
+  function noonInZone(year: number, month: number, day: number): Date {
+    const guess = new Date(Date.UTC(year, month - 1, day, 12, 0, 0));
+    const parts = partsOf(guess, visitorTz);
+    const deltaMinutes = (Number(parts.hour) - 12) * 60 + Number(parts.minute);
+    return new Date(guess.getTime() - deltaMinutes * 60_000);
+  }
+
+  function instantForDay(key: string): Date {
+    const first = state.byDay[key]?.[0];
+    if (first) return new Date(first.start);
+    const [year, month, day] = key.split('-').map(Number);
+    return noonInZone(year ?? 0, month ?? 1, day ?? 1);
+  }
+
+  function refreshTzHeader() {
+    const label = $('[data-tz-label]');
+    if (!label) return;
+    const instant = state.slot
+      ? new Date(state.slot.start)
+      : state.day
+        ? instantForDay(state.day)
+        : undefined;
+    label.textContent = `Times shown in ${instant ? tzName(instant) : tzGeneric()}`;
+  }
+
   function updateFoot() {
     if (!next || !note) return;
+    refreshTzHeader();
     next.hidden = false;
     if (state.step === 'pick') {
       next.disabled = !state.slot;
@@ -459,8 +483,6 @@ if (bookingRoot instanceof HTMLDialogElement && typeof bookingRoot.showModal ===
     state.slots = result;
     renderCalendar();
     updateFoot();
-    const label = $('[data-tz-label]');
-    if (label) label.textContent = `Times shown in ${tzName(new Date())}`;
   }
 
   const checks: Record<string, (value: string) => boolean> = {
@@ -666,6 +688,7 @@ if (bookingRoot instanceof HTMLDialogElement && typeof bookingRoot.showModal ===
     box.append(heading, copy, group, change);
     alertBox.append(box);
     state.slot = null;
+    refreshTzHeader();
     $$('.slot-sum [data-slot-label]').forEach((el) => {
       el.textContent = 'No time selected';
     });
@@ -892,4 +915,6 @@ if (bookingRoot instanceof HTMLDialogElement && typeof bookingRoot.showModal ===
     event.preventDefault();
     open(trigger);
   });
+
+  refreshTzHeader();
 }

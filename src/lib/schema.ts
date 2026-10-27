@@ -1,4 +1,5 @@
 import type {
+  AdministrativeArea,
   BreadcrumbList,
   FAQPage,
   Organization,
@@ -16,9 +17,13 @@ const websiteId = `${site.url}/#website`;
 
 const absolute = (path: string) => new URL(path, site.url).toString();
 
-const areaServed =
+const areaServed: AdministrativeArea[] | undefined =
   site.areaServed.length > 0
-    ? site.areaServed.map((name) => ({ '@type': 'AdministrativeArea' as const, name }))
+    ? site.areaServed.map((area) =>
+        area.type === 'City'
+          ? { '@type': 'City', name: area.name }
+          : { '@type': 'AdministrativeArea', name: area.name },
+      )
     : undefined;
 
 const postalAddress = () => ({

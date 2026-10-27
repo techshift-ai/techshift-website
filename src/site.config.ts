@@ -19,18 +19,25 @@ export const site = {
     name: undefined as string | undefined,
     jobTitle: 'Founder',
   },
+  /**
+   * Locality only: Toronto, Ontario, Canada. No street address is published.
+   * JSON-LD reads these fields. Visible page copy does not.
+   */
   address: {
-    addressLocality: 'Barrie',
-    addressRegion: 'ON',
-    addressCountry: 'CA',
+    addressLocality: 'Toronto',
+    addressRegion: 'Ontario',
+    addressCountry: 'Canada',
     postalCode: undefined as string | undefined,
     streetAddress: undefined as string | undefined,
   },
   /**
-   * Left empty on purpose. Techshift works with businesses anywhere, so schema has no service area
-   * until a founder confirms a public area.
+   * Service area for JSON-LD. Toronto is a City. The Greater Toronto Area is an AdministrativeArea.
+   * Not rendered in visible page copy.
    */
-  areaServed: [] as string[],
+  areaServed: [
+    { type: 'City', name: 'Toronto' },
+    { type: 'AdministrativeArea', name: 'Greater Toronto Area' },
+  ] as const,
   sameAs: [] as string[],
   /** In-page booking. The modal opens from any link with data-book. */
   bookingUrl: 'https://techshift.ai/#book',
