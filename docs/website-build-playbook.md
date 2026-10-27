@@ -88,7 +88,7 @@ Accordions are one open panel at a time, including under reduced motion. Without
 - `robots.txt` allows `/` and disallows `/review/`. The review folder also sends `X-Robots-Tag: noindex`.
 - Sitemap from the integration. Filter 404 and review URLs.
 - JSON-LD on every page: `Organization`, `ProfessionalService`, `WebSite`, `WebPage`. Homepage adds `FAQPage` from the FAQ module and one `Service` node per system named on the page.
-- Omit phone, person, and `areaServed` when `site.config.ts` does not set them. Do not invent a service area.
+- Omit phone and person when `site.config.ts` does not set them. Emit `areaServed` only from that config, with a `City` for a city and an `AdministrativeArea` for a wider region. This build serves Toronto (City) and the Greater Toronto Area (AdministrativeArea). The postal address is the locality only: Toronto, Ontario, Canada, with no street address. Do not add that location to visible page copy, and do not invent a service area that config does not list.
 - `llms.txt` is generated from config, the service list, and the FAQ. It is not a hand-written file.
 - Semantic landmarks: `header`, `nav` (named), `main`, `footer`. Accordions are `button` plus `aria-expanded` plus `aria-controls` and a `role="region"`. The booking dialog is a native `<dialog>` with `aria-modal`, a Tab trap, Esc, and focus returned to the opener.
 
@@ -114,6 +114,7 @@ Pattern:
 5. Submit posts JSON including the topic chip (`issue`), optional notes, a honeypot, and the Turnstile token when one exists.
 6. If the widget mounts and has not errored, wait for a token. If Turnstile errors (a hostname mismatch on localhost is the usual case), submit anyway. Production with Turnstile required will reject a missing token, and the dialog then shows the email plus the fallback link so the path is never dead.
 7. Success copy does not name the video product. A join URL may be placed in the calendar file. The on-screen sentence is the approved line about the invitation.
+8. Time zone labels follow the selected date. The header, the slot details, and the confirmation use the long zone name of that instant, so a date after the November change says Eastern Standard Time and a date before it says Eastern Daylight Time. With nothing selected, the header uses the generic name (Eastern Time) so it does not contradict a later slot. Do not show availability hours or scheduling rules.
 
 Local dev: `npm run worker:dev` (mock calendar, Turnstile off) and `astro dev`, which proxies `/api` to the Worker. `astro preview` uses that same proxy, so it is not a test of a missing API. Stop the Worker, or use the Pages preview URL, to test the fallback.
 
@@ -136,11 +137,11 @@ Astro `security.csp` writes a meta policy and hashes every processed script and 
 
 This build sets:
 
-- `script-src 'self' https://challenges.cloudflare.com` plus Astro's hashes
+- `script-src 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com` plus Astro's hashes
 - `frame-src https://challenges.cloudflare.com` for the Turnstile iframe
-- `connect-src 'self'` for same-origin `/api`
+- `connect-src 'self' https://cloudflareinsights.com` for same-origin `/api` and the analytics beacon
 
-Turnstile's own requests run inside its iframe, so the parent does not need that host on `connect-src`. Do not enable `strict-dynamic` or the external script host is ignored.
+Cloudflare Web Analytics injects `https://static.cloudflareinsights.com/beacon.min.js` at the edge, after the build. Astro never sees that tag, so it cannot hash it. `script-src` must allow `https://static.cloudflareinsights.com`, and `connect-src` must allow `https://cloudflareinsights.com`. Leave every other source as strict as it is. Turnstile's own requests run inside its iframe, so the parent does not need that host on `connect-src`. Do not enable `strict-dynamic` or the external script hosts are ignored.
 
 `public/_headers` adds what a meta policy cannot: `frame-ancestors`, `base-uri`, `form-action`, `X-Frame-Options`, nosniff, referrer policy, and HSTS. `/review/*` is framable by the same origin and marked `noindex`.
 
@@ -157,7 +158,7 @@ Run, in order:
 3. `npm run lighthouse` against the build. Fail under 95 in any category.
 4. Browser pass at 390 and 1440: homepage, mobile menu (icon only, Esc closes), accordions (one open), booking with the Worker running, booking with the Worker stopped.
 5. No console or page errors on those flows.
-6. JSON-LD present for the types above, FAQ count matches the visible questions, no telephone, no person node.
+6. JSON-LD present for the types above, FAQ count matches the visible questions, no telephone, no person node. Address locality is Toronto, Ontario, Canada, with no street. `areaServed` lists Toronto (City) and the Greater Toronto Area (AdministrativeArea).
 7. `npx wrangler deploy --dry-run` from `worker/` before anyone deploys the Worker. Pass `--env=""` if Wrangler warns about multiple environments. Dry-run does not deploy.
 
 ## Deploy flow
@@ -191,3 +192,6 @@ Do not merge, and do not push `main`, until the owner has looked at the preview.
 - The stock favicon in the scaffold was the framework logo. Replace it from the approved symbol before release.
 - `wrangler deploy` with a `local` environment warns unless you pass `--env=""`. The top-level environment is the production config. Dry-run still does not upload.
 - The operations calendar's open windows are data. Putting weekday hours back into code will drift from the calendar the owner actually edits.
+- Cloudflare Web Analytics injects `beacon.min.js` from `static.cloudflareinsights.com` after the build. A hash-only `script-src` blocks it. Allow that host on `script-src` and `cloudflareinsights.com` on `connect-src`.
+- A booking zone label taken from the current instant says Eastern Daylight Time in October and then disagrees with a November slot, which is Eastern Standard Time. Name the selected instant, and use the generic name until a date is selected.
+- Location schema uses `areaServed`: a City for Toronto and an AdministrativeArea for the Greater Toronto Area. The postal address is Toronto, Ontario, Canada, with no street address. Do not put that location in visible page copy.

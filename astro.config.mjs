@@ -29,11 +29,20 @@ export default defineConfig({
   security: {
     // Hashes every Astro-processed script and style into a CSP meta tag.
     // Turnstile is loaded only after the booking modal opens.
+    // Cloudflare Web Analytics injects its beacon at the edge, so that host is
+    // allowed here. Astro never sees the tag and cannot hash it.
     csp: {
       scriptDirective: {
-        resources: ["'self'", 'https://challenges.cloudflare.com'],
+        resources: [
+          "'self'",
+          'https://challenges.cloudflare.com',
+          'https://static.cloudflareinsights.com',
+        ],
       },
-      directives: ['frame-src https://challenges.cloudflare.com', "connect-src 'self'"],
+      directives: [
+        'frame-src https://challenges.cloudflare.com',
+        "connect-src 'self' https://cloudflareinsights.com",
+      ],
     },
   },
   fonts: [
